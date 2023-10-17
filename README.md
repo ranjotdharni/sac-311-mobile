@@ -16,5 +16,5 @@ The team consists of the following 9 members:
 - Your Name Here
 
 ## To-do List
-[] gitignore
-[] Tech Stack
+- [ ] gitignore
+- [ ] Tech Stack
