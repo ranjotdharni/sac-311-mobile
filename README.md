@@ -7,7 +7,7 @@ The team consists of the following 9 members:
 
 - Ranjot Dharni
 - Brennan Moran
-- Your Name Here
+- Sean Russel Agarrado
 - Your Name Here
 - Your Name Here
 - Your Name Here
