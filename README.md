@@ -6,7 +6,7 @@ City of Sacramento's 311 mobile service developed on React Native using the Expo
 The team consists of the following 9 members:
 
 - Ranjot Dharni
-- Your Name Here
+- Brennan Moran
 - Your Name Here
 - Your Name Here
 - Your Name Here
