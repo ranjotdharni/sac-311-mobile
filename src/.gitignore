@@ -1,5 +1,36 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+# ---BEGIN LECTURE GITIGNORE EXAMPLE---
+# added by Connor Dominik
+# gitignore additions provided as in the 10-16-2023 lecture
+# Prerequisites
+*.d
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+# Precompiled Headers
+*.gch
+*.pch
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+# Fortran module files
+*.mod
+*.smod
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+# Executables
+*.exe
+*.out
+*.app
+# ---END LECTURE GITIGNORE EXAMPLE---
+
 # dependencies
 node_modules/
 

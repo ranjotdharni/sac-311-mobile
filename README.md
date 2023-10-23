@@ -10,7 +10,7 @@ The team consists of the following 9 members:
 - Sean Russel Agarrado
 - Jeffrey Bianucci
 - Nicolas Baturin
-- Your Name Here
+- Connor Dominik
 - Your Name Here
 - Your Name Here
 - Your Name Here
