@@ -9,7 +9,7 @@ The team consists of the following 9 members:
 - Brennan Moran
 - Sean Russel Agarrado
 - Jeffrey Bianucci
-- Your Name Here
+- Nicolas Baturin
 - Your Name Here
 - Your Name Here
 - Your Name Here
