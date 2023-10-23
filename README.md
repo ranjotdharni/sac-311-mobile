@@ -11,7 +11,7 @@ The team consists of the following 9 members:
 - Jeffrey Bianucci
 - Nicolas Baturin
 - Connor Dominik
-- Your Name Here
+- David Chernyy
 - Your Name Here
 - Your Name Here
 
