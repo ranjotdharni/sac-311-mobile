@@ -12,10 +12,11 @@ The team consists of the following 9 members:
 - Nicolas Baturin
 - Connor Dominik
 - David Chernyy
-- Your Name Here
-- Your Name Here
+- Jalen Scrivner
+- Jeremy Smart
 
 ## To-do List
 - [X] Tech Stack
-- [ ] gitignore
+- [X] gitignore
+- [X] names into readme file
 - [ ] Interactive Mock-up
