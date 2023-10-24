@@ -1,5 +1,4 @@
 import { Stack } from "expo-router";
-import NavBar from "./(components)/NavBar";
 
 
 global.baseBlue100 = '#2F2DA3'

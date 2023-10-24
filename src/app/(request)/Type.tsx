@@ -1,5 +1,4 @@
-import { Link } from "expo-router";
-import { View, Text, Modal } from "react-native";
+import { View, Text } from "react-native";
 
 
 export default function Type()
