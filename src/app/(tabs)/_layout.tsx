@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import NavBar from "../(components)/NavBar";
 
 
 export default function Layout()
@@ -11,6 +12,7 @@ export default function Layout()
                 <Stack.Screen name="Resources" options={{ headerShown: false }} />
                 <Stack.Screen name="Profile" options={{ headerShown: false }} />
             </Stack>
+            <NavBar />
         </>
     )
 }
