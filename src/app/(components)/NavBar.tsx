@@ -1,5 +1,7 @@
 import { Link } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import NavItem from "./NavItem";
 
 
 export default function NavBar()
@@ -7,7 +9,7 @@ export default function NavBar()
     return (
         <View style={styles.NavContainer}>
             <View style={styles.NavBox}>
-                <Link href='/(tabs)/Home' >Home</Link>
+                <NavItem active={false} title='home' iconName='home' url='/(tabs)/Home' />
                 <Link href='/(tabs)/Explore' >Explore</Link>
 
                 <Link href='/(request)/Type'>New</Link>
