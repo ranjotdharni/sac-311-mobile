@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function NavBar(this: any)
 {
     //Each NavItem 'id' attribute should be a unique value!!!
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(0); //this useState hook should be set to the initial id of the tab to start off on
 
     function isActive( index : number ) : boolean {
         return activeTab === index
