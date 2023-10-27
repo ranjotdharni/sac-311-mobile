@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
         borderRadius: 25,
-        shadowColor: "#000",
+        shadowColor: "#000000",
         shadowOffset: {
 	        width: 0,
 	        height: 5,

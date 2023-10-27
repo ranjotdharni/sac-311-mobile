@@ -1,21 +1,22 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import NewsFeed from "../(components)/Home/NewsFeed";
+import ButtonPanel from "../(components)/Home/ButtonPanel";
+import ForeHead from "../(components)/Home/ForeHead";
 import RequestList from "../(components)/Home/RequestList";
 
 
 export default function Home()
 {
     return (
-        <View style={styles.homeWrapper}>
-            <Text>This is the home page!</Text>
-
-            <RequestList />
-        </View>
+        <>
+            <ForeHead />
+            <View style={{flex: 1}}>
+            <ScrollView contentContainerStyle={{flexGrow: 1}}>
+                    <ButtonPanel />
+                    <NewsFeed />
+                    <RequestList />
+            </ScrollView>
+            </View>
+        </>
     )
 }
-
-const styles = StyleSheet.create({
-    homeWrapper: {
-        width: '100%',
-        height: '100%',
-    }
-})

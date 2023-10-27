@@ -1,52 +1,158 @@
 import { View, StyleSheet, Text, DimensionValue } from "react-native";
+import { dateToFormat } from "../../dummy";
 
-function DefaultRequest( { category, type, reqNumber, date, status } : { category: string, type: string, reqNumber: number, date: Date, status: string } ) {
+const borderCuttoff: number = 15
+
+function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: number, date: Date, status: string, compact: boolean } ) {
+    let internalStyle = (compact ? compactStyles : defaultStyles)
+    let basicStyle = StyleSheet.create({ 
+        default: {
+            width: width, 
+            height: height, 
+            backgroundColor: 'white', 
+            shadowColor: 'black', 
+            shadowOffset: { 
+                width: -2, 
+                height: 4 
+            }, 
+            shadowOpacity: 0.33, shadowRadius: 10, 
+            borderRadius: borderCuttoff,
+        }     
+    })
+    
     return (
-        <View>
-            <Text>{category}</Text>
-            <Text>{type}</Text>
-            <Text>{reqNumber}</Text>
-            <Text>{date.toUTCString()}</Text>
-            <Text>{status}</Text>
+        <View style={[basicStyle.default, internalStyle.requestWrapper]} >
+            <View style={internalStyle.requestCategoryWrapper}><Text adjustsFontSizeToFit style={internalStyle.requestCategory}>{category}</Text></View>
+
+            <View style={internalStyle.internalWrapper}>
+            <View style={internalStyle.basicWrapper}>
+                <Text style={internalStyle.basicTitle}>Type:</Text><Text style={[internalStyle.basicContent, internalStyle.highlightType]}>{type}</Text>
+            </View>
+
+            <View style={internalStyle.basicWrapper}>
+                <Text style={internalStyle.basicTitle}>Request Number:</Text><Text style={internalStyle.basicContent}>{reqNumber}</Text>
+            </View>
+
+            <View style={internalStyle.basicWrapper}>
+                <Text style={internalStyle.basicTitle}>Date Created:</Text><Text style={internalStyle.basicContent}>{dateToFormat('MMM DD, YYYY', date)}</Text>
+            </View>
+
+            <View style={internalStyle.basicWrapper}>
+                <Text style={internalStyle.basicTitle}>Status:</Text><Text style={internalStyle.basicContent}>{status}</Text>
+            </View>
         </View>
-    )
-}
-
-function CompactRequest( { category, type, reqNumber, date, status } : { category: string, type: string, reqNumber: number, date: Date, status: string } ) {
-    return (
-        <View>
-            <Text>{category}</Text>
-            <Text>{type}</Text>
-            <Text>{reqNumber}</Text>
-            <Text>{date.toUTCString()}</Text>
-            <Text>{status}</Text>
         </View>
     )
 }
 
 export default function Request({ category, type, reqNumber, date, status, compact, width, height } : { category: string, type: string, reqNumber: number, date: Date, status: string, compact: boolean, width: DimensionValue, height: DimensionValue }) {
-    dimensions[0] = width;
-    dimensions[1] = height;
-
     return ( 
-        compact ?  
-        <CompactRequest category={category} type={type} reqNumber={reqNumber} date={date} status={status} /> : 
-        <DefaultRequest category={category} type={type} reqNumber={reqNumber} date={date} status={status} />
+        <DefaultRequest compact={compact} width={width} height={height} category={category} type={type} reqNumber={reqNumber} date={date} status={status} />
     )
 }
 
-let dimensions : Array<DimensionValue | undefined> = [undefined, undefined]
-
 const defaultStyles = StyleSheet.create({
-    RequestWrapper: {
-        width: dimensions[0],
-        height: dimensions[1],
+    requestWrapper: {
+        marginBottom: '5%',
+    },
+
+    requestCategoryWrapper: {
+        width: '100%',
+        height: '25%',
+        overflow: 'hidden',
+        borderTopLeftRadius: borderCuttoff,
+        borderTopRightRadius: borderCuttoff,
+        backgroundColor: global.baseBlue100,
+        justifyContent: 'center',
+    },
+
+    requestCategory: {
+        fontSize: 25,
+        width: 'auto',
+        height: 'auto',
+        color: 'white',
+        alignSelf: 'flex-start',
+        marginLeft: '2.5%',
+    },
+
+    internalWrapper: {
+        width: '100%',
+        height: '75%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+    },
+
+    basicWrapper: {
+        width: '80%',
+        marginLeft: '5%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+
+    basicTitle: {
+        fontSize: 15,
+    },
+
+    basicContent: {
+        fontSize: 15
+    },
+
+    highlightType: {
+        color: global.baseGold100
     }
 })
 
 const compactStyles = StyleSheet.create({
-    RequestWrapper: {
-        width: dimensions[0],
-        height: dimensions[1],
+    requestWrapper: {
+        marginTop: '5%',
+    },
+
+    requestCategoryWrapper: {
+        width: '100%',
+        height: '25%',
+        overflow: 'hidden',
+        borderTopLeftRadius: borderCuttoff,
+        borderTopRightRadius: borderCuttoff,
+        backgroundColor: global.baseBlue100,
+        justifyContent: 'center',
+    },
+
+    requestCategory: {
+        fontSize: 25,
+        width: 'auto',
+        height: 'auto',
+        color: 'white',
+        alignSelf: 'flex-start',
+        marginLeft: '2.5%',
+    },
+
+    internalWrapper: {
+        width: '100%',
+        height: '75%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+    },
+
+    basicWrapper: {
+        width: '80%',
+        marginLeft: '5%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+
+    basicTitle: {
+        
+    },
+
+    basicContent: {
+
+    },
+
+    highlightType: {
+        color: global.baseGold100
     }
 })
