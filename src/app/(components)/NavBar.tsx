@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import NavItem from "./NavItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
+import { global } from "../../dummy";
 
 
 export default function NavBar(this: any)
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
         borderRadius: 25,
-        shadowColor: "#000",
+        shadowColor: "#000000",
         shadowOffset: {
 	        width: 0,
 	        height: 5,
