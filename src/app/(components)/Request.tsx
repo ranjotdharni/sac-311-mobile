@@ -2,7 +2,7 @@ import { View, StyleSheet, Text, DimensionValue } from "react-native";
 import { dateToFormat, global } from "../../dummy";
 import CustomText from "./CustomText";
 
-const borderCuttoff: number = 15 //border radius, this will be applied to multiple wrapper components so I set it universally here
+const borderCuttoff: number = 15 //border radius of component, this will be applied to multiple wrapper components so change it universally here
 
 function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: number, date: Date, status: string, compact: boolean } ) {
     let internalStyle = (compact ? compactStyles : defaultStyles)
@@ -97,7 +97,7 @@ const defaultStyles = StyleSheet.create({
     },
 
     basicContent: {
-        fontSize: 15
+        fontSize: 15,
     },
 
     highlightType: {

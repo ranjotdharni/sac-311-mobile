@@ -71,18 +71,26 @@ export const dummyDataNews = [
 //       Custom Functions Section       //
 //                                      //
 
-//The below function generates a date string in a given format from a given Date object, the format string paramter is case insensitive
-//arg1 can be any string but must include the following 3 substrings IN ANY ORDER ANYWHERE IN THE STRING (CASE INSENSITIVE): ('mm' OR 'mmm') AND ('dd' OR 'ddd') AND ('yy' OR 'yyyy')
-//FORMAT EXAMPLES: Using a Date object generated on 10/31/2023 (the date at the time of writing this [ Happy Halloween :) ])
-//  Use         Format           Output
-// Month    'mm' OR 'MM'     :     10
-// Month    'mmm' OR 'MMM'   :    Oct
-//  Day     'dd' OR 'DD'     :     31
-//  Day     'ddd' OR 'DDD'   :    Tue 
-// Year     'yy' OR 'YY'     :     23
-// Year     'yyyy' OR 'YYYY' :   2023
-//USAGE EXAMPLE: Using a Date object generated on 10/31/2023
-// dateToFormat('MMM dd, yYyY', new Date()) -> outputs string 'Oct 31, 2023'            !!!!!!!!!!!!!!!!EXAMPLE ON THIS LINE!!!!!!!!!!!!!!!!
+//=====================================================================================================================================================================================//
+//The below function generates a date string in a given format from a given Date object, the format string paramter is case insensitive                                                //
+//arg1 can be any string but must include the following 3 substrings IN ANY ORDER ANYWHERE IN THE STRING (CASE INSENSITIVE): ('mm' OR 'mmm') AND ('dd' OR 'ddd') AND ('yy' OR 'yyyy')  //
+//=====================================================================================================================================================================================//
+//                                                                                                                                                                                     //
+//FORMAT EXAMPLES: Using a Date object generated on 10/31/2023 (the date at the time of writing this [ Happy Halloween :) ])                                                           // 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//  Use         Format           Output                                                                                                                                                //
+// Month    'mm' OR 'MM'     :     10                                                                                                                                                  //
+// Month    'mmm' OR 'MMM'   :    Oct                                                                                                                                                  //
+//  Day     'dd' OR 'DD'     :     31                                                                                                                                                  //
+//  Day     'ddd' OR 'DDD'   :    Tue                                                                                                                                                  //
+// Year     'yy' OR 'YY'     :     23                                                                                                                                                  //
+// Year     'yyyy' OR 'YYYY' :   2023                                                                                                                                                  //
+//                                                                                                                                                                                     //
+//USAGE EXAMPLE: Using a Date object generated on 10/31/2023                                                                                                                           //
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+// dateToFormat('MMM dd, yYyY', new Date()) -> outputs string 'Oct 31, 2023'            !!!!!!!!!!!!!!!!EXAMPLE ON THIS LINE!!!!!!!!!!!!!!!!                                           //
+//                                                                                                                                                                                     //
+//=====================================================================================================================================================================================//
 export function dateToFormat(arg1: string, arg2: Date): string
 {
     let str = arg1.toLowerCase().slice()
