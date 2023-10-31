@@ -1,3 +1,13 @@
+//                              //
+//             Imports          //
+//                              //
+
+import { StyleSheet } from 'react-native'
+
+//                              //
+//      Dummy Data Section      //
+//                              //
+
 export const dummyDataHome = [
     {
         category: 'Dead Animal',
@@ -36,6 +46,32 @@ export const dummyDataHome = [
     },
 ]
 
+export const dummyDataNews = [
+    {
+        title: 'Modern Innovations in Forensic Technology Show Promising Results',
+        uri: 'https://media.wired.co.uk/photos/606db6c4e46630a583ab3275/master/w_1600,c_limit/iStock_92896435_LARGE.jpg',
+        url: 'https://www.wired.co.uk/article/crime-scene-technology',
+        description: 'Sir Bernard Spilsbury was - by modern standards - an unlikely celebrity. As a forensic pathologist, he delved inside dead bodies to discover the truth behind some of the most notorious murders in the first half of the 20th century.',
+    },
+    {
+        title: 'Tribute for Maine Mass Shooting Attracts Thousands',
+        uri: 'https://i0.wp.com/sacramentocityexpress.com/wp-content/uploads/2021/08/stephen-leonardi-ExpyK79Dx_w-unsplash.jpg?fit=5407%2C3605&ssl=1',
+        url: 'https://fox40.com/news/national/ap-us-news/ap-more-than-1000-pay-tribute-to-maines-mass-shooting-victims-on-day-of-prayer-reflection-and-hope/',
+        description: 'LEWISTON, Maine (AP) — Authorities in Maine spent Monday continuing to piece together the events that led to the worst mass shooting in the state’s history — with the suspect’s record of interaction with police and warning signs involving mental illness and violent threats emerging as key threads.',
+    },
+    {
+        title: 'Domestic Violence Awareness Month',
+        uri: 'https://www.saccounty.gov/news/latest-news/SiteAssets/Domestic%20Violence%20Awareness%20Month.png',
+        url: 'https://www.saccounty.gov/news/latest-news/Pages/Uniting-Against-Domestic-Violence.aspx',
+        description: 'October is Domestic Violence Awareness Month. Sacramento County’s Department of Child, Family and Adult Services (DCFAS) partners with several organizations to help victims of domestic violence. This month, DCFAS is raising awareness about domestic violence and sharing information about the services available.',
+    },
+]
+
+//                                      //
+//       Custom Functions Section       //
+//                                      //
+
+
 export function dateToFormat(arg1: string, arg2: Date): string
 {
     let str = arg1.toLowerCase().slice()
@@ -51,4 +87,47 @@ export function dateToFormat(arg1: string, arg2: Date): string
     str = str.replace(yy, (yy === 'yyyy' ? (arg2.getFullYear()).toString() : arg2.getFullYear().toString().slice(-2)))
 
     return str
+}
+
+//                                      //
+//         Custom Styles Section        //
+//                                      //
+
+export const shadowUniversal = StyleSheet.create({ 
+    default: {
+        shadowColor: 'black', 
+        shadowOffset: { 
+            width: -2, 
+            height: 4 
+        }, 
+        shadowOpacity: 0.33, 
+        shadowRadius: 10,
+    },
+    
+    homeHeader: {
+        shadowColor: 'black', 
+        shadowOffset: { 
+            width: 0,
+            height: 4 
+        }, 
+        shadowOpacity: 0.33, 
+        shadowRadius: 2,
+    }
+})
+
+//                                      //
+//         Global Values Section        //
+//                                      //
+
+export const global = {
+    baseBackground100: '#ffffff',
+
+    baseBlue100: '#2F2DA3',
+    baseBlue200: 'rgba(47, 45, 163, 0.5)',
+
+    baseGold100: '#BEA315',
+    baseGold200: 'rgba(190, 163, 21, 0.5)',
+    baseGold300: 'rgba(190, 163, 21, 0.33)',
+
+    baseGrey100: '#6F6F6F',
 }

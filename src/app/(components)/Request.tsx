@@ -1,7 +1,8 @@
 import { View, StyleSheet, Text, DimensionValue } from "react-native";
-import { dateToFormat } from "../../dummy";
+import { dateToFormat, global } from "../../dummy";
+import CustomText from "./CustomText";
 
-const borderCuttoff: number = 15
+const borderCuttoff: number = 15 //border radius, this will be applied to multiple wrapper components so I set it universally here
 
 function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: number, date: Date, status: string, compact: boolean } ) {
     let internalStyle = (compact ? compactStyles : defaultStyles)
@@ -22,23 +23,23 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
     
     return (
         <View style={[basicStyle.default, internalStyle.requestWrapper]} >
-            <View style={internalStyle.requestCategoryWrapper}><Text adjustsFontSizeToFit style={internalStyle.requestCategory}>{category}</Text></View>
+            <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} bold={true} nol={0} style={internalStyle.requestCategory} /></View>
 
             <View style={internalStyle.internalWrapper}>
             <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Type:</Text><Text style={[internalStyle.basicContent, internalStyle.highlightType]}>{type}</Text>
+                <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} bold={true} style={[internalStyle.basicContent, internalStyle.highlightType]} />
             </View>
 
             <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Request Number:</Text><Text style={internalStyle.basicContent}>{reqNumber}</Text>
+                <Text style={internalStyle.basicTitle}>Request Number:</Text><CustomText text={reqNumber.toString()} nol={0} bold={false} style={internalStyle.basicContent} />
             </View>
 
             <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Date Created:</Text><Text style={internalStyle.basicContent}>{dateToFormat('MMM DD, YYYY', date)}</Text>
+                <Text style={internalStyle.basicTitle}>Date Created:</Text><CustomText nol={0} bold={false} text={dateToFormat('MMM DD, YYYY', date)} style={internalStyle.basicContent} />
             </View>
 
             <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Status:</Text><Text style={internalStyle.basicContent}>{status}</Text>
+                <Text style={internalStyle.basicTitle}>Status:</Text><CustomText text={status} nol={0} bold={false} style={internalStyle.basicContent} />
             </View>
         </View>
         </View>
@@ -53,7 +54,7 @@ export default function Request({ category, type, reqNumber, date, status, compa
 
 const defaultStyles = StyleSheet.create({
     requestWrapper: {
-        marginBottom: '5%',
+        marginTop: '5%',
     },
 
     requestCategoryWrapper: {
@@ -100,7 +101,8 @@ const defaultStyles = StyleSheet.create({
     },
 
     highlightType: {
-        color: global.baseGold100
+        color: global.baseGold100,
+        fontWeight: 'bold',
     }
 })
 

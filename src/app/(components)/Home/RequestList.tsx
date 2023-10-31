@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { dummyDataHome } from "../../../dummy";
 import Request from "../Request";
+import { global } from "../../../dummy";
 
 export default function RequestList()
 {
@@ -19,6 +20,7 @@ export default function RequestList()
 
 const styles = StyleSheet.create({
     listWrapper: {
+        backgroundColor: global.baseBackground100,
         position: 'relative',
         width: Dimensions.get('screen').width,
         height: 'auto',
@@ -32,9 +34,17 @@ const styles = StyleSheet.create({
     },
 
     listTitle: {
-        color: global.baseBlue100,
+        color: 'white',
         alignSelf: 'flex-start',
         fontSize: 30,
-        padding: '2%',
+        padding: 0,
+        backgroundColor: global.baseGold100,
+        borderRadius: 8,
+        overflow: 'hidden',
+        paddingLeft: '2%',
+        paddingRight: '2%',
+        marginLeft: '6%',
+        position: 'relative',
+        top: '0.75%',
     },
 })
