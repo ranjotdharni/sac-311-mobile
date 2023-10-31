@@ -7,7 +7,7 @@ function Button({ text, logo } : { text: string, logo: any }) {     //Ensure val
     return (
         <TouchableOpacity style={styles.ButtonWrapper}>
             <FontAwesome name={logo} size={Dimensions.get('screen').width * 0.15} color='#2B60E9' />
-            <CustomText nol={0} bold={false} style={styles.ButtonText} text={text} />
+            <CustomText nol={0} font='JBM' style={styles.ButtonText} text={text} />
         </TouchableOpacity>
     )
 }
@@ -15,7 +15,7 @@ function Button({ text, logo } : { text: string, logo: any }) {     //Ensure val
 export default function ButtonPanel() {
     return (
         <View style={styles.ButtonPanelWrapper}>
-            <CustomText nol={0} bold={true} text='Are You A...' style={styles.ButtonPanelTitle} />
+            <CustomText nol={0} font='JBM-B' text='Are You A...' style={styles.ButtonPanelTitle} />
             
             <View style={styles.ButtonPanelContainer}>
                 <Button text='Resident' logo='home' />

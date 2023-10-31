@@ -23,23 +23,23 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
     
     return (
         <View style={[basicStyle.default, internalStyle.requestWrapper]} >
-            <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} bold={true} nol={0} style={internalStyle.requestCategory} /></View>
+            <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} font='JBM-B' nol={0} style={internalStyle.requestCategory} /></View>
 
             <View style={internalStyle.internalWrapper}>
             <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} bold={true} style={[internalStyle.basicContent, internalStyle.highlightType]} />
+                <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} font='JBM-B' style={[internalStyle.basicContent, internalStyle.highlightType]} />
             </View>
 
             <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Request Number:</Text><CustomText text={reqNumber.toString()} nol={0} bold={false} style={internalStyle.basicContent} />
+                <Text style={internalStyle.basicTitle}>Request Number:</Text><CustomText text={reqNumber.toString()} nol={0} font='JBM' style={internalStyle.basicContent} />
             </View>
 
             <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Date Created:</Text><CustomText nol={0} bold={false} text={dateToFormat('MMM DD, YYYY', date)} style={internalStyle.basicContent} />
+                <Text style={internalStyle.basicTitle}>Date Created:</Text><CustomText nol={0} font='JBM' text={dateToFormat('MMM DD, YYYY', date)} style={internalStyle.basicContent} />
             </View>
 
             <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Status:</Text><CustomText text={status} nol={0} bold={false} style={internalStyle.basicContent} />
+                <Text style={internalStyle.basicTitle}>Status:</Text><CustomText text={status} nol={0} font='JBM' style={internalStyle.basicContent} />
             </View>
         </View>
         </View>

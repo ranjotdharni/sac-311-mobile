@@ -9,8 +9,8 @@ export default function FeedBox({ title, imgUrl, link, desc } : { title: string,
         <TouchableOpacity onPress={ () => { Linking.openURL(link) } } style={[styles.FeedBoxWrapper, shadowUniversal.default]}>
             <Image source={{ uri: imgUrl }} style={styles.FeedBoxImage} />
             <View style={styles.FeedBoxContentWrapper}>
-                <CustomText bold={true} nol={2} text={title} style={styles.FeedBoxTitle} />
-                <CustomText bold={false} nol={3} text={desc} style={styles.FeedBoxText} />
+                <CustomText font='JBM-B' nol={2} text={title} style={styles.FeedBoxTitle} />
+                <CustomText font='JBM' nol={3} text={desc} style={styles.FeedBoxText} />
             </View>
         </TouchableOpacity>
     )

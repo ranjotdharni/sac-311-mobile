@@ -2,7 +2,6 @@ import { View, StyleSheet, Dimensions, TouchableOpacity, Text, Image } from "rea
 import { shadowUniversal } from "../../../dummy"
 import { MaterialIcons } from "@expo/vector-icons"
 import { global } from "../../../dummy"
-import CustomText from "../CustomText"
 
 
 export default function ForeHead() {
