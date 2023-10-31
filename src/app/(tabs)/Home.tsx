@@ -18,8 +18,8 @@ export default function Home()
                     <RequestList />
                     <View style={{ height: Dimensions.get('screen').height * 0.125 }}></View>
             </ScrollView>
-            <View style={[{width: '100%', height: Dimensions.get('screen').height * 0.005, position: 'fixed', backgroundColor: global.baseBackground100, top: '-100%'}, shadowUniversal.homeHeader]} />
-            </View>
+            <View key={0o10101} style={[{width: '100%', height: Dimensions.get('screen').height * 0.005, position: 'fixed', backgroundColor: global.baseBlue100, top: '-100%'}, shadowUniversal.homeHeader]} />
+            </View>                                                                                             
         </View>
     )
 }

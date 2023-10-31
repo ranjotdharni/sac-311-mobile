@@ -8,11 +8,12 @@ import { useFonts } from "expo-font"
 //      AND fontsLoaded below   //
 //                              //
 
-//      Component Props         //
-//      text: what the text should say
-//      style: custom style prop to be applied to inner Text component
-//      font: one of the fonts included in this component, see includedFonts below
-//      nol: number of lines to display, set to 0 to disable or as default behavior
+//                                  Component Props                                     //
+//======================================================================================//
+//      text: what the text should say                                                  //
+//      style: custom style prop to be applied to inner Text component                  //
+//      font: one of the fonts included in this component, see includedFonts below      //
+//      nol: number of lines to display, set to 0 to disable or as default behavior     //
 
 let includedFonts: "JBM" | "JBM-B"
 
