@@ -1,5 +1,5 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { global } from "../../../dummy";
 import CustomText from "../CustomText";
 

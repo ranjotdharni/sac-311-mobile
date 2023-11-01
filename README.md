@@ -20,5 +20,5 @@ The team consists of the following 9 members:
 - [X] gitignore
 - [X] README
 - [X] Debug Status Bar
-- [ ] In-app WebView Modal
+- [X] In-app WebView Modal
 - [ ] Google Maps API

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
+import { View, ScrollView, Dimensions } from "react-native";
 import NewsFeed from "../(components)/Home/NewsFeed";
 import ButtonPanel from "../(components)/Home/ButtonPanel";
 import ForeHead from "../(components)/Home/ForeHead";
