@@ -1,14 +1,13 @@
 import { StyleSheet, Dimensions, Image, Linking, TouchableOpacity, View } from "react-native";
 import { shadowUniversal, global } from "../../dummy";
 import CustomText from "./CustomText";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
 const borderOffset = 20 //Locally universal border radius
 
 export default function FeedBox({ title, imgUrl, link, desc } : { title: string, imgUrl: string, link: string, desc: string }) {
     return (
-        <TouchableOpacity style={[styles.FeedBoxWrapper, shadowUniversal.default]}>
-            <Link style={styles.Link} href={ { pathname: '/(web)/WebView', params: { url: link } } } />
+        <TouchableOpacity onPress={() => {router.push({ pathname: '/(web)/WebView', params: { url: link } })}} style={[styles.FeedBoxWrapper, shadowUniversal.default]}>
             <Image source={{ uri: imgUrl }} style={styles.FeedBoxImage} />
             <View style={styles.FeedBoxContentWrapper}>
                 <CustomText font='JBM-B' nol={2} text={title} style={styles.FeedBoxTitle} />
@@ -19,12 +18,19 @@ export default function FeedBox({ title, imgUrl, link, desc } : { title: string,
 }
 
 const styles = StyleSheet.create({
+    Wrapper: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     FeedBoxWrapper: {
         width: Dimensions.get('screen').width * 0.9, //say we call the last number on this line 'x' (see next comment below),...
         height: '70%',
         position: 'relative',
-        top: '15%',
-        marginLeft: Dimensions.get('screen').width * 0.05, //...then the last number on this line should be equal to (1 - x) / 2!!!!!
+        marginLeft: Dimensions.get('screen').width * 0.05,
+        top: '15%', //...then the last number on this line should be equal to (1 - x) / 2!!!!!
         backgroundColor: 'white',
         borderRadius: borderOffset,
         display: 'flex',

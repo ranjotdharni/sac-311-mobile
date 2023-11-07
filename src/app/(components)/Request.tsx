@@ -3,14 +3,10 @@ import { dateToFormat, global } from "../../dummy";
 import CustomText from "./CustomText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
 
 const borderCuttoff: number = 15 //border radius of component, this will be applied to multiple wrapper components so change it universally here
-
-const viewRequest = (reqNumber: any) => {
-    //console.log(reqNumber);
-}
 
 
 function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: number, date: Date, status: string, compact: boolean } ) {
@@ -35,29 +31,28 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
         <View style={[basicStyle.default, internalStyle.requestWrapper]} >
             <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} font='JBM-B' nol={0} style={internalStyle.requestCategory} /></View>
             <View style={defaultStyles.arrowWrapper}>
-            <View style={internalStyle.internalWrapper}>
-            <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} font='JBM-B' style={[internalStyle.basicContent, internalStyle.highlightType]} />
-            </View>
+                <View style={internalStyle.internalWrapper}>
+                    <View style={internalStyle.basicWrapper}>
+                        <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} font='JBM-B' style={[internalStyle.basicContent, internalStyle.highlightType]} />
+                    </View>
 
-            <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Request Number:</Text><CustomText text={reqNumber.toString()} nol={0} font='JBM' style={internalStyle.basicContent} />
-            </View>
+                    <View style={internalStyle.basicWrapper}>
+                        <Text style={internalStyle.basicTitle}>Request Number:</Text><CustomText text={reqNumber.toString()} nol={0} font='JBM' style={internalStyle.basicContent} />
+                    </View>
 
-            <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Date Created:</Text><CustomText nol={0} font='JBM' text={dateToFormat('MMM DD, YYYY', date)} style={internalStyle.basicContent} />
-            </View>
+                    <View style={internalStyle.basicWrapper}>
+                        <Text style={internalStyle.basicTitle}>Date Created:</Text><CustomText nol={0} font='JBM' text={dateToFormat('MMM DD, YYYY', date)} style={internalStyle.basicContent} />
+                    </View>
 
-            <View style={internalStyle.basicWrapper}>
-                <Text style={internalStyle.basicTitle}>Status:</Text><CustomText text={status} nol={0} font='JBM' style={internalStyle.basicContent} />
+                    <View style={internalStyle.basicWrapper}>
+                        <Text style={internalStyle.basicTitle}>Status:</Text><CustomText text={status} nol={0} font='JBM' style={internalStyle.basicContent} />
+                    </View>  
+                </View>
+
+                <TouchableOpacity style={defaultStyles.fullRequestView} onPress={() => {router.push('/(requestview)/RequestFullView')}}>
+                    <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseBlue100} />
+                </TouchableOpacity>
             </View>
-            
-        </View>
-            <TouchableOpacity onPress={() => viewRequest(reqNumber)}>
-                <Link style={defaultStyles.fullRequestView} href="/(requestview)/RequestFullView" />
-                <FontAwesome paddingTop='10%' name={'chevron-right'} size={Dimensions.get('screen').width * 0.1} color='#2B60E9' />
-            </TouchableOpacity>
-        </View>
         </View>
     )
 }
@@ -67,6 +62,14 @@ export default function Request({ category, type, reqNumber, date, status, compa
         <DefaultRequest compact={compact} width={width} height={height} category={category} type={type} reqNumber={reqNumber} date={date} status={status} />
     )
 }
+
+/*
+<View>
+                <TouchableOpacity onPress={() => {router.push('/(requestview)/RequestFullView')}}>
+                    <FontAwesome paddingTop='15%' name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseBlue100} />
+                </TouchableOpacity>
+            </View>
+*/
 
 const defaultStyles = StyleSheet.create({
     requestWrapper: {
@@ -127,11 +130,10 @@ const defaultStyles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
     },
+
     fullRequestView: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        zIndex: 2,
+        position: 'relative',
+        top: '35%'
     }
 })
 
@@ -176,14 +178,27 @@ const compactStyles = StyleSheet.create({
     },
 
     basicTitle: {
-        
+        fontSize: 15,
     },
 
     basicContent: {
-
+        fontSize: 15,
     },
 
     highlightType: {
-        color: global.baseGold100
+        color: global.baseGold100,
+        fontWeight: 'bold',
+    },
+
+    arrowWrapper: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    fullRequestView: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        zIndex: 2,
     }
 })
