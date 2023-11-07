@@ -108,7 +108,7 @@ export default function Carousel({ nestData, nestCallback, endPadding, scrollOff
 
     return (
         <>
-            <ScrollView ref={scrollRef} horizontal onScrollBeginDrag={onScrollBegin} onScrollEndDrag={onScrollEnd} contentContainerStyle={{/*flexGrow: 1,*/ paddingRight: endPadding}}>
+            <ScrollView decelerationRate={0} showsHorizontalScrollIndicator={false} ref={scrollRef} horizontal onScrollBeginDrag={onScrollBegin} onScrollEndDrag={onScrollEnd} contentContainerStyle={{/*flexGrow: 1,*/ paddingRight: endPadding}}>
                 { nestCallback(nestData) }
             </ScrollView>
             {(bubbles !== undefined ? <View style={[styles.bubbleWrapper, { width: Dimensions.get('screen').width * bubbles!.spacing, left: Dimensions.get('screen').width * ((1 - bubbles!.spacing) / 2), }]}>
