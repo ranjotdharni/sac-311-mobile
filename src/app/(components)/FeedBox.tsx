@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions, Image, Linking, TouchableOpacity, View } from "react-native";
 import { shadowUniversal, global } from "../../dummy";
 import CustomText from "./CustomText";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 const borderOffset = 20 //Locally universal border radius
 

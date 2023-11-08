@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, Image } from 'react-native';
 
-export default function SearchBar() {
+export default function SearchBar({ placeholder, passUp, style } : { placeholder: string, passUp?: (arg1: string) => void, style?: any }) {
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearch = (query: string) => {
@@ -9,11 +9,12 @@ export default function SearchBar() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, (style !== undefined ? style : {})]}>
             <View style={styles.searchInputWrapper}>
                 <Image style={styles.searchIcon} source={require('../../../assets/png/search.png')} />
-                {searchQuery === '' && <Text style={styles.placeholder}>Request Number</Text>}
+                {searchQuery === '' && <Text style={styles.placeholder}>{placeholder}</Text>}
                 <TextInput
+                    onSubmitEditing={() => {if (passUp !== undefined) {passUp(searchQuery)}}}
                     style={styles.searchInput}
                     value={searchQuery}
                     onChangeText={handleSearch}
