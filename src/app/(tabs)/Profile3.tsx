@@ -8,6 +8,7 @@ import { MaterialIcons } from "@expo/vector-icons"
 TODO:
 - scroll functionality
     - screen should snap so that input field automatically sits above keyboard
+    - navbar currently moves up with keyboard, that probably shouldn't happen
 - shadows on boxes behind input fields (inputBacking)
     - change background color of main container (container) to white once shadows are implemented
 - undo, save, delete changes
@@ -191,8 +192,8 @@ export default function Profile3(){
                     <Text style={styles.inputTextTitle}>Zip Code</Text>
                     <TextInput
                         style={styles.userInput}
-                        value={aptNum}
-                        onChangeText={setAptNum}
+                        value={zipCode}
+                        onChangeText={setZipCode}
                         placeholder="Ex. 98501"
                         placeholderTextColor='#9B9B9B'
                     />
