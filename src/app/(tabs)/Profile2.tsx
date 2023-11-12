@@ -1,9 +1,17 @@
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Image, Pressable} from "react-native";
 import { useState } from "react";
+import { useNavigation } from '@react-navigation/native';
 
 export default function Profile2() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const navigation = useNavigation();
+
+    //pressing login button automatically proceeds to profile page
+    const tempLoginPress = () => {
+      (navigation.navigate as (screen: string) => void)('Profile3');
+    };
   
     return (
       <SafeAreaView style={styles.container}>
@@ -19,7 +27,7 @@ export default function Profile2() {
           placeholder='Password'
           onChangeText={(val) => setPassword(val)}
         />
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress = {tempLoginPress}>
           <Text style={{ color: '#ffffff', textAlign: 'center' }}>Log In</Text>
         </Pressable>
         <Text style={{ marginTop: 20 }}>Forgot your password?</Text>
