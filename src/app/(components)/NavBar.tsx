@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.33,
         shadowRadius: 6,
+        elevation: 5,
     },
 
     NavCenterButton: {

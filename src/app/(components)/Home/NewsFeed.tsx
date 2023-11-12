@@ -2,26 +2,28 @@ import { View, StyleSheet, Text, Dimensions, ScrollView } from "react-native";
 import FeedBox from "../FeedBox";
 import { dummyDataNews } from "../../../dummy";
 import { global } from "../../../dummy";
+import Carousel from "../Carousel";
 
 //  To-Do   //
-// Carousel Slider
-// Nest WebView in Modal for in-app browser effect
+// Carousel Slider - completed on 11/6/2023
 
 export default function NewsFeed() {
+
+    function callback(data: any) {
+        return data.map( (item: any): any => {
+            return <FeedBox key={Math.random()} title={item.title} imgUrl={item.uri} link={item.url} desc={item.description} />
+        })
+    }
+
     return (
         <View style={styles.NewsFeedWrapper}>
             <Text style={styles.NewsFeedTitle}>News</Text>
-            <ScrollView horizontal contentContainerStyle={{/*flexGrow: 1,*/ paddingRight: '5%'}}>
-                {
-                    dummyDataNews.map( data => {
-                            return <FeedBox key={Math.random()} title={data.title} imgUrl={data.uri} link={data.url} desc={data.description} />
-                        }
-                    )
-                }
-            </ScrollView>
+            <Carousel bubbles={{radius: 5, spacing: 0.08, color: global.baseGrey100, activeColor: global.baseBlue100, activeRadius: 6}} nestData={dummyDataNews} nestCallback={callback} itemCount={dummyDataNews.length} endPadding={'5%'} scrollOffset={Dimensions.get('screen').width * 0.95} minScroll={100} />
         </View>
     )
 }
+
+//In the 'Carousel' component used above, please see the specific instructions for setting scrollOffset in the Carousel.tsx file if you need to re-use the component
 
 const styles = StyleSheet.create({
     NewsFeedWrapper: {

@@ -121,6 +121,7 @@ export const shadowUniversal = StyleSheet.create({
         }, 
         shadowOpacity: 0.33, 
         shadowRadius: 10,
+        elevation: 5,
     },
     
     homeHeader: {
@@ -131,6 +132,7 @@ export const shadowUniversal = StyleSheet.create({
         }, 
         shadowOpacity: 0.33, 
         shadowRadius: 2,
+        elevation: 5,
     }
 })
 
