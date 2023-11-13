@@ -1,19 +1,37 @@
 import { Link } from "expo-router";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import NavItem from "./NavItem";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useState } from "react";
+import { global } from "../../dummy";
 
 
-export default function NavBar()
+export default function NavBar(this: any)
 {
+    //Each NavItem 'id' attribute should be a unique value!!!
+    const [activeTab, setActiveTab] = useState(0); //this useState hook should be set to the initial id of the tab to start off on
+
+    function isActive( index : number ) : boolean {
+        return activeTab === index
+    }
+
+    function swapTab(newTab : number) : void {
+        setActiveTab(newTab)
+    }
+
     return (
         <View style={styles.NavContainer}>
             <View style={styles.NavBox}>
-                <Link href='/(tabs)/Home' >Home</Link>
-                <Link href='/(tabs)/Explore' >Explore</Link>
+                <NavItem id={0} active={isActive} passUp={swapTab} title='Home' iconName='home' url='/(tabs)/Home' />
+                <NavItem id={1} active={isActive} passUp={swapTab} title='Explore' iconName='map' url='/(tabs)/Explore' />
 
-                <Link href='/(request)/Type'>New</Link>
+                <View style={styles.NavCenterButton}>
+                    <Link href='/(request)/Type' style={styles.NavCenterLink} />
+                    <MaterialIcons color='#ffffff' name='add' size={35} />
+                </View>
 
-                <Link href='/(tabs)/Resources' >Resources</Link>
-                <Link href='/(tabs)/Profile' >Profile</Link>
+                <NavItem id={2} active={isActive} passUp={swapTab} title='Resources' iconName='bookmark' url='/(tabs)/Resources' />
+                <NavItem id={3} active={isActive} passUp={swapTab} title='Profile' iconName='person' url='/(tabs)/Profile' />
             </View>
         </View>
     )
@@ -30,10 +48,35 @@ const styles = StyleSheet.create({
 
     NavBox: {
         flexDirection: 'row',
-        backgroundColor: '#6f6f6f',
+        backgroundColor: 'white',
         height: '100%',
         width: '90%',
         justifyContent: 'space-evenly',
-        borderRadius: 25
+        alignItems: 'center',
+        borderRadius: 25,
+        shadowColor: "#000000",
+        shadowOffset: {
+	        width: 0,
+	        height: 5,
+        },
+        shadowOpacity: 0.33,
+        shadowRadius: 6,
+        elevation: 5,
+    },
+
+    NavCenterButton: {
+        width: '15%', 
+        aspectRatio: 1 / 1,
+        borderRadius: 28,
+        backgroundColor: global.baseBlue100,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    NavCenterLink: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        zIndex: 2
     },
 })

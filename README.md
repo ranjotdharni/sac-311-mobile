@@ -18,5 +18,7 @@ The team consists of the following 9 members:
 ## To-do List
 - [X] Tech Stack
 - [X] gitignore
-- [X] names into readme file
-- [ ] Interactive Mock-up
+- [X] README
+- [X] Debug Status Bar
+- [X] In-app WebView Modal
+- [ ] Google Maps API

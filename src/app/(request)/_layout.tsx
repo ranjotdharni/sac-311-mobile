@@ -1,13 +1,17 @@
 import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 
 export default function Layout()
 {
     return (
-        <Stack>
-            <Stack.Screen name="Type" options = {{ headerShown: false }} />
-            <Stack.Screen name="Location" options = {{ headerShown: false }} />
-            <Stack.Screen name="Confirm" options = {{ headerShown: false }} />
-        </Stack>
+        <>
+            <StatusBar style='light' />
+            <Stack>
+                <Stack.Screen name="Type" options = {{ headerShown: false, presentation: 'modal' }} />
+                <Stack.Screen name="Location" options = {{ headerShown: false, presentation: 'modal' }} />
+                <Stack.Screen name="Confirm" options = {{ headerShown: false, presentation: 'modal' }} />
+            </Stack>
+        </>
     )
 }
