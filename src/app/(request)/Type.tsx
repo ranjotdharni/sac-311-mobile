@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text, ScrollView } from 'react-native';
 import CustomText from '../(components)/CustomText';
-import { useNavigation } from 'expo-router';
 import { global } from "../../dummy";
 import SearchBar from '../(components)/RequestType/SearchBar';
-
-
+import CreateButton from '../(components)/RequestConfirmation/SubmitButton';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Type()
 {
     const nav = useNavigation()
+    const navigation = useNavigation();
+    const navigateToRequestConfirm = () => {
+        (navigation.navigate as (screen: string) => void)('RequestConfirm');
+    }
     return (
         <View style={styles.mainWrapper}>
             <View style={styles.exitWrapper}>
@@ -25,9 +28,11 @@ export default function Type()
                     <Text style={styles.serviceCardPlaceholder}>
                         Modular service card UI goes here (WIP).
                     </Text>
+                     <CreateButton onPressGoToConfirm={navigateToRequestConfirm} />
             </ScrollView>
         </View>
     )
+
 }
 
 const styles = StyleSheet.create({
