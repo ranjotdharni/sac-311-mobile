@@ -4,11 +4,13 @@ import ButtonPanel from "../(components)/Home/ButtonPanel";
 import ForeHead from "../(components)/Home/ForeHead";
 import RequestList from "../(components)/Home/RequestList";
 import { shadowUniversal, global } from "../../dummy";
+import { StatusBar } from "expo-status-bar";
 
 
 export default function Home()
 {
     return (
+        <>
         <View style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').height, backgroundColor: global.baseBackground100}}>
             <ForeHead />
             <View style={{flex: 1}}>
@@ -21,5 +23,6 @@ export default function Home()
             <View key={0o10101} style={[{width: '100%', height: Dimensions.get('screen').height * 0.005, position: 'fixed', backgroundColor: global.baseBlue100, top: '-100%'}, shadowUniversal.homeHeader]} />
             </View>                                                                                             
         </View>
+        </>
     )
 }

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, Image } from 'react-native';
+import { View, TextInput, StyleSheet, Text, Image, Dimensions } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-export default function SearchBar() {
+export default function SearchBar({ placeholder, passUp, style } : { placeholder: string, passUp?: (inputText: string, keyboardOpen: boolean) => void, style?: any }) {
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearch = (query: string) => {
@@ -9,14 +10,16 @@ export default function SearchBar() {
     };
 
     return (
-        <View style={styles.container}>
+        
+        <View style={[styles.container, (style !== undefined ? style : {})]}>
             <View style={styles.searchInputWrapper}>
                 <Image style={styles.searchIcon} source={require('../../../assets/png/search.png')} />
-                {searchQuery === '' && <Text style={styles.placeholder}>Request Number</Text>}
+                {searchQuery === '' && <Text style={styles.placeholder}>{placeholder}</Text>}
                 <TextInput
+                    onSubmitEditing={() => {if (passUp !== undefined) {passUp(searchQuery, false)}}}
                     style={styles.searchInput}
                     value={searchQuery}
-                    onChangeText={handleSearch}
+                    onChangeText={(e: string) => {handleSearch(e); passUp ? passUp(e, true) : undefined}}
                     placeholderTextColor="#D3D3D3"
                 />
             </View>
