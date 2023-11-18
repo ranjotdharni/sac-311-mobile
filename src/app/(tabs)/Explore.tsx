@@ -5,7 +5,7 @@ import { global, shadowUniversal } from "../../dummy";
 import { places } from "../../addresses";
 import { useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
-import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 function getInitialState() {
     return (
