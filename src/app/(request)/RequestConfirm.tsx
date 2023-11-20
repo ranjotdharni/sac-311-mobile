@@ -1,5 +1,4 @@
-
-
+import { useLocalSearchParams } from "expo-router";
 import { useNavigation } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet, } from "react-native";
 import { global } from "../../dummy";
@@ -7,6 +6,7 @@ import { global } from "../../dummy";
 
 export default function RequestConfirm(){
     const nav = useNavigation()
+    const { reqType, reqDesc } = useLocalSearchParams()
 
     return (
         <View style={styles.pageWrapper}>
@@ -19,7 +19,7 @@ export default function RequestConfirm(){
                     {/*Possibly add category title here*/}
                     <View style={styles.rowWrapper}>
                         <Text style={styles.basicText}>Service:</Text>
-                        <Text style={styles.basicText}>(the selected service)</Text> 
+                        <Text style={[styles.basicText, {fontSize: 15}]}>{(reqType || '(the selected service)')}</Text> 
                     </View>
                     <View style={styles.rowWrapper}>
                         <Text style={styles.basicText}>Location:</Text>
@@ -27,7 +27,7 @@ export default function RequestConfirm(){
                     </View>
                     <View style={styles.rowWrapper}>
                         <Text style={styles.basicText}>Details:</Text>
-                        <Text style={styles.basicText}>(the submitted details)</Text> 
+                        <Text style={[styles.basicText, {fontSize: 15}]}>{(reqDesc || '(the submitted details)')}</Text> 
                     </View>
                     <View style={styles.rowWrapper}>
                         <Text style={styles.basicText}>Attachments:</Text>
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     },
     basicText: {
         fontSize: 22,
-        lineHeight: 50,
+        lineHeight: 25,
     },
     barText: {
         fontSize: 25,

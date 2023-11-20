@@ -77,9 +77,13 @@ const styles = StyleSheet.create({
     },
 
     searchBar: {
+        width: '95%',
         position: 'absolute',
         zIndex: 2,
         top: '5%',
+        left: '2.5%',
+        borderWidth: 1,
+        borderColor: global.baseBlue100,
     },
 
     searchResults: {

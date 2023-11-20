@@ -10,8 +10,7 @@ export default function SearchBar({ placeholder, passUp, style } : { placeholder
     };
 
     return (
-        
-        <View style={[styles.container, (style !== undefined ? style : {})]}>
+        <View style={[styles.container, style ? style : {}]}>
             <View style={styles.searchInputWrapper}>
                 <Image style={styles.searchIcon} source={require('../../../assets/png/search.png')} />
                 {searchQuery === '' && <Text style={styles.placeholder}>{placeholder}</Text>}
@@ -23,7 +22,7 @@ export default function SearchBar({ placeholder, passUp, style } : { placeholder
                     placeholderTextColor="#D3D3D3"
                 />
             </View>
-        </View>
+        </View>        
     );
 }
 
@@ -31,14 +30,15 @@ export default function SearchBar({ placeholder, passUp, style } : { placeholder
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        padding: 10,
         marginTop: 10,
-    },
-    searchInputWrapper: {
+        backgroundColor: 'red',
+        width: Dimensions.get('screen').width,
         height: 50,
-        borderRadius: 25, // Increase this to make the ends more circular
-        backgroundColor: 'white',
+        borderRadius: 25,
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -46,7 +46,13 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
+    },
+    searchInputWrapper: {
+        width: Dimensions.get('screen').width,
+        height: 50,
+        borderRadius: 25, // Increase this to make the ends more circular
         elevation: 10,
+        backgroundColor: 'white',
     },
     placeholder: {
         position: 'absolute', // Add this line
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         paddingLeft: 40, // Adjust this value as needed to make room for the icon
         paddingRight: 10,
-        backgroundColor: 'transparent',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
         fontFamily: 'JBM',
     },
 });
