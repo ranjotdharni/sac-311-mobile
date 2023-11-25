@@ -3,8 +3,22 @@ import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text } from 'rea
 import CustomText from '../(components)/CustomText';
 import { useNavigation } from 'expo-router';
 import { global } from "../../dummy";
+import localData from './patch.json';
+import BulletPointDisplay from './BulletPoints';
+
+export type WhatsNewData = {
+    header: string;
+    body: string;
+  };
 
 export default function WhatsNew(){
+    // Define the state with the correct type
+  const [data, setData] = useState<WhatsNewData | null>(null);
+
+  useEffect(() => {
+    // Directly set the imported JSON data to state
+    setData(localData);
+  }, []);
 
     const navi = useNavigation()
     return(
@@ -24,8 +38,15 @@ export default function WhatsNew(){
                     style={styles.bgImage}
                 />
              <View style={styles.overlay}>
-                   <Text style={styles.headerText}>Welcome to the new Sacramento 311 Mobile App!</Text>
-                   <Text style={styles.bodyText}>This is where the details for the patchnotes will go.</Text>
+                {data ? (
+                    <>
+                   <Text style={styles.headerText}>{data.header}</Text>
+                   <BulletPointDisplay />
+                   <Text style={styles.bodyText}>{data.body}</Text>
+                   </>
+                ) : (
+                    <Text style={styles.headerText}> Loading... </Text>
+                )}
                </View>
             </View>
         </View>
@@ -64,7 +85,7 @@ const styles = StyleSheet.create({
     inXWrapper:{
         marginright: '10%',
         left: 20,
-        marginTop: '5%',
+        marginTop: '6%',
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -84,7 +105,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        padding: 10,
+        padding: 8,
     },
     topText: {
         fontSize: 20,
@@ -92,14 +113,14 @@ const styles = StyleSheet.create({
         marginRight: '41%',
     },
     headerText: {
-        fontSize: 16,
+        fontSize: 18,
         color: 'black',
         fontFamily: 'JBM-B',
         textAlign: 'center',
     },
     bodyText: {
         fontSize: 16,
-        top: 30,
+        top: 20,
         color: 'black',
         fontFamily: 'JBM',
         textAlign: 'center',
