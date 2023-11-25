@@ -1,4 +1,5 @@
-import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
+import { View, StyleSheet, ScrollView, Dimensions, Text} from "react-native";
+import { Component } from "react";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
 import { global, shadowUniversal } from "../../dummy";
@@ -25,6 +26,12 @@ export default function Explore()
     const [data, setData] = useState<Array<{address: string, latitude: number, longitude: number}>>([])
     const [results, showResults] = useState(data.length !== 0)
 
+    //WIP for fetching and parsing the JSON data, uncommenting this makes Expo Go crash every minute or so
+    //const [requests, setRequests] = useState([]);
+    //fetch('https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
+    //.then(response => response.json())
+    //.then(json => setRequests(json));
+
     const mapRef = useRef<MapView>(null)
 
     function setQuery(arg1: string, arg2: boolean) {
@@ -48,7 +55,32 @@ export default function Explore()
 
     return (
         <View style={{flex: 1}}>
-                <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%'}} />
+                <ScrollView showsVerticalScrollIndicator={false} style={[styles.requestWindow]}>
+                    <Text style={{padding:5, textAlign:"center", color:"#8c6f2b"}}>Placeholder for the JSON data.</Text>
+                    {/*Start of placeholder bubbles, replace with real requests from the JSON later*/}
+                    <View style={styles.requestBubble}>
+                        <Text style={styles.requestText}>Request Type: Animal Control</Text>
+                        <Text style={styles.requestText}>Location: N/A</Text>
+                        <Text style={styles.requestText}>Status: CLOSED</Text>
+                    </View>
+                    <View style={styles.requestBubble}>
+                        <Text style={styles.requestText}>Request Type: Parking Violation</Text>
+                        <Text style={styles.requestText}>Location: N/A</Text>
+                        <Text style={styles.requestText}>Status: ACTIVE</Text>
+                    </View>
+                    <View style={styles.requestBubble}>
+                        <Text style={styles.requestText}>Request Type: Dead Animal</Text>
+                        <Text style={styles.requestText}>Location: N/A</Text>
+                        <Text style={styles.requestText}>Status: CLOSED</Text>
+                    </View>
+                    <View style={styles.requestBubble}>
+                        <Text style={styles.requestText}>Request Type: Graffiti</Text>
+                        <Text style={styles.requestText}>Location: N/A</Text>
+                        <Text style={styles.requestText}>Status: ACTIVE</Text>
+                    </View>
+                    {/*End of placeholder bubble */}
+                </ScrollView>
+                <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}} />
                 <SearchBar style={styles.searchBar} passUp={setQuery} placeholder='Search Address' />
                 <ScrollView style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}>
                     {
@@ -115,4 +147,52 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         overflow: 'hidden',
     },
+
+    requestWindow: {
+        backgroundColor: '#ffffffdd',
+        opacity: 1,
+        borderRadius: 15,
+        alignSelf: 'center',
+        width: '88%',
+        height: '20%',
+        top: '67%',
+        overflow: 'scroll',
+        zIndex: 3,
+        position: 'absolute',
+        borderColor: 'transparent',
+        shadowColor: "#000000",
+        shadowOffset: {
+	        width: 0,
+	        height: 5,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 6,
+        elevation: 9,
+    },
+
+    requestBubble: {
+        backgroundColor: '#c79d3c',
+        color: '#ffffff',
+        opacity: 1,
+        borderRadius: 15,
+        alignSelf: 'center',
+        width: '90%',
+        height: 'auto',
+        padding:5,
+        margin:3,
+        shadowColor: "#000000",
+        shadowOffset: {
+	        width: 0,
+	        height: 5,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 6,
+        elevation: 1,
+    },
+
+    requestText: {
+        color: '#ffffff',
+        left: "5%",
+        fontSize: 14
+    }
 })
