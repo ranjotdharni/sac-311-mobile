@@ -17,6 +17,7 @@ export default function Layout()
                 <Stack.Screen name="ResourceFAQ" options={{ headerShown: false }} />
                 <Stack.Screen name="Profile" options={{ headerShown: false }} />
                 <Stack.Screen name="Profile3" options={{ headerShown: false }} />
+                <Stack.Screen name="Profile0" options={{ headerShown: false }} />
             </Stack>
             <NavBar />
         </>
