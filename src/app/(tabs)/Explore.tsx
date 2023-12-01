@@ -7,19 +7,19 @@ import { useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-function getInitialState() {
-    return (
-        {
-            latitude: 38.574713,
-            longitude: -121.491489,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-        }
-    )
-}
-
 export default function Explore()
 {
+    function getInitialState() {
+        return (
+            {
+                latitude: 38.574713,
+                longitude: -121.491489,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            }
+        )
+    }
+
     let sQuery = ''
 
     const [data, setData] = useState<Array<{address: string, latitude: number, longitude: number}>>([])
