@@ -1,0 +1,10 @@
+{
+    "header": "Welcome to the New City of Sacramento 311 Mobile App",
+    "body": "A MORE DETAILED EXPLANATION CAN BE WRITTEN HERE IF IT ISN'T COVERED BY THE BULLET POINTS",
+    "points": [
+        "Fixed a bug in the login flow.",
+        "Improved performance on older devices.",
+        "Added a new feature to customize profiles."
+      ]
+}
+  

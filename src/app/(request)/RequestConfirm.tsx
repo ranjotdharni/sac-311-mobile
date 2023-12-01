@@ -1,12 +1,16 @@
 import { useLocalSearchParams } from "expo-router";
-import { useNavigation } from "expo-router";
+import { useNavigation } from '@react-navigation/native';
 import { Text, TouchableOpacity, View, StyleSheet, } from "react-native";
 import { global } from "../../dummy";
-
+import React from 'react';
 
 export default function RequestConfirm(){
     const nav = useNavigation()
     const { reqType, reqDesc } = useLocalSearchParams()
+
+    const navigateToExplore2 = () => {
+        (nav.navigate as (screen: string) => void)('Explore2');
+    };
 
     return (
         <View style={styles.pageWrapper}>
@@ -23,7 +27,9 @@ export default function RequestConfirm(){
                     </View>
                     <View style={styles.rowWrapper}>
                         <Text style={styles.basicText}>Location:</Text>
-                        <Text style={styles.basicText}>(the submitted address)</Text> 
+                        <TouchableOpacity onPress={navigateToExplore2}>
+                            <Text style={styles.basicText}>(Select Location)</Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.rowWrapper}>
                         <Text style={styles.basicText}>Details:</Text>
