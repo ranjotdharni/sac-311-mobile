@@ -12,6 +12,10 @@ export default function Profile2() {
     const tempLoginPress = () => {
       (navigation.navigate as (screen: string) => void)('Profile3');
     };
+
+    const accountCreationPress = () => {
+      (navigation.navigate as (screen: string) => void)('Profile0');
+    };
   
     return (
       <SafeAreaView style={styles.container}>
@@ -34,7 +38,7 @@ export default function Profile2() {
         <Pressable>
           <Text style={{ color: '#2069bd' }}>Click here.</Text>
         </Pressable>
-        <Pressable style={{ ...styles.button, marginTop: 0 }}>
+        <Pressable style={{ ...styles.button, marginTop: 0 }} onPress={accountCreationPress}>
           <Text style={{ color: '#ffffff', textAlign: 'center' }}>Create an Account</Text>
         </Pressable>
       </SafeAreaView>

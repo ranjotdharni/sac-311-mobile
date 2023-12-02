@@ -1,16 +1,19 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Dimensions, TouchableOpacity, Linking, Text} from "react-native";
 import { global } from "../../../dummy";
-import CustomText from "../CustomText";
+import CustomText  from "../CustomText";
+//import {FontGetter, FontSetter }  from "../CustomText";
+import { router } from "expo-router";
 
-function Button({ text, logo } : { text: string, logo: any }) {     //Ensure values passed in for logo corresond to FontAwesome Icons!!!!!!!!!!!!!!!
+function Button({ text, logo, url } : { text: string, logo: any, url: any}) {     //Ensure values passed in for logo corresond to FontAwesome Icons!!!!!!!!!!!!!!!
     return (
-        <TouchableOpacity style={styles.ButtonWrapper}>
+        <TouchableOpacity onPress={() => {router.push({ pathname: '/(web)/WebView', params: { url: url } })}} style={styles.ButtonWrapper}>
             <FontAwesome name={logo} size={Dimensions.get('screen').width * 0.15} color='#2B60E9' />
-            <CustomText nol={0} font='JBM' style={styles.ButtonText} text={text} />
+            <CustomText nol={0} font='JBM' style={styles.ButtonText} text={text}/>
         </TouchableOpacity>
     )
 }
+
 
 export default function ButtonPanel() {
     return (
@@ -18,9 +21,12 @@ export default function ButtonPanel() {
             <CustomText nol={0} font='JBM-B' text='Are You A...' style={styles.ButtonPanelTitle} />
             
             <View style={styles.ButtonPanelContainer}>
-                <Button text='Resident' logo='home' />
-                <Button text='Visitor' logo='location-arrow' />
-                <Button text='Business' logo='suitcase' />
+
+                <Button text='Resident' logo='home' url="https://www.cityofsacramento.org/Information-Technology"/>
+
+
+                <Button text='Visitor' logo='location-arrow' url="https://www.visitsacramento.com/"/>
+                <Button text='Business' logo='suitcase'  url="https://www.cityofsacramento.org/business"/>
             </View>
         </View>
     )

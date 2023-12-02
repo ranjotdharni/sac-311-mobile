@@ -1,0 +1,40 @@
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import bulletPointsData from './patch.json';
+
+interface BulletPoints {
+  points: string[];
+}
+
+const BulletPointDisplay: React.FC = () => {
+  const data: BulletPoints = bulletPointsData;
+
+  return (
+    <View style={styles.container}>
+      {data.points.map((point, index) => (
+        <View key={index} style={styles.bulletPointContainer}>
+          <Text style={styles.bulletPoint}>• {point}</Text>
+        </View>
+      ))}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  bulletPointContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  bulletPoint: {
+    padding: 5,
+    fontSize: 16,
+  },
+});
+
+export default BulletPointDisplay;

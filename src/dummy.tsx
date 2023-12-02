@@ -71,6 +71,11 @@ export const dummyDataNews = [
 //       Custom Functions Section       //
 //                                      //
 
+export function generateSudoId(digits: number)
+{
+    return Math.floor(Math.random() * Math.pow(10, Math.max(1, digits)))
+}
+
 //=====================================================================================================================================================================================//
 //The below function generates a date string in a given format from a given Date object, the format string paramter is case insensitive                                                //
 //arg1 can be any string but must include the following 3 substrings IN ANY ORDER ANYWHERE IN THE STRING (CASE INSENSITIVE): ('mm' OR 'mmm') AND ('dd' OR 'ddd') AND ('yy' OR 'yyyy')  //

@@ -17,10 +17,12 @@ import { useFonts } from "expo-font"
 
 let includedFonts: "JBM" | "JBM-B"
 
+
+
 export default function CustomText({ text, style, font, nol } : { text: string, style: any, font: typeof includedFonts, nol: number }) {
     let [fontsLoaded] = useFonts({
         'JBM': require('../../assets/fonts/JBM.ttf'),
-        'JBM-B': require('../../assets/fonts/JBM-B.ttf'),
+        'JBM-B': require('../../assets/fonts/JBM-B.ttf')
     })
 
     return (

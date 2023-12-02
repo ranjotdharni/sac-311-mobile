@@ -1,17 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { StatusBar, View, Text, StyleSheet, Pressable, Dimensions, Image, TextInput } from 'react-native';
+import { StatusBar, View, ScrollView, Text, StyleSheet, Pressable, Dimensions, Image, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { shadowUniversal, global } from "../../dummy";
 import { MaterialIcons } from "@expo/vector-icons"
 
 /*
 TODO:
-- scroll functionality
-    - screen should snap so that input field automatically sits above keyboard
-    - navbar currently moves up with keyboard, that probably shouldn't happen
-- shadows on boxes behind input fields (inputBacking)
+- remove navbar when keyboard is open
+- shadows on boxes behind input fields and forehead buttons (inputBacking)
     - change background color of main container (container) to white once shadows are implemented
-- undo, save, delete changes
 */
 
 export default function Profile3(){
@@ -56,8 +54,58 @@ export default function Profile3(){
     };
 
     // sign out button takes user back to login page
-    const handleSignOutPress = () => {
+    const handleSignOutPress = async () => {
+        await AsyncStorage.clear(); // clear user data
         (navigation.navigate as (screen: string) => void)('Profile2');
+    };
+
+    // save user data in async storage
+    const saveUserData = async () => {
+        try {
+            await AsyncStorage.setItem('userData', JSON.stringify({
+                firstName,
+                lastName,
+                userEmail,
+                userAddress,
+                aptNum,
+                zipCode,
+                firstPart,
+                secondPart,
+                thirdPart,
+            }));
+        } catch (error) {
+          // handle errors here
+        }
+    };
+
+    const loadUserData = async () => {
+        try {
+            const userDataString = await AsyncStorage.getItem('userData');
+            if (userDataString !== null) {
+                const userData = JSON.parse(userDataString);
+                setFirstName(userData.firstName);
+                setLastName(userData.lastName);
+                setUserEmail(userData.userEmail);
+                setFirstPart(userData.firstPart);
+                setSecondPart(userData.secondPart);
+                setThirdPart(userData.thirdPart);
+                setUserAddress(userData.userAddress);
+                setAptNum(userData.aptNum);
+                setZipCode(userData.zipCode);
+            }
+        } catch (error) {
+          // handle errors here
+        }
+    };
+
+    // load user data when user clicks back into profile view
+    React.useEffect(() => {
+        loadUserData();
+    }, []);
+    
+    // undo profile changes
+    const revertUserData = async () => { 
+        loadUserData();
     };
         
 
@@ -76,129 +124,144 @@ export default function Profile3(){
                 </Pressable>
             </View>
 
-            <View style={styles.bigSeparator} />
+            <View style={styles.bigSeparator} />{/*end of forehead*/}
+
+            <ScrollView>
+            <View style={{paddingBottom: 90}}>
             
-            <View style={styles.titleWrapper}>
-                <Text style={styles.titleText}>My Profile</Text>
-                <Pressable style={styles.signOutButton} onPress={handleSignOutPress}>
-                    <Image style={styles.loginIcon} source={require('../../assets/png/login1.png')} />{/*login1.png from icons8.com*/}
-                    <Text style={styles.signOutText}>Sign Out</Text>
-                </Pressable>
-            </View>
+                <View style={styles.titleWrapper}>
+                    <Text style={styles.titleText}>My Profile</Text>
+                    <Pressable style={styles.signOutButton} onPress={handleSignOutPress}>
+                        <Image style={styles.loginIcon} source={require('../../assets/png/login1.png')} />{/*login1.png from icons8.com*/}
+                        <Text style={styles.signOutText}>Sign Out</Text>
+                    </Pressable>
+                </View>
 
-            <View style={styles.bigSeparator} />
+                <View style={styles.bigSeparator} />
 
-            <Text style={styles.subtitle}>Personal</Text>
-            <View style={styles.infoWrapper}>
-                <View style={styles.inputBacking}>
-                    <Text style={styles.inputTextTitle}>First Name</Text>
-                    <TextInput
-                        style={styles.userInput}
-                        value={firstName}
-                        onChangeText={setFirstName}
-                        placeholder="Enter your first name"
-                        placeholderTextColor='#9B9B9B'
-                    />
-
-                    <View style={styles.infoSeparator} />
-
-                    <Text style={styles.inputTextTitle}>Last Name</Text>
-                    <TextInput
-                        style={styles.userInput}
-                        value={lastName}
-                        onChangeText={setLastName}
-                        placeholder="Enter your last name"
-                        placeholderTextColor='#9B9B9B'
-                    />
-
-                    <View style={styles.infoSeparator} />
-
-                    <Text style={styles.inputTextTitle}>Email</Text>
-                    <TextInput
-                        style={styles.userInput}
-                        value={userEmail}
-                        onChangeText={setUserEmail}
-                        placeholder="Enter your email address"
-                        placeholderTextColor='#9B9B9B'
-                    /> 
-
-                    <View style={styles.infoSeparator} />
-
-                    <Text style={styles.inputTextTitle}>Phone Number</Text>
-                    <View style={styles.phoneInputContainer}>
-                        <Text style={styles.phoneFormat}>(</Text>
+                <Text style={styles.subtitle}>Personal</Text>
+                <View style={styles.infoWrapper}>
+                    <View style={styles.inputBacking}>
+                        <Text style={styles.inputTextTitle}>First Name</Text>
                         <TextInput
-                            style={styles.phoneInput}
-                            value={firstPart}
-                            onChangeText={handleFirstPartComplete}
-                            maxLength={3}
-                            keyboardType="number-pad"
-                            placeholder="123"
+                            style={styles.userInput}
+                            value={firstName}
+                            onChangeText={setFirstName}
+                            placeholder="Enter your first name"
                             placeholderTextColor='#9B9B9B'
                         />
-                        <Text style={styles.phoneFormat}>)  -</Text>
+
+                        <View style={styles.infoSeparator} />
+
+                        <Text style={styles.inputTextTitle}>Last Name</Text>
                         <TextInput
-                            ref={secondPartRef}
-                            style={styles.phoneInput}
-                            value={secondPart}
-                            onChangeText={handleSecondPartComplete}
-                            maxLength={3}
-                            keyboardType="number-pad"
-                            placeholder="456"
+                            style={styles.userInput}
+                            value={lastName}
+                            onChangeText={setLastName}
+                            placeholder="Enter your last name"
                             placeholderTextColor='#9B9B9B'
                         />
-                        <Text style={styles.phoneFormat}> - </Text>
+
+                        <View style={styles.infoSeparator} />
+
+                        <Text style={styles.inputTextTitle}>Email</Text>
                         <TextInput
-                            ref={thirdPartRef}
-                            style={styles.phoneInputLast}
-                            value={thirdPart}
-                            onChangeText={setThirdPart}
-                            maxLength={4}
-                            keyboardType="number-pad"
-                            placeholder="7890" 
+                            style={styles.userInput}
+                            value={userEmail}
+                            onChangeText={setUserEmail}
+                            placeholder="Enter your email address"
                             placeholderTextColor='#9B9B9B'
-                        />                        
-                    </View>{/*phoneInputContainer*/}
-                    <View style={styles.infoSeparator} />
-                </View>{/*inputBacking*/}       
-            </View>{/*infoWrapper*/}
+                        /> 
 
-            <Text style={styles.subtitle}>Address (Optional)</Text>
-            <View style={styles.infoWrapper}>
-                <View style={styles.inputBacking}>
+                        <View style={styles.infoSeparator} />
 
-                    <Text style={styles.inputTextTitle}>Street Address</Text>
-                    <TextInput
-                        style={styles.userInput}
-                        value={userAddress}
-                        onChangeText={setUserAddress}
-                        placeholder="Example: 1018 J St."
-                        placeholderTextColor='#9B9B9B'
-                    /> 
+                        <Text style={styles.inputTextTitle}>Phone Number</Text>
+                        <View style={styles.phoneInputContainer}>
+                            <Text style={styles.phoneFormat}>(</Text>
+                            <TextInput
+                                style={styles.phoneInput}
+                                value={firstPart}
+                                onChangeText={handleFirstPartComplete}
+                                maxLength={3}
+                                keyboardType="number-pad"
+                                placeholder="123"
+                                placeholderTextColor='#9B9B9B'
+                            />
+                            <Text style={styles.phoneFormat}>)  -</Text>
+                            <TextInput
+                                ref={secondPartRef}
+                                style={styles.phoneInput}
+                                value={secondPart}
+                                onChangeText={handleSecondPartComplete}
+                                maxLength={3}
+                                keyboardType="number-pad"
+                                placeholder="456"
+                                placeholderTextColor='#9B9B9B'
+                            />
+                            <Text style={styles.phoneFormat}> - </Text>
+                            <TextInput
+                                ref={thirdPartRef}
+                                style={styles.phoneInputLast}
+                                value={thirdPart}
+                                onChangeText={setThirdPart}
+                                maxLength={4}
+                                keyboardType="number-pad"
+                                placeholder="7890" 
+                                placeholderTextColor='#9B9B9B'
+                            />                        
+                        </View>{/*phoneInputContainer*/}
+                        <View style={styles.infoSeparator} />
+                    </View>{/*inputBacking*/}       
+                </View>{/*infoWrapper*/}
 
-                    <View style={styles.infoSeparator} />
+                <Text style={styles.subtitle}>Address (Optional)</Text>
+                <View style={styles.infoWrapper}>
+                    <View style={styles.inputBacking}>
 
-                    <Text style={styles.inputTextTitle}>Apartment/Suite/Other</Text>
-                    <TextInput
-                        style={styles.userInput}
-                        value={aptNum}
-                        onChangeText={setAptNum}
-                        placeholder="Ex. #2, 247"
-                        placeholderTextColor='#9B9B9B'
-                    />
+                        <Text style={styles.inputTextTitle}>Street Address</Text>
+                        <TextInput
+                            style={styles.userInput}
+                            value={userAddress}
+                            onChangeText={setUserAddress}
+                            placeholder="Example: 1018 J St."
+                            placeholderTextColor='#9B9B9B'
+                        /> 
 
-                    <View style={styles.infoSeparator} />
+                        <View style={styles.infoSeparator} />
 
-                    <Text style={styles.inputTextTitle}>Zip Code</Text>
-                    <TextInput
-                        style={styles.userInput}
-                        value={zipCode}
-                        onChangeText={setZipCode}
-                        placeholder="Ex. 98501"
-                        placeholderTextColor='#9B9B9B'
-                    />
+                        <Text style={styles.inputTextTitle}>Apartment/Suite/Other</Text>
+                        <TextInput
+                            style={styles.userInput}
+                            value={aptNum}
+                            onChangeText={setAptNum}
+                            placeholder="Ex. #2, 247"
+                            placeholderTextColor='#9B9B9B'
+                        />
+
+                        <View style={styles.infoSeparator} />
+
+                        <Text style={styles.inputTextTitle}>Zip Code</Text>
+                        <TextInput
+                            style={styles.userInput}
+                            value={zipCode}
+                            onChangeText={setZipCode}
+                            placeholder="Ex. 98501"
+                            placeholderTextColor='#9B9B9B'
+                        />
+                    </View>
+                </View>{/*end of address*/}
+
+                <View style={styles.saveDeleteButtons}>{/*save/delete buttons*/}
+                    <Pressable style={styles.saveButton} onPress={saveUserData}>
+                        <Text style={styles.buttonText}>Save</Text>
+                    </Pressable>
+
+                    <Pressable style={styles.deleteButton} onPress={revertUserData}>
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </Pressable>
                 </View>
             </View>
+            </ScrollView>
         </View>
     );
 };
@@ -210,8 +273,35 @@ const styles = StyleSheet.create({
         //justifyContent: 'flex-start',
         //backgroundColor: '#FFF',
     },
-    addressWrapper: {
-
+    saveDeleteButtons: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        paddingHorizontal: 10, 
+        paddingVertical: 5,
+        paddingBottom: 20, 
+    },
+    saveButton: {
+        backgroundColor: '#2F2DA3',
+        borderRadius: 15,
+        marginRight: 10,
+        flex: 0.33,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 10,
+    },
+    deleteButton: {
+        backgroundColor: '#E01D11',
+        borderRadius: 15,
+        flex: 0.33,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 10,
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontFamily: 'JBM',
     },
     phoneInputContainer: {
         flexDirection: 'row',
@@ -239,7 +329,6 @@ const styles = StyleSheet.create({
     infoWrapper: {
         justifyContent: 'center',
         alignItems: 'center',
-        //flex: 1,
     },
     userInput: {// user input text
         color: '#676767',
@@ -247,10 +336,10 @@ const styles = StyleSheet.create({
         fontFamily: 'JBM',
         textAlign: 'left',
     },
-    inputBacking: {// white rectangle behind personal info section
+    inputBacking: {// white rectangle behind personal info sections
         paddingHorizontal: 15,
         paddingVertical: 10,
-        borderRadius: 10,
+        borderRadius: 20,
         width: '95%',
         backgroundColor: '#FFF',
     },
@@ -258,7 +347,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 2,
         backgroundColor: '#D9D9D9',
-        //paddingVertical: 2
     },
     inputTextTitle: {
         fontSize: 13,
