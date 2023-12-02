@@ -15,12 +15,15 @@ import { useFonts } from "expo-font"
 //      font: one of the fonts included in this component, see includedFonts below      //
 //      nol: number of lines to display, set to 0 to disable or as default behavior     //
 
-let includedFonts: "JBM" | "JBM-B"
+let includedFonts: "JBM" | "JBM-B" | "Accessible"
+
+
 
 export default function CustomText({ text, style, font, nol } : { text: string, style: any, font: typeof includedFonts, nol: number }) {
     let [fontsLoaded] = useFonts({
         'JBM': require('../../assets/fonts/JBM.ttf'),
         'JBM-B': require('../../assets/fonts/JBM-B.ttf'),
+        'Accessible': require('../../assets/fonts/OpenDyslexic3-Regular.ttf')
     })
 
     return (
