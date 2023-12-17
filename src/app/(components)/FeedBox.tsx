@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions, Image, Linking, TouchableOpacity, View } from "react-native";
-import { shadowUniversal, global } from "../../dummy";
+import { shadowUniversal, global } from "../../customs";
 import CustomText from "./CustomText";
 import { router } from "expo-router";
 

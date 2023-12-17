@@ -5,6 +5,35 @@
 import { StyleSheet } from 'react-native'
 
 //                              //
+//      Static Types Section    //
+//                              //
+
+export interface responseType {
+    attributes: {
+        ReferenceNumber : string, 
+        CategoryLevel1 : string, 
+        CategoryLevel2 : string, 
+        CategoryName : string, 
+        CouncilDistrictNumber : string, 
+        DateCreated : 1586980200000, 
+        DateUpdated : 1589599320000, 
+        DateClosed : 1589599320000, 
+        CrossStreet : string, 
+        ZIP : string, 
+        SFTicketID : string, 
+        Address : string, 
+        Data_Source : string, 
+        PublicStatus : string, 
+        Neighborhood : string, 
+        SourceLevel1 : string
+    },
+    geometry: {
+        x: number, //longitude
+        y: number  //latitude
+    }
+}
+
+//                              //
 //      Dummy Data Section      //
 //                              //
 
@@ -112,6 +141,48 @@ export function dateToFormat(arg1: string, arg2: Date): string
 
     return str
 }
+
+//==============================================================//
+//  Encodes query paramters according to arcGIS specifications  //
+//==============================================================//
+
+function encodeQueryParamter(query: string): string {
+    let encodedString = encodeURIComponent(query)                   //basic URI encoding
+    encodedString = encodedString.replace(/%20/g, '+')              //replace whitespaces with '+'
+    encodedString = encodedString.replace(/'/g, '%' + (`'`).charCodeAt(0).toString(16))  //encode `'`, `(`, and `)` characters
+    encodedString = encodedString.replace(/\(/g, '%' + ('(').charCodeAt(0).toString(16))
+    encodedString = encodedString.replace(/\)/g, '%' + (')').charCodeAt(0).toString(16))
+    return encodedString
+}
+
+//====================================================================//
+//  Generates full request string to arcGIS endpoint, ready to fetch  //
+//====================================================================//
+
+export function generateEndpointUrl(whereClause: string | undefined, resultCount: number, paramters: Array<[string, string]>): string {
+    // The endpoint's origin
+    const endpointOrigin: string = 'https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/query?'
+
+    // A where clause is necessary for every query so set default (I used OBJECTID to accomplish this because it should never be null)
+    const defaultWhereClause: string = 'where=' + encodeQueryParamter('OBJECTID IS NOT NULL') + (whereClause !== undefined ? encodeQueryParamter(` AND ${whereClause}`) : '')
+
+    // Set the required response fields, specify geometry required, specify spatial reference, specify json response format
+    const defaultParameters: string = '&outFields=ReferenceNumber%2C+CategoryLevel1%2C+CategoryLevel2%2C+CategoryName%2C+CouncilDistrictNumber%2C+DateCreated%2C+DateUpdated%2C+DateClosed%2C+CrossStreet%2C+ZIP%2C+SFTicketID%2C+Address%2C+Data_Source%2C+PublicStatus%2C+Neighborhood%2C+SourceLevel1&returnGeometry=true&outSR=4326&f=pjson'
+
+    // initialize query string
+    let queryString = endpointOrigin + defaultWhereClause
+
+    // append any passed in parameters
+    paramters.forEach((item) => {
+        queryString += `&${item[0]}=${encodeQueryParamter(item[1])}`
+    })
+
+    queryString += `&resultRecordCount=${Math.max(1, resultCount)}` // append the required number of response results
+    queryString += defaultParameters                                // append the default parameters
+
+    return queryString
+}
+
 
 //                                      //
 //         Custom Styles Section        //

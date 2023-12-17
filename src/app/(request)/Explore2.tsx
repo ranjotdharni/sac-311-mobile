@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Region, Marker } from "react-native-maps";
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global } from "../../dummy";
+import { global } from "../../customs";
 import { places } from "../../addresses";
 import { useNavigation } from '@react-navigation/native';
 

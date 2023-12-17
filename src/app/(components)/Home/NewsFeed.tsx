@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, Dimensions, ScrollView } from "react-native";
 import FeedBox from "../FeedBox";
-import { dummyDataNews } from "../../../dummy";
-import { global } from "../../../dummy";
+import { dummyDataNews } from "../../../customs";
+import { global } from "../../../customs";
 import Carousel from "../Carousel";
 
 //  To-Do   //

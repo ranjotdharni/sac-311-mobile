@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, DimensionValue, Dimensions } from "react-native";
-import { dateToFormat, global } from "../../dummy";
+import { dateToFormat, global } from "../../customs";
 import CustomText from "./CustomText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";

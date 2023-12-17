@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useNavigation } from '@react-navigation/native';
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import { global } from "../../dummy";
+import { global } from "../../customs";
 import React from 'react';
 
 export default function RequestConfirm() {

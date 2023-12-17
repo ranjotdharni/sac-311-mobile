@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, Dimensions } from "react-native";
-import { dummyDataHome } from "../../../dummy";
+import { dummyDataHome } from "../../../customs";
 import Request from "../Request";
-import { global } from "../../../dummy";
+import { global } from "../../../customs";
 
 export default function RequestList()
 {

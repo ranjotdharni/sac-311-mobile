@@ -1,9 +1,7 @@
 import { View, StyleSheet, ScrollView, Dimensions, Text} from "react-native";
-import { Component } from "react";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal } from "../../dummy";
-import { places } from "../../addresses";
+import { global, shadowUniversal, generateEndpointUrl, responseType } from "../../customs";
 import { useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -23,7 +21,7 @@ export default function Explore()
 
     let sQuery = ''
 
-    const [data, setData] = useState<Array<{address: string, latitude: number, longitude: number}>>([])
+    const [data, setData] = useState<Array<responseType>>([])
     const [results, showResults] = useState(data.length !== 0)
 
     //WIP for fetching and parsing the JSON data, uncommenting this makes Expo Go crash every minute or so
@@ -34,29 +32,32 @@ export default function Explore()
 
     const mapRef = useRef<MapView>(null)
 
-    function setQuery(arg1: string, arg2: boolean) {
+    async function setQuery(arg1: string, arg2: boolean) {
         sQuery = arg1.trim()
         if (sQuery === '')     return    //break clause
-        
-        let middle = places.filter((e) => {
-            return e.address.toLowerCase().includes(sQuery.toLowerCase())
+
+        const query = generateEndpointUrl(`NOT(Address='') AND UPPER(Address) LIKE UPPER('%${sQuery}%')`, 15, [])
+
+        await fetch(query).then((middle) => {
+            return middle.json()
+        }).then((res) => {
+            setData(res.features)
         })
 
-        setData(middle)
         if (!results || arg2)   showResults(true)
         if (!arg2)  showResults(false)
     }
 
-    function handlePress(obj : { address: string, latitude: number, longitude: number }) {
+    function handlePress(obj: responseType) {
         setData([])
         showResults(false)
-        mapRef.current?.animateToRegion({latitude: obj.latitude, longitude: obj.longitude, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+        mapRef.current?.animateToRegion({latitude: obj.geometry.y, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
     }
 
     return (
         <View style={{flex: 1}}>
                 <ScrollView showsVerticalScrollIndicator={false} style={[styles.requestWindow]}>
-                    <Text style={{padding:5, textAlign:"center", color:"#8c6f2b"}}>Placeholder for the JSON data.</Text>
+                    <Text style={{padding:5, textAlign:"center", color:"#8c6f2b"}}>Select a Request for Details</Text>
                     {/*Start of placeholder bubbles, replace with real requests from the JSON later*/}
                     <View style={styles.requestBubble}>
                         <Text style={styles.requestText}>Request Type: Animal Control</Text>
@@ -84,10 +85,10 @@ export default function Explore()
                 <SearchBar style={styles.searchBar} passUp={setQuery} placeholder='Search Address' />
                 <ScrollView style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}>
                     {
-                        data.map((obj: { address: string, latitude: number, longitude: number }) => {
+                        data.map((obj: responseType) => {
                             return (
                                 <TouchableOpacity onPress={() => {handlePress(obj)}} key={Math.floor(Math.random() * 100000000)} style={[styles.resultShadow, shadowUniversal.default]}>
-                                    <CustomText text={obj.address} style={styles.result} nol={0} font="JBM" />
+                                    <CustomText text={obj.attributes.Address} style={styles.result} nol={0} font="JBM" />
                                 </TouchableOpacity>
                             )
                         })

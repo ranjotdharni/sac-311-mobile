@@ -1,7 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons"
 import { Href, Link } from "expo-router"
 import { View, StyleSheet, Pressable } from "react-native"
-import { global } from "../../dummy"
+import { global } from "../../customs"
 import CustomText from "./CustomText"
 
 export default function NavItem({ id, title, iconName, active, url, passUp } : { id: number, title: string | undefined, iconName: keyof typeof MaterialIcons.glyphMap, active: (arg1: number) => boolean, url: Href<string>, passUp: (arg1: number) => void })

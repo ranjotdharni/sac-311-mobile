@@ -1,6 +1,6 @@
 import { useNavigation } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
-import { global } from "../../dummy";
+import { global } from "../../customs";
 
 
 export default function RequestFullView(){

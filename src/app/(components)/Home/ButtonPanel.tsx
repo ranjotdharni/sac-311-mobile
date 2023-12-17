@@ -1,6 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { View, StyleSheet, Dimensions, TouchableOpacity, Linking, Text} from "react-native";
-import { global } from "../../../dummy";
+import { global } from "../../../customs";
 import CustomText  from "../CustomText";
 //import {FontGetter, FontSetter }  from "../CustomText";
 import { router } from "expo-router";

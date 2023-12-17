@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text, ScrollView } from 'react-native';
 import CustomText from '../(components)/CustomText';
-import { global, shadowUniversal } from "../../dummy";
+import { global, shadowUniversal } from "../../customs";
 //import SearchBar from '../(components)/RequestType/SearchBar';
 import SearchBar from '../(components)/Profile/SearchBar';
 import CreateButton from '../(components)/RequestConfirmation/SubmitButton';

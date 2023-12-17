@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { global, shadowUniversal } from "../../dummy";
+import { global, shadowUniversal } from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useRouter } from 'expo-router';
 import { requestTypes } from '../../addresses';

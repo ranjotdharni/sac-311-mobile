@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import NavItem from "./NavItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { global } from "../../dummy";
+import { global } from "../../customs";
 
 
 export default function NavBar(this: any)
