@@ -1,5 +1,4 @@
 import { Stack } from "expo-router";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export default function Layout()
 {
