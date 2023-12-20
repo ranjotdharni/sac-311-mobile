@@ -1,13 +1,83 @@
-import { View, StyleSheet, ScrollView, Dimensions, Text} from "react-native";
+import { View, StyleSheet, ScrollView, Dimensions, Animated, Text, Easing} from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
 import { global, shadowUniversal, generateEndpointUrl, responseType } from "../../customs";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
+import Request from "../(components)/Request";
+
+function Loader() {
+    const loaderAnim = useRef(new Animated.Value(0)).current
+
+    Animated.loop(
+        Animated.timing(loaderAnim, {
+            toValue: 1,
+            duration: 1000,
+            easing: Easing.linear,
+            useNativeDriver: true,
+        })
+    ).start()
+
+    return (
+        <Animated.View style={[styles.loader, {transform: [{ rotate: loaderAnim.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']}) }]}]}></Animated.View>
+    )
+}
 
 export default function Explore()
 {
+    let sQuery = ''
+
+    const [loader, setLoader] = useState<boolean>(false)
+    const [requests, setRequests] = useState<Array<responseType>>([])
+    const [data, setData] = useState<Array<responseType>>([])
+    const [results, showResults] = useState<boolean>(data.length !== 0)
+
+    const swipeAnim = useRef(new Animated.Value(Dimensions.get('screen').height * 0.8)).current
+    const fadeAnim = useRef(new Animated.Value(0)).current
+
+    function swipeIn() {
+        Animated.timing(swipeAnim, {
+            toValue: Dimensions.get('screen').height * 0.52,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
+    }
+
+    function fadeIn() {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
+    }
+
+    function swipeOut() {
+        Animated.timing(swipeAnim, {
+            toValue: Dimensions.get('screen').height * 0.8,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
+    }
+
+    function fadeOut() {
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
+    }
+
+    function showPad() {
+        fadeIn()
+        swipeIn()
+    }
+
+    function hidePad() {
+        fadeOut()
+        swipeOut()
+    }
+
     function getInitialState() {
         return (
             {
@@ -19,11 +89,6 @@ export default function Explore()
         )
     }
 
-    let sQuery = ''
-
-    const [data, setData] = useState<Array<responseType>>([])
-    const [results, showResults] = useState(data.length !== 0)
-
     //WIP for fetching and parsing the JSON data, uncommenting this makes Expo Go crash every minute or so
     //const [requests, setRequests] = useState([]);
     //fetch('https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
@@ -31,6 +96,13 @@ export default function Explore()
     //.then(json => setRequests(json));
 
     const mapRef = useRef<MapView>(null)
+
+    function onSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
+        if (evt.nativeEvent.translationY > 15)
+        {
+            hidePad()
+        }
+    }
 
     async function setQuery(arg1: string, arg2: boolean) {
         sQuery = arg1.trim()
@@ -48,41 +120,54 @@ export default function Explore()
         if (!arg2)  showResults(false)
     }
 
-    function handlePress(obj: responseType) {
+    async function handlePress(obj: responseType) {
         setData([])
+        setRequests([])
         showResults(false)
+        showPad()
         mapRef.current?.animateToRegion({latitude: obj.geometry.y, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+
+        const query = generateEndpointUrl(`Address='${obj.attributes.Address}'`, 100, [])
+
+        setLoader(true)
+        await fetch(query).then((middle) => {
+            return middle.json()
+        }).then((res) => {
+            setLoader(false)
+            setRequests(res.features)
+        })
     }
 
     return (
         <View style={{flex: 1}}>
-                <ScrollView showsVerticalScrollIndicator={false} style={[styles.requestWindow]}>
-                    <Text style={{padding:5, textAlign:"center", color:"#8c6f2b"}}>Select a Request for Details</Text>
-                    {/*Start of placeholder bubbles, replace with real requests from the JSON later*/}
-                    <View style={styles.requestBubble}>
-                        <Text style={styles.requestText}>Request Type: Animal Control</Text>
-                        <Text style={styles.requestText}>Location: N/A</Text>
-                        <Text style={styles.requestText}>Status: CLOSED</Text>
+                <Animated.View style={[styles.requestWindow, {opacity: fadeAnim, transform: [{translateY: swipeAnim}]}]}>
+                    <View style={styles.padTopBar}>
+                        <PanGestureHandler onGestureEvent={onSwipe}>
+                            <View style={{position: 'absolute', width: '100%', height: '100%'}}>
+                                <TouchableOpacity style={{top: 7, backgroundColor:"grey", width: 75, height: 5, borderRadius: 10, alignSelf: 'center'}}></TouchableOpacity>
+                            </View>
+                        </PanGestureHandler>
                     </View>
-                    <View style={styles.requestBubble}>
-                        <Text style={styles.requestText}>Request Type: Parking Violation</Text>
-                        <Text style={styles.requestText}>Location: N/A</Text>
-                        <Text style={styles.requestText}>Status: ACTIVE</Text>
-                    </View>
-                    <View style={styles.requestBubble}>
-                        <Text style={styles.requestText}>Request Type: Dead Animal</Text>
-                        <Text style={styles.requestText}>Location: N/A</Text>
-                        <Text style={styles.requestText}>Status: CLOSED</Text>
-                    </View>
-                    <View style={styles.requestBubble}>
-                        <Text style={styles.requestText}>Request Type: Graffiti</Text>
-                        <Text style={styles.requestText}>Location: N/A</Text>
-                        <Text style={styles.requestText}>Status: ACTIVE</Text>
-                    </View>
-                    {/*End of placeholder bubble */}
-                </ScrollView>
+                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{alignItems: 'center', paddingBottom: Dimensions.get('screen').height * 0.05}}>
+                        {
+                            (loader ? <Loader /> :
+                                requests.map((item) => {
+                                    return (
+                                        <Request
+                                            key={item.attributes.ReferenceNumber}
+                                            data={item}
+                                            width={'90%'}
+                                            height={Dimensions.get('screen').height * 0.1}
+                                            compact
+                                        />
+                                    )
+                                })
+                            )
+                        }
+                    </ScrollView>
+                </Animated.View>
                 <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}} />
-                <SearchBar style={styles.searchBar} passUp={setQuery} placeholder='Search Address' />
+                <SearchBar style={styles.searchBar} passUp={setQuery} placeholder={'Search Address'} />
                 <ScrollView style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}>
                     {
                         data.map((obj: responseType) => {
@@ -151,12 +236,10 @@ const styles = StyleSheet.create({
 
     requestWindow: {
         backgroundColor: '#ffffffdd',
-        opacity: 1,
         borderRadius: 15,
         alignSelf: 'center',
         width: '88%',
-        height: '20%',
-        top: '67%',
+        height: '35%',
         overflow: 'scroll',
         zIndex: 3,
         position: 'absolute',
@@ -169,6 +252,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 6,
         elevation: 9,
+    },
+
+    padTopBar: {
+        width: '90%',
+        height: '35%',
+        left: '5%',
+        borderBottomColor: '#1b1b1b2f',
+        borderBottomWidth: 1,
     },
 
     requestBubble: {
@@ -195,5 +286,16 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         left: "5%",
         fontSize: 14
+    },
+
+    loader: {
+        width: '15%',
+        aspectRatio: 1 / 1,
+        borderRadius: 100,
+        alignSelf: 'center',
+        marginTop: '20%',
+        borderColor: global.baseGold100,
+        borderWidth: 3,
+        borderStyle: 'dotted',
     }
 })
