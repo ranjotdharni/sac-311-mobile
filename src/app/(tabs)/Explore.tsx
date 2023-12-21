@@ -1,94 +1,67 @@
-import { View, StyleSheet, ScrollView, Dimensions, Animated, Image, Easing} from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
+import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal, generateEndpointUrl, responseType, unixTimeDaysAgo } from "../../customs";
+import { global, shadowUniversal, generateEndpointUrl, responseType } from "../../customs";
 import { useEffect, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
 import Request from "../(components)/Request";
 import { FontAwesome } from "@expo/vector-icons";
 import CustomMarker from "../(components)/CustomMarker";
+import { Loader } from "../(components)/Loader";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 
 const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markers'
 const searchKeySuffix: string = '-scrollAddresses'
 
-function Loader() {
-    const loaderAnim = useRef(new Animated.Value(0)).current
-
-    Animated.loop(
-        Animated.timing(loaderAnim, {
-            toValue: 1,
-            duration: 1000,
-            easing: Easing.linear,
-            useNativeDriver: true,
-        })
-    ).start()
-
-    return (
-        <Animated.View style={[styles.loader, {transform: [{ rotate: loaderAnim.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']}) }]}]}></Animated.View>
-    )
-}
+const padHiddenHeight = Dimensions.get('screen').height * 0.8
+const padVisibleHeight = Dimensions.get('screen').height * 0.47
 
 export default function Explore()
 {
-    let sQuery = ''
+    let padDy: number = 0 // keeps track of how far finger has moved on pad to trigger when to hide pad
 
+    let searchTimeout: NodeJS.Timeout
+    let timeOutCleared: boolean = true
+
+    const mapRef = useRef<MapView>(null)
+
+    const [addressQuery, setAddressQuery] = useState<string>('')
     const [activeMarker, setActiveMarker] = useState<string>('')
     const [markers, setMarkers] = useState<Array<responseType>>([])
     const [padDistrict, setPadDistrict] = useState<string>('')
     const [padAddress, setPadAddress] = useState<string>('')
     const [loader, setLoader] = useState<boolean>(false)
+    const [addressesLoading, setAddressesLoading] = useState<boolean>(false)
     const [requests, setRequests] = useState<Array<responseType>>([])
     const [data, setData] = useState<Array<responseType>>([])
     const [results, showResults] = useState<boolean>(data.length !== 0)
 
-    const padHiddenHeight = Dimensions.get('screen').height * 0.8
-    const padVisibleHeight = Dimensions.get('screen').height * 0.47
+    const swipeAnim = useSharedValue(padHiddenHeight)
+    const fadeAnim = useSharedValue(0)
 
-    const swipeAnim = useRef(new Animated.Value(padHiddenHeight)).current
-    const fadeAnim = useRef(new Animated.Value(0)).current
-
-    async function grabInitialProps() {
-        const query = generateEndpointUrl(`NOT(Address='')`, 100, [])
-    
-        await fetch(query).then((middle) => {
-            return middle.json()
-        }).then((res) => {
-            setMarkers(res.features)
-        })
+    const padAnimation = {
+        transform: [{
+            translateY: swipeAnim.value
+        }],
+        opacity: fadeAnim.value
     }
 
     function swipeIn() {
-        Animated.timing(swipeAnim, {
-            toValue: padVisibleHeight,
-            duration: 200,
-            useNativeDriver: true,
-        }).start();
+        swipeAnim.value = withTiming(padVisibleHeight, { duration: 450 })
     }
 
     function fadeIn() {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 200,
-            useNativeDriver: true,
-        }).start();
+        fadeAnim.value = withTiming(1, { duration: 450 })
     }
 
     function swipeOut() {
-        Animated.timing(swipeAnim, {
-            toValue: padHiddenHeight,
-            duration: 200,
-            useNativeDriver: true,
-        }).start();
+        swipeAnim.value = withTiming(padHiddenHeight, { duration: 450 })
     }
 
     function fadeOut() {
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 200,
-            useNativeDriver: true,
-        }).start();
+        fadeAnim.value = withTiming(0, { duration: 450 })
     }
 
     function showPad() {
@@ -113,13 +86,21 @@ export default function Explore()
         )
     }
 
+    async function grabInitialProps() {
+        const query = generateEndpointUrl(`NOT(Address='')`, 100, [])
+    
+        await fetch(query).then((middle) => {
+            return middle.json()
+        }).then((res) => {
+            setMarkers(res.features)
+        })
+    }
+
     //WIP for fetching and parsing the JSON data, uncommenting this makes Expo Go crash every minute or so
     //const [requests, setRequests] = useState([]);
     //fetch('https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
     //.then(response => response.json())
     //.then(json => setRequests(json));
-
-    const mapRef = useRef<MapView>(null)
 
     function initializePad(obj: responseType) { //will wipe current active marker!!!!!!!!!!!!!!
         setActiveMarker('')
@@ -130,32 +111,52 @@ export default function Explore()
         setPadAddress(obj.attributes.Address)
         showPad()
         mapRef.current?.animateToRegion({latitude: obj.geometry.y, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
-    }
+    }   //notice: latitude is geometry.y and longitude is geometry.x
 
     function onSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
-        if (evt.nativeEvent.translationY > 15)
-        {
-            hidePad()
-        }
+        padDy = evt.nativeEvent.translationY
     }
 
-    async function setQuery(arg1: string, arg2: boolean) {
-        sQuery = arg1.trim()
-        if (sQuery === '')     return    //break clause
+    function onSwipeEnd() {
+        if (padDy > 50) {
+            hidePad()
+        }
+        padDy = 0
+    }
 
-        const query = generateEndpointUrl(`NOT(Address='') AND UPPER(Address) LIKE UPPER('%${sQuery}%')`, 15, [])
+    function setQuery(value: string) {
+        setAddressQuery(value)
+        let sQuery = addressQuery.trim()
+        if (sQuery === '') {
+            setAddressesLoading(false)
+            showResults(false)
+            return
+        }   //break clause
 
-        await fetch(query).then((middle) => {
-            return middle.json()
-        }).then((res) => {
-            setData(res.features)
-        })
+        setAddressesLoading(true)
+        showResults(true)
 
-        if (!results || arg2)   showResults(true)
-        if (!arg2)  showResults(false)
+        if (!timeOutCleared) {
+            clearTimeout(searchTimeout)
+            timeOutCleared = true
+        }
+
+        timeOutCleared = false
+        searchTimeout = setTimeout(async () => {
+            timeOutCleared = true
+            const query = generateEndpointUrl(`NOT(Address='') AND UPPER(Address) LIKE UPPER('%${sQuery}%')`, 15, [])
+
+            await fetch(query).then((middle) => {
+                return middle.json()
+            }).then((res) => {
+                setAddressesLoading(false)
+                setData(res.features)
+            })
+        }, 2000)
     }
 
     async function handlePress(obj: responseType) {
+        setAddressQuery(obj.attributes.Address)
         initializePad(obj)
 
         const query = generateEndpointUrl(`Address='${obj.attributes.Address}'`, 100, [])
@@ -183,7 +184,7 @@ export default function Explore()
 
     return (
         <View style={{flex: 1}}>
-                <Animated.View style={[styles.requestWindow, {opacity: fadeAnim, transform: [{translateY: swipeAnim}]}]}>
+                <Animated.View style={[styles.requestWindow, padAnimation]}>
                     <View style={styles.padTopBar}>
                         <View style={styles.padLeftPartition}>
                             <CustomText nol={3} text={padAddress} font='JBM' style={styles.padAddress} />
@@ -199,7 +200,7 @@ export default function Explore()
                             </TouchableOpacity>
                         </View>
 
-                        <PanGestureHandler onGestureEvent={onSwipe}>
+                        <PanGestureHandler onGestureEvent={onSwipe} onEnded={onSwipeEnd}>
                             <View style={{position: 'absolute', width: '100%', height: '100%'}}>
                                 <TouchableOpacity style={{top: 7, backgroundColor:"grey", width: 75, height: 5, borderRadius: 10, alignSelf: 'center'}}></TouchableOpacity>
                             </View>
@@ -237,16 +238,20 @@ export default function Explore()
                         })
                     }
                 </MapView>
-                <SearchBar style={styles.searchBar} passUp={setQuery} placeholder={'Search Address'} />
+                <SearchBar value={addressQuery} style={styles.searchBar} onSubmit={() => { showResults(false) }} passUp={setQuery} onClear={() => { setAddressQuery('') }} placeholder={'Search Address'} />
                 <ScrollView style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}>
                     {
-                        data.map((obj: responseType) => {
-                            return (
-                                <TouchableOpacity onPress={() => {handlePress(obj)}} key={obj.attributes.ReferenceNumber + searchKeySuffix} style={[styles.resultShadow, shadowUniversal.default]}>
-                                    <CustomText text={obj.attributes.Address} style={styles.result} nol={0} font="JBM" />
-                                </TouchableOpacity>
-                            )
-                        })
+                        (
+                            addressesLoading ? 
+                            <Loader /> :
+                            data.map((obj: responseType) => {
+                                return (
+                                    <TouchableOpacity onPress={() => {handlePress(obj)}} key={obj.attributes.ReferenceNumber + searchKeySuffix} style={[styles.resultShadow, shadowUniversal.default]}>
+                                        <CustomText text={obj.attributes.Address} style={styles.result} nol={0} font="JBM" />
+                                    </TouchableOpacity>
+                                )
+                            })
+                        )
                     }
                     <View style={styles.searchResultsPaddingBottom} />
                 </ScrollView>
@@ -283,6 +288,7 @@ const styles = StyleSheet.create({
         left: '5%',
         borderRadius: 15,
         paddingTop: '5%',
+        zIndex: 5,
     },
 
     searchResultsPaddingBottom: {
@@ -305,7 +311,7 @@ const styles = StyleSheet.create({
     },
 
     requestWindow: {
-        backgroundColor: '#ffffffdd',
+        backgroundColor: global.baseBackground100,
         borderRadius: 15,
         alignSelf: 'center',
         width: '88%',
@@ -325,6 +331,7 @@ const styles = StyleSheet.create({
     },
 
     padTopBar: {
+        backgroundColor: global.baseBackground100,
         width: '90%',
         height: '35%',
         left: '5%',
@@ -358,17 +365,6 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         left: "5%",
         fontSize: 14
-    },
-
-    loader: {
-        width: '15%',
-        aspectRatio: 1 / 1,
-        borderRadius: 100,
-        alignSelf: 'center',
-        marginTop: '20%',
-        borderColor: global.baseGold100,
-        borderWidth: 3,
-        borderStyle: 'dotted',
     },
 
     padLeftPartition: {
