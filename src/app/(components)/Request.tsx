@@ -9,7 +9,7 @@ import { Link, router } from "expo-router";
 const borderCuttoff: number = 15 //border radius of component, this will be applied to multiple wrapper components so change it universally here
 
 
-function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: string, date: Date, status: string, compact: boolean } ) {
+function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact, focusFunction } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: string, date: Date, status: string, compact: boolean, focusFunction: () => void } ) {
     let internalStyle = (compact ? compactStyles : defaultStyles)
     let basicStyle = StyleSheet.create({ 
         default: {
@@ -64,7 +64,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
 
                 {
                     !compact ?
-                    <TouchableOpacity style={internalStyle.fullRequestView} onPress={() => {router.push('/(requestview)/RequestFullView')}}>
+                    <TouchableOpacity style={internalStyle.fullRequestView} onPress={focusFunction}>
                         <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseBlue100} />
                     </TouchableOpacity>
                     :
@@ -73,7 +73,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
             </View>
             {
                 compact ?
-                <TouchableOpacity style={internalStyle.fullRequestView} onPress={() => {router.push('/(requestview)/RequestFullView')}}>
+                <TouchableOpacity style={internalStyle.fullRequestView} onPress={focusFunction}>
                     <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseGrey100} />
                 </TouchableOpacity>
                 :
@@ -93,7 +93,8 @@ export default function Request({ data, compact, width, height } : { data: respo
             type={data.attributes.CategoryLevel1} 
             reqNumber={data.attributes.ReferenceNumber} 
             date={new Date(data.attributes.DateCreated)} 
-            status={data.attributes.PublicStatus} 
+            status={data.attributes.PublicStatus}
+            focusFunction={() => {router.push({pathname: '/(requestview)/RequestFullView', params: {requestData: JSON.stringify(data)}})}} 
         />
     )
 }

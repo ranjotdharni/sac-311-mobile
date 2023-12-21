@@ -1,11 +1,17 @@
-import { View, StyleSheet, ScrollView, Dimensions, Animated, Text, Easing} from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
+import { View, StyleSheet, ScrollView, Dimensions, Animated, Image, Easing} from "react-native";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal, generateEndpointUrl, responseType } from "../../customs";
+import { global, shadowUniversal, generateEndpointUrl, responseType, unixTimeDaysAgo } from "../../customs";
 import { useEffect, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
 import Request from "../(components)/Request";
+import { FontAwesome } from "@expo/vector-icons";
+import CustomMarker from "../(components)/CustomMarker";
+
+const padKeySuffix: string = '-padRequests'
+const markerKeySuffix: string = '-markers'
+const searchKeySuffix: string = '-scrollAddresses'
 
 function Loader() {
     const loaderAnim = useRef(new Animated.Value(0)).current
@@ -28,17 +34,34 @@ export default function Explore()
 {
     let sQuery = ''
 
+    const [activeMarker, setActiveMarker] = useState<string>('')
+    const [markers, setMarkers] = useState<Array<responseType>>([])
+    const [padDistrict, setPadDistrict] = useState<string>('')
+    const [padAddress, setPadAddress] = useState<string>('')
     const [loader, setLoader] = useState<boolean>(false)
     const [requests, setRequests] = useState<Array<responseType>>([])
     const [data, setData] = useState<Array<responseType>>([])
     const [results, showResults] = useState<boolean>(data.length !== 0)
 
-    const swipeAnim = useRef(new Animated.Value(Dimensions.get('screen').height * 0.8)).current
+    const padHiddenHeight = Dimensions.get('screen').height * 0.8
+    const padVisibleHeight = Dimensions.get('screen').height * 0.47
+
+    const swipeAnim = useRef(new Animated.Value(padHiddenHeight)).current
     const fadeAnim = useRef(new Animated.Value(0)).current
+
+    async function grabInitialProps() {
+        const query = generateEndpointUrl(`NOT(Address='')`, 100, [])
+    
+        await fetch(query).then((middle) => {
+            return middle.json()
+        }).then((res) => {
+            setMarkers(res.features)
+        })
+    }
 
     function swipeIn() {
         Animated.timing(swipeAnim, {
-            toValue: Dimensions.get('screen').height * 0.52,
+            toValue: padVisibleHeight,
             duration: 200,
             useNativeDriver: true,
         }).start();
@@ -54,7 +77,7 @@ export default function Explore()
 
     function swipeOut() {
         Animated.timing(swipeAnim, {
-            toValue: Dimensions.get('screen').height * 0.8,
+            toValue: padHiddenHeight,
             duration: 200,
             useNativeDriver: true,
         }).start();
@@ -74,6 +97,7 @@ export default function Explore()
     }
 
     function hidePad() {
+        setActiveMarker('')
         fadeOut()
         swipeOut()
     }
@@ -96,6 +120,17 @@ export default function Explore()
     //.then(json => setRequests(json));
 
     const mapRef = useRef<MapView>(null)
+
+    function initializePad(obj: responseType) { //will wipe current active marker!!!!!!!!!!!!!!
+        setActiveMarker('')
+        setData([])
+        setRequests([])
+        showResults(false)
+        setPadDistrict(obj.attributes.CouncilDistrictNumber)
+        setPadAddress(obj.attributes.Address)
+        showPad()
+        mapRef.current?.animateToRegion({latitude: obj.geometry.y, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+    }
 
     function onSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
         if (evt.nativeEvent.translationY > 15)
@@ -121,11 +156,7 @@ export default function Explore()
     }
 
     async function handlePress(obj: responseType) {
-        setData([])
-        setRequests([])
-        showResults(false)
-        showPad()
-        mapRef.current?.animateToRegion({latitude: obj.geometry.y, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+        initializePad(obj)
 
         const query = generateEndpointUrl(`Address='${obj.attributes.Address}'`, 100, [])
 
@@ -138,10 +169,36 @@ export default function Explore()
         })
     }
 
+    function activateMarker(obj: responseType) {
+        obj.geometry.y -= 0.005    //adjust geometry first b/c pad initialization will set coords based off of passed in object
+        initializePad(obj)
+
+        setActiveMarker(obj.attributes.ReferenceNumber + markerKeySuffix)
+        setRequests([obj])
+    }
+
+    useEffect(() => {
+        grabInitialProps()
+    })
+
     return (
         <View style={{flex: 1}}>
                 <Animated.View style={[styles.requestWindow, {opacity: fadeAnim, transform: [{translateY: swipeAnim}]}]}>
                     <View style={styles.padTopBar}>
+                        <View style={styles.padLeftPartition}>
+                            <CustomText nol={3} text={padAddress} font='JBM' style={styles.padAddress} />
+                            <View style={{flexDirection: 'row', marginBottom: '1%'}}>
+                                <FontAwesome name='trash' size={30} color={global.baseGrey200} />
+                                <CustomText text='Thursday' nol={0} font='JBM-B' style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
+                            </View>
+                        </View>
+                        <View style={styles.padRightPartition}>
+                            <CustomText text={padDistrict} nol={0} font='JBM' style={styles.padDistrict} />
+                            <TouchableOpacity style={styles.newRequestButton}>
+                                <CustomText text='New Request' nol={0} font='JBM' style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
+                            </TouchableOpacity>
+                        </View>
+
                         <PanGestureHandler onGestureEvent={onSwipe}>
                             <View style={{position: 'absolute', width: '100%', height: '100%'}}>
                                 <TouchableOpacity style={{top: 7, backgroundColor:"grey", width: 75, height: 5, borderRadius: 10, alignSelf: 'center'}}></TouchableOpacity>
@@ -154,11 +211,11 @@ export default function Explore()
                                 requests.map((item) => {
                                     return (
                                         <Request
-                                            key={item.attributes.ReferenceNumber}
+                                            key={item.attributes.ReferenceNumber + padKeySuffix}
                                             data={item}
                                             width={'90%'}
                                             height={Dimensions.get('screen').height * 0.1}
-                                            compact
+                                            compact={true}
                                         />
                                     )
                                 })
@@ -166,13 +223,26 @@ export default function Explore()
                         }
                     </ScrollView>
                 </Animated.View>
-                <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}} />
+                <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}}>
+                    {
+                        markers.map((mark) => {
+                            return (
+                                <CustomMarker 
+                                    key={mark.attributes.ReferenceNumber + markerKeySuffix} 
+                                    markerData={mark} 
+                                    isActive={activeMarker === mark.attributes.ReferenceNumber + markerKeySuffix}
+                                    passUp={activateMarker}
+                                />
+                            )
+                        })
+                    }
+                </MapView>
                 <SearchBar style={styles.searchBar} passUp={setQuery} placeholder={'Search Address'} />
                 <ScrollView style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}>
                     {
                         data.map((obj: responseType) => {
                             return (
-                                <TouchableOpacity onPress={() => {handlePress(obj)}} key={Math.floor(Math.random() * 100000000)} style={[styles.resultShadow, shadowUniversal.default]}>
+                                <TouchableOpacity onPress={() => {handlePress(obj)}} key={obj.attributes.ReferenceNumber + searchKeySuffix} style={[styles.resultShadow, shadowUniversal.default]}>
                                     <CustomText text={obj.attributes.Address} style={styles.result} nol={0} font="JBM" />
                                 </TouchableOpacity>
                             )
@@ -239,7 +309,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         alignSelf: 'center',
         width: '88%',
-        height: '35%',
+        height: '40%',
         overflow: 'scroll',
         zIndex: 3,
         position: 'absolute',
@@ -260,6 +330,8 @@ const styles = StyleSheet.create({
         left: '5%',
         borderBottomColor: '#1b1b1b2f',
         borderBottomWidth: 1,
+        display: 'flex',
+        flexDirection: 'row',
     },
 
     requestBubble: {
@@ -297,5 +369,39 @@ const styles = StyleSheet.create({
         borderColor: global.baseGold100,
         borderWidth: 3,
         borderStyle: 'dotted',
+    },
+
+    padLeftPartition: {
+        width: '60%',
+        height: '100%',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+
+    padRightPartition: {
+        width: '40%',
+        height: '100%',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+
+    padAddress: {
+        marginTop: '10%',
+        color: global.baseGold100,
+        fontSize: 18.5,
+    },
+
+    padDistrict: {
+        marginTop: '16%',
+        marginRight: '10%',
+        color: global.baseGrey100,
+        fontSize: 15,
+        alignSelf: 'flex-end'
+    },
+
+    newRequestButton: {
+        backgroundColor: global.baseBlue100,
+        borderRadius: 30,
+        marginBottom: '5%',
     }
 })

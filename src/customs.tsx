@@ -37,6 +37,28 @@ export interface responseType {
 //      Dummy Data Section      //
 //                              //
 
+const symbolReference = [
+    {category: 'Animal Control', url: '9750d7d29ebe0f642bb414e7bb60a4d4'},
+    {category: 'Building and Planning', url: '6f30eb2bf6323ab0383e57efab6c3dc1'},
+    {category: 'Code Enforcement', url: 'e3dea662e30e1a880f31107ed2743d65'},
+    {category: 'Drains', url: 'eedca6fac77ce62660fb33ee2b1e26a5'},
+    {category: 'Facilities', url: '6fa0605b4d17e4fe7323cbbd0a40f3d2'},
+    {category: 'Non-City', url: 'dbc53d72aa7fd12b0e35b259d8d05bc3'},
+    {category: 'Homeless Camp', url: 'f0b03999436715744d4f42082d55837d'},
+    {category: 'Parking', url: '3628d2b19fb65fa59c7760ac37ff392a'},
+    {category: 'Parks', url: '88af0c6e7fd1f8f47e1283175cee8852'},
+    {category: 'Sewer', url: '293d2daab0bc638de963005561a98a58'},
+    {category: 'Solid Waste', url: '768a6272c424eb7c57837e0e5c4d0813'},
+    {category: 'Streets', url: '86b083a8af0adc7acfc753f0d052689e'},
+    {category: 'Urban Forestry', url: '2aee2d289cca97d5dc7c8c380b325ed8'},
+    {category: 'Utility Billing', url: '77150615e9ef53a65a6cae6612e17c2d'},
+    {category: 'Water', url: '334ddb09d796886d797edc23f896a2c2'},
+    {category: 'Email Review', url: '48c427e81f51f55c6dfe8cd916106429'},
+    {category: 'Shared Rideables', url: 'bc4c127d82817d628a6015ccdf073e63'},
+    {category: 'Escalation', url: 'f3a7dd9487d9ca03b00ce5f015b8061c'},
+    {category: 'Other', url: 'a7427c700f875c2e789f93802fc4d1fd'},
+]
+
 export const dummyDataHome = [
     {
         category: 'Dead Animal',
@@ -183,6 +205,27 @@ export function generateEndpointUrl(whereClause: string | undefined, resultCount
     return queryString
 }
 
+export function generateSymbolUrl(categoryLevel1: string): string {
+    const endpointOrigin: string = 'https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/images/'
+
+    for (let i = 0; i < symbolReference.length; i++) {
+        let subject = symbolReference[i]
+
+        if (subject.category === categoryLevel1) {
+            return endpointOrigin + subject.url
+        }
+    }
+
+    return endpointOrigin + '361c2dfe548d1b53b9da23f9219a630d'
+}
+
+export function unixTimeDaysAgo(daysAgo: number): number {
+    const dateNow: Date = new Date()
+    const dateAtGivenDaysAgo: Date = new Date(dateNow.getTime() - daysAgo * 24 * 60 * 60 * 1000)
+    const dateInUnixTime: number = Math.floor(dateAtGivenDaysAgo.getTime() / 1000)
+
+    return dateInUnixTime
+}
 
 //                                      //
 //         Custom Styles Section        //
@@ -227,4 +270,5 @@ export const global = {
     baseGold300: 'rgba(190, 163, 21, 0.33)',
 
     baseGrey100: '#6F6F6F',
+    baseGrey200: 'rgba(112, 112, 112, 0.7)',
 }
