@@ -219,12 +219,10 @@ export function generateSymbolUrl(categoryLevel1: string): string {
     return endpointOrigin + '361c2dfe548d1b53b9da23f9219a630d'
 }
 
-export function unixTimeDaysAgo(daysAgo: number): number {
+export function dateAtDaysAgo(daysAgo: number): Date {
     const dateNow: Date = new Date()
-    const dateAtGivenDaysAgo: Date = new Date(dateNow.getTime() - daysAgo * 24 * 60 * 60 * 1000)
-    const dateInUnixTime: number = Math.floor(dateAtGivenDaysAgo.getTime() / 1000)
-
-    return dateInUnixTime
+    dateNow.setDate(dateNow.getDate() - daysAgo)
+    return dateNow
 }
 
 //                                      //

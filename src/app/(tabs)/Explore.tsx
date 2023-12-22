@@ -1,7 +1,7 @@
 import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal, generateEndpointUrl, responseType } from "../../customs";
+import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat } from "../../customs";
 import { useEffect, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
@@ -10,6 +10,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import CustomMarker from "../(components)/CustomMarker";
 import { Loader } from "../(components)/Loader";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import _ from 'lodash'
 
 const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markers'
@@ -21,9 +22,6 @@ const padVisibleHeight = Dimensions.get('screen').height * 0.47
 export default function Explore()
 {
     let padDy: number = 0 // keeps track of how far finger has moved on pad to trigger when to hide pad
-
-    let searchTimeout: NodeJS.Timeout
-    let timeOutCleared: boolean = true
 
     const mapRef = useRef<MapView>(null)
 
@@ -87,7 +85,8 @@ export default function Explore()
     }
 
     async function grabInitialProps() {
-        const query = generateEndpointUrl(`NOT(Address='')`, 100, [])
+        // default markers are requests w/ valid addresses and created within in the last 7 days
+        const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(7))}'`, 100, [['orderByFields', 'Address']])
     
         await fetch(query).then((middle) => {
             return middle.json()
@@ -110,7 +109,7 @@ export default function Explore()
         setPadDistrict(obj.attributes.CouncilDistrictNumber)
         setPadAddress(obj.attributes.Address)
         showPad()
-        mapRef.current?.animateToRegion({latitude: obj.geometry.y, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+        mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.005, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
     }   //notice: latitude is geometry.y and longitude is geometry.x
 
     function onSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
@@ -124,10 +123,8 @@ export default function Explore()
         padDy = 0
     }
 
-    function setQuery(value: string) {
-        setAddressQuery(value)
-        let sQuery = addressQuery.trim()
-        if (sQuery === '') {
+    const fetchAddresses = _.throttle(async () => {
+        if (addressQuery === '') {
             setAddressesLoading(false)
             showResults(false)
             return
@@ -136,23 +133,19 @@ export default function Explore()
         setAddressesLoading(true)
         showResults(true)
 
-        if (!timeOutCleared) {
-            clearTimeout(searchTimeout)
-            timeOutCleared = true
-        }
+        const query = generateEndpointUrl(`NOT(Address='') AND UPPER(Address) LIKE UPPER('%${addressQuery}%')`, 15, [])
 
-        timeOutCleared = false
-        searchTimeout = setTimeout(async () => {
-            timeOutCleared = true
-            const query = generateEndpointUrl(`NOT(Address='') AND UPPER(Address) LIKE UPPER('%${sQuery}%')`, 15, [])
+        await fetch(query).then((middle) => {
+            return middle.json()
+        }).then((res) => {
+            setAddressesLoading(false)
+            setData(res.features)
+        })
+    }, 750)
 
-            await fetch(query).then((middle) => {
-                return middle.json()
-            }).then((res) => {
-                setAddressesLoading(false)
-                setData(res.features)
-            })
-        }, 2000)
+    function setQuery(value: string) {
+        setAddressQuery(value.trim())
+        fetchAddresses()
     }
 
     async function handlePress(obj: responseType) {
@@ -171,7 +164,6 @@ export default function Explore()
     }
 
     function activateMarker(obj: responseType) {
-        obj.geometry.y -= 0.005    //adjust geometry first b/c pad initialization will set coords based off of passed in object
         initializePad(obj)
 
         setActiveMarker(obj.attributes.ReferenceNumber + markerKeySuffix)
