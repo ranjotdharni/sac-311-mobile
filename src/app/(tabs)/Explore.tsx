@@ -1,7 +1,7 @@
-import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
+import { View, StyleSheet, ScrollView, Dimensions, FlatList } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat } from "../../customs";
+import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl } from "../../customs";
 import { useEffect, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
@@ -22,6 +22,7 @@ const padVisibleHeight = Dimensions.get('screen').height * 0.47
 export default function Explore()
 {
     let padDy: number = 0 // keeps track of how far finger has moved on pad to trigger when to hide pad
+                          //the visibility of the pad itself is an independent, state-wise function so storing this in state is not necessary
 
     const mapRef = useRef<MapView>(null)
 
@@ -35,6 +36,7 @@ export default function Explore()
     const [requests, setRequests] = useState<Array<responseType>>([])
     const [data, setData] = useState<Array<responseType>>([])
     const [results, showResults] = useState<boolean>(data.length !== 0)
+    const [requestFetch, triggerRequestFetch] = useState<responseType>()
 
     const swipeAnim = useSharedValue(padHiddenHeight)
     const fadeAnim = useSharedValue(0)
@@ -82,17 +84,6 @@ export default function Explore()
                 longitudeDelta: 0.0421,
             }
         )
-    }
-
-    async function grabInitialProps() {
-        // default markers are requests w/ valid addresses and created within in the last 7 days
-        const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(7))}'`, 100, [['orderByFields', 'Address']])
-    
-        await fetch(query).then((middle) => {
-            return middle.json()
-        }).then((res) => {
-            setMarkers(res.features)
-        })
     }
 
     //WIP for fetching and parsing the JSON data, uncommenting this makes Expo Go crash every minute or so
@@ -148,19 +139,11 @@ export default function Explore()
         fetchAddresses()
     }
 
-    async function handlePress(obj: responseType) {
+    function handlePress(obj: responseType) {
         setAddressQuery(obj.attributes.Address)
         initializePad(obj)
-
-        const query = generateEndpointUrl(`Address='${obj.attributes.Address}'`, 100, [])
-
         setLoader(true)
-        await fetch(query).then((middle) => {
-            return middle.json()
-        }).then((res) => {
-            setLoader(false)
-            setRequests(res.features)
-        })
+        triggerRequestFetch(obj)
     }
 
     function activateMarker(obj: responseType) {
@@ -171,8 +154,34 @@ export default function Explore()
     }
 
     useEffect(() => {
+        async function grabInitialProps() {
+            // default markers are requests w/ valid addresses and created within in the last 7 days
+            const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(7))}'`, 25, [['orderByFields', 'Address']])
+        
+            await fetch(query).then((middle) => {
+                return middle.json()
+            }).then((res) => {
+                setMarkers(res.features)
+            })
+        }
+
         grabInitialProps()
     })
+
+    useEffect(() => {
+        async function grabRequests() {
+            const query = generateEndpointUrl(`Address='${requestFetch?.attributes.Address}'`, 100, [])
+
+            await fetch(query).then((middle) => {
+                return middle.json()
+            }).then((res) => {
+                setLoader(false)
+                setRequests(res.features)
+            })
+        }
+
+        grabRequests()
+    }, [requestFetch])
 
     return (
         <View style={{flex: 1}}>
@@ -198,23 +207,24 @@ export default function Explore()
                             </View>
                         </PanGestureHandler>
                     </View>
-                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{alignItems: 'center', paddingBottom: Dimensions.get('screen').height * 0.05}}>
-                        {
-                            (loader ? <Loader /> :
-                                requests.map((item) => {
-                                    return (
-                                        <Request
-                                            key={item.attributes.ReferenceNumber + padKeySuffix}
-                                            data={item}
-                                            width={'90%'}
-                                            height={Dimensions.get('screen').height * 0.1}
-                                            compact={true}
-                                        />
-                                    )
-                                })
-                            )
-                        }
-                    </ScrollView>
+                    {
+                        loader ? 
+                        <Loader /> :
+                        <FlatList
+                            contentContainerStyle={{alignItems: 'center', paddingBottom: Dimensions.get('screen').height * 0.05}}
+                            data={requests}
+                            keyExtractor={item => item.attributes.ReferenceNumber + padKeySuffix}
+                            renderItem={
+                                ({item}) => 
+                                <Request
+                                    data={item}
+                                    width={Dimensions.get('screen').width * 0.75}
+                                    height={Dimensions.get('screen').height * 0.1}
+                                    compact={true}
+                                />
+                            }
+                        />
+                    }
                 </Animated.View>
                 <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}}>
                     {
@@ -223,7 +233,7 @@ export default function Explore()
                                 <CustomMarker 
                                     key={mark.attributes.ReferenceNumber + markerKeySuffix} 
                                     markerData={mark} 
-                                    isActive={activeMarker === mark.attributes.ReferenceNumber + markerKeySuffix}
+                                    image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
                                     passUp={activateMarker}
                                 />
                             )
@@ -231,22 +241,21 @@ export default function Explore()
                     }
                 </MapView>
                 <SearchBar value={addressQuery} style={styles.searchBar} onSubmit={() => { showResults(false) }} passUp={setQuery} onClear={() => { setAddressQuery('') }} placeholder={'Search Address'} />
-                <ScrollView style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}>
-                    {
-                        (
-                            addressesLoading ? 
-                            <Loader /> :
-                            data.map((obj: responseType) => {
-                                return (
-                                    <TouchableOpacity onPress={() => {handlePress(obj)}} key={obj.attributes.ReferenceNumber + searchKeySuffix} style={[styles.resultShadow, shadowUniversal.default]}>
-                                        <CustomText text={obj.attributes.Address} style={styles.result} nol={0} font="JBM" />
-                                    </TouchableOpacity>
-                                )
-                            })
-                        )
-                    }
-                    <View style={styles.searchResultsPaddingBottom} />
-                </ScrollView>
+                {(
+                    addressesLoading ?
+                    <View style={[styles.searchResults, shadowUniversal.default]}><Loader /></View>:
+                    <FlatList 
+                        style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}
+                        keyExtractor={item => item.attributes.ReferenceNumber + searchKeySuffix}
+                        data={data}
+                        renderItem={
+                            ({item}) => 
+                                <TouchableOpacity onPress={() => { handlePress(item) }} style={[styles.resultShadow, shadowUniversal.default]}>
+                                    <CustomText text={item.attributes.Address} style={styles.result} nol={0} font="JBM" />
+                                </TouchableOpacity>
+                        }
+                    />
+                )}
         </View>
     )
 }

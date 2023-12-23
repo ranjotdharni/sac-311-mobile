@@ -1,8 +1,8 @@
 import { Marker } from "react-native-maps";
-import { generateSymbolUrl, responseType } from "../../customs";
+import { responseType } from "../../customs";
 import { Image } from "react-native";
 
-export default function CustomMarker({ markerData, isActive, passUp } : { markerData: responseType, isActive: boolean, passUp: (obj: responseType) => void }) {
+export default function CustomMarker({ markerData, image, passUp } : { markerData: responseType, image: string, passUp: (obj: responseType) => void }) {
     if (markerData.geometry === undefined) {    // ensure valid geometry exists
         return (
             <></>
@@ -10,11 +10,8 @@ export default function CustomMarker({ markerData, isActive, passUp } : { marker
     }
 
     return (
-        <Marker coordinate={{latitude: markerData.geometry.y, longitude: markerData.geometry.x}} onPress={() => {passUp(markerData)}}>
-            <Image 
-                source={{uri: generateSymbolUrl(markerData.attributes.CategoryLevel1)}}
-                style={{width: (isActive ? 60 : 20), height: (isActive ? 60 : 20)}}
-            />
+        <Marker image={{uri: image}} coordinate={{latitude: markerData.geometry.y, longitude: markerData.geometry.x}} onPress={() => {passUp(markerData)}}>
+    
         </Marker>
     )
 }

@@ -58,7 +58,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
 
                     <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestStatus)}>
                         {(!compact ? <Text style={internalStyle.basicTitle}>Status:</Text> : <></>)}
-                        <CustomText text={status} nol={0} font='JBM' style={[internalStyle.basicContent, (compact ? {color: (status === 'CLOSED' ? 'red' : (status === 'NEW' ? 'green' : global.baseGold100))} : {})]} />
+                        <CustomText text={status} nol={0} font='JBM' style={[internalStyle.basicContent, (compact ? {marginRight: '10%', top: -2, color: (status === 'CLOSED' ? 'red' : (status === 'NEW' ? 'green' : global.baseGold100))} : {})]} />
                     </View>  
                 </View>
 

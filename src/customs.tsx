@@ -205,19 +205,28 @@ export function generateEndpointUrl(whereClause: string | undefined, resultCount
     return queryString
 }
 
-export function generateSymbolUrl(categoryLevel1: string): string {
-    const endpointOrigin: string = 'https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/images/'
+//==========================================================================================================//
+//  Generate full request string to icon images endpoint based on CategoryLevel1 of object, ready to fetch  //
+//  Also provides default url in case CategoryLevel1 is not matched to any existing value                   //
+//==========================================================================================================//
 
-    for (let i = 0; i < symbolReference.length; i++) {
+export function generateSymbolUrl(categoryLevel1: string): string {
+    const endpointOrigin: string = 'https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/images/'  // the image endpoint origin
+
+    for (let i = 0; i < symbolReference.length; i++) {  // loop through symbol reference
         let subject = symbolReference[i]
 
-        if (subject.category === categoryLevel1) {
-            return endpointOrigin + subject.url
+        if (subject.category === categoryLevel1) {  // if category match...
+            return endpointOrigin + subject.url     // return image endpoint origin with corresponding url appended
         }
     }
 
-    return endpointOrigin + '361c2dfe548d1b53b9da23f9219a630d'
+    return endpointOrigin + '361c2dfe548d1b53b9da23f9219a630d'  // no category match found? Return image endpoint origin with default url appended
 }
+
+//==========================================//
+//  Get date from given number of days ago  //
+//==========================================//
 
 export function dateAtDaysAgo(daysAgo: number): Date {
     const dateNow: Date = new Date()
