@@ -1,10 +1,10 @@
 import { FontAwesome } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { View, TextInput, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { global } from '../../../customs';
 
-export default function SearchBar({ placeholder, value, passUp, onSubmit, onClear, style } : { placeholder: string, value: string, passUp?: (inputText: string) => void, onSubmit: () => void, style?: any, onClear: () => void }) {
+function SearchBar({ placeholder, value, passUp, onSubmit, onClear, style } : { placeholder: string, value: string, passUp: (inputText: string) => void, onSubmit: () => void, style?: any, onClear: () => void }) {
     return (
         <View style={[styles.container, style ? style : {}]}>
             <View style={styles.searchInputWrapper}>
@@ -90,8 +90,4 @@ const styles = StyleSheet.create({
     },
 });
 
-
-
-
-
-
+export default memo(SearchBar)

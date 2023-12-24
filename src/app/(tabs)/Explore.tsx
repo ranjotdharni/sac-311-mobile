@@ -2,7 +2,7 @@ import { View, StyleSheet, ScrollView, Dimensions, FlatList } from "react-native
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
 import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl } from "../../customs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, memo, useCallback } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
 import Request from "../(components)/Request";
@@ -11,6 +11,9 @@ import CustomMarker from "../(components)/CustomMarker";
 import { Loader } from "../(components)/Loader";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import _ from 'lodash'
+import { Logs } from 'expo'
+
+Logs.enableExpoCliLogging()
 
 const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markers'
@@ -19,11 +22,8 @@ const searchKeySuffix: string = '-scrollAddresses'
 const padHiddenHeight = Dimensions.get('screen').height * 0.8
 const padVisibleHeight = Dimensions.get('screen').height * 0.47
 
-export default function Explore()
+function Explore()
 {
-    let padDy: number = 0 // keeps track of how far finger has moved on pad to trigger when to hide pad
-                          //the visibility of the pad itself is an independent, state-wise function so storing this in state is not necessary
-
     const mapRef = useRef<MapView>(null)
 
     const [addressQuery, setAddressQuery] = useState<string>('')
@@ -64,16 +64,16 @@ export default function Explore()
         fadeAnim.value = withTiming(0, { duration: 450 })
     }
 
-    function showPad() {
+    const memoizedShowPad = useCallback(function showPad() {
         fadeIn()
         swipeIn()
-    }
+    }, [])
 
-    function hidePad() {
+    const memoizedHidePad = useCallback(function hidePad() {
         setActiveMarker('')
         fadeOut()
         swipeOut()
-    }
+    }, [])
 
     function getInitialState() {
         return (
@@ -95,24 +95,13 @@ export default function Explore()
     function initializePad(obj: responseType) { //will wipe current active marker!!!!!!!!!!!!!!
         setActiveMarker('')
         setData([])
-        setRequests([])
+        //setRequests([])
         showResults(false)
         setPadDistrict(obj.attributes.CouncilDistrictNumber)
         setPadAddress(obj.attributes.Address)
-        showPad()
+        memoizedShowPad()
         mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.005, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
     }   //notice: latitude is geometry.y and longitude is geometry.x
-
-    function onSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
-        padDy = evt.nativeEvent.translationY
-    }
-
-    function onSwipeEnd() {
-        if (padDy > 50) {
-            hidePad()
-        }
-        padDy = 0
-    }
 
     const fetchAddresses = _.throttle(async () => {
         if (addressQuery === '') {
@@ -156,7 +145,7 @@ export default function Explore()
     useEffect(() => {
         async function grabInitialProps() {
             // default markers are requests w/ valid addresses and created within in the last 7 days
-            const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(7))}'`, 25, [['orderByFields', 'Address']])
+            const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(7))}'`, 1500, [['orderByFields', 'Address']])
         
             await fetch(query).then((middle) => {
                 return middle.json()
@@ -183,6 +172,32 @@ export default function Explore()
         grabRequests()
     }, [requestFetch])
 
+    const memoizedMarkerRender = useMemo(() => markers.map((mark) => {
+        return (
+            <CustomMarker 
+                key={mark.attributes.ReferenceNumber + markerKeySuffix} 
+                markerData={mark} 
+                image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
+                passUp={activateMarker}
+            />
+        )
+    }), [markers])
+
+    //const memoizedRequestsRender = useMemo(() => requests, [requests])
+    const memoizedRequestRender = useCallback(({item} : {item: any}) => 
+        <Request
+            data={item}
+            width={Dimensions.get('screen').width * 0.75}
+            height={Dimensions.get('screen').height * 0.1}
+            compact={true}
+    />, [requests])
+
+    const memoizedAddressRender = useCallback(({item} : {item: any}) => 
+        <TouchableOpacity onPress={() => handlePress(item) } style={[styles.resultShadow, shadowUniversal.default]}>
+            <CustomText text={item.attributes.Address} style={styles.result} nol={0} font="JBM" />
+        </TouchableOpacity>,    
+    [data])
+
     return (
         <View style={{flex: 1}}>
                 <Animated.View style={[styles.requestWindow, padAnimation]}>
@@ -200,12 +215,9 @@ export default function Explore()
                                 <CustomText text='New Request' nol={0} font='JBM' style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
                             </TouchableOpacity>
                         </View>
-
-                        <PanGestureHandler onGestureEvent={onSwipe} onEnded={onSwipeEnd}>
-                            <View style={{position: 'absolute', width: '100%', height: '100%'}}>
-                                <TouchableOpacity style={{top: 7, backgroundColor:"grey", width: 75, height: 5, borderRadius: 10, alignSelf: 'center'}}></TouchableOpacity>
-                            </View>
-                        </PanGestureHandler>
+                        <TouchableOpacity onPress={memoizedHidePad} style={{top: 5, left: -5, alignSelf: 'center'}}>
+                            <FontAwesome name='remove' size={20} color={global.baseGrey200} />
+                        </TouchableOpacity>
                     </View>
                     {
                         loader ? 
@@ -214,30 +226,13 @@ export default function Explore()
                             contentContainerStyle={{alignItems: 'center', paddingBottom: Dimensions.get('screen').height * 0.05}}
                             data={requests}
                             keyExtractor={item => item.attributes.ReferenceNumber + padKeySuffix}
-                            renderItem={
-                                ({item}) => 
-                                <Request
-                                    data={item}
-                                    width={Dimensions.get('screen').width * 0.75}
-                                    height={Dimensions.get('screen').height * 0.1}
-                                    compact={true}
-                                />
-                            }
+                            renderItem={memoizedRequestRender}
                         />
                     }
                 </Animated.View>
                 <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}}>
                     {
-                        markers.map((mark) => {
-                            return (
-                                <CustomMarker 
-                                    key={mark.attributes.ReferenceNumber + markerKeySuffix} 
-                                    markerData={mark} 
-                                    image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
-                                    passUp={activateMarker}
-                                />
-                            )
-                        })
+                        memoizedMarkerRender
                     }
                 </MapView>
                 <SearchBar value={addressQuery} style={styles.searchBar} onSubmit={() => { showResults(false) }} passUp={setQuery} onClear={() => { setAddressQuery('') }} placeholder={'Search Address'} />
@@ -248,12 +243,7 @@ export default function Explore()
                         style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}
                         keyExtractor={item => item.attributes.ReferenceNumber + searchKeySuffix}
                         data={data}
-                        renderItem={
-                            ({item}) => 
-                                <TouchableOpacity onPress={() => { handlePress(item) }} style={[styles.resultShadow, shadowUniversal.default]}>
-                                    <CustomText text={item.attributes.Address} style={styles.result} nol={0} font="JBM" />
-                                </TouchableOpacity>
-                        }
+                        renderItem={memoizedAddressRender}
                     />
                 )}
         </View>
@@ -402,3 +392,5 @@ const styles = StyleSheet.create({
         marginBottom: '5%',
     }
 })
+
+export default Explore
