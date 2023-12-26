@@ -1,33 +1,35 @@
-import { View, StyleSheet, ScrollView, Dimensions, FlatList } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
 import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl } from "../../customs";
-import { useEffect, useMemo, useRef, useState, memo, useCallback } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
 import Request from "../(components)/Request";
 import { FontAwesome } from "@expo/vector-icons";
 import CustomMarker from "../(components)/CustomMarker";
 import { Loader } from "../(components)/Loader";
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+import { FlashList } from "@shopify/flash-list"
 import _ from 'lodash'
-import { Logs } from 'expo'
 
-Logs.enableExpoCliLogging()
-
-const padKeySuffix: string = '-padRequests'
+//const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markers'
-const searchKeySuffix: string = '-scrollAddresses'
+//const searchKeySuffix: string = '-scrollAddresses'
 
-const padHiddenHeight = Dimensions.get('screen').height * 0.8
+const padHiddenHeight = Dimensions.get('screen').height
 const padVisibleHeight = Dimensions.get('screen').height * 0.47
+
+const requestItemWidth = 0.75 // as a decimal percentage of screen width, used in multiple places synchronously so stored here for maintainability 
+//const padAnimationTiming = 1000
 
 function Explore()
 {
+    const controller = new AbortController()
+
     const mapRef = useRef<MapView>(null)
 
     const [addressQuery, setAddressQuery] = useState<string>('')
-    const [activeMarker, setActiveMarker] = useState<string>('')
     const [markers, setMarkers] = useState<Array<responseType>>([])
     const [padDistrict, setPadDistrict] = useState<string>('')
     const [padAddress, setPadAddress] = useState<string>('')
@@ -35,45 +37,36 @@ function Explore()
     const [addressesLoading, setAddressesLoading] = useState<boolean>(false)
     const [requests, setRequests] = useState<Array<responseType>>([])
     const [data, setData] = useState<Array<responseType>>([])
-    const [results, showResults] = useState<boolean>(data.length !== 0)
+    const [results, showResults] = useState<boolean>(false)
     const [requestFetch, triggerRequestFetch] = useState<responseType>()
+    const [padPan, setPadPan] = useState(padHiddenHeight)
 
-    const swipeAnim = useSharedValue(padHiddenHeight)
-    const fadeAnim = useSharedValue(0)
-
-    const padAnimation = {
-        transform: [{
-            translateY: swipeAnim.value
-        }],
-        opacity: fadeAnim.value
+    function hidePad() {
+        //setActiveMarker('')
+        setPadPan(padHiddenHeight)
     }
 
-    function swipeIn() {
-        swipeAnim.value = withTiming(padVisibleHeight, { duration: 450 })
+    function showPad() {
+        setPadPan(padVisibleHeight)
     }
 
-    function fadeIn() {
-        fadeAnim.value = withTiming(1, { duration: 450 })
+    // react-native-reanimated was giving compatability issues out the wazoo, fix the issue for 
+    // react-native-reanimated and expo complains about compatability, fix the issue for expo and
+    // react-native-reanimated complains about compatability; came up with below hacky animation 
+    // as temporary solution 
+
+    function watchSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
+        setPadPan(Math.max(padVisibleHeight, padVisibleHeight + (evt.nativeEvent.translationY / 1.5)))
     }
 
-    function swipeOut() {
-        swipeAnim.value = withTiming(padHiddenHeight, { duration: 450 })
+    function detectSwipeEnd() {
+        if (padPan > padVisibleHeight + 100) {
+            hidePad()
+        }
+        else {
+            setPadPan(padVisibleHeight)
+        }
     }
-
-    function fadeOut() {
-        fadeAnim.value = withTiming(0, { duration: 450 })
-    }
-
-    const memoizedShowPad = useCallback(function showPad() {
-        fadeIn()
-        swipeIn()
-    }, [])
-
-    const memoizedHidePad = useCallback(function hidePad() {
-        setActiveMarker('')
-        fadeOut()
-        swipeOut()
-    }, [])
 
     function getInitialState() {
         return (
@@ -93,14 +86,14 @@ function Explore()
     //.then(json => setRequests(json));
 
     function initializePad(obj: responseType) { //will wipe current active marker!!!!!!!!!!!!!!
-        setActiveMarker('')
-        setData([])
+        //setActiveMarker('')
+        //setData([])
         //setRequests([])
         showResults(false)
         setPadDistrict(obj.attributes.CouncilDistrictNumber)
         setPadAddress(obj.attributes.Address)
-        memoizedShowPad()
         mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.005, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+        showPad()
     }   //notice: latitude is geometry.y and longitude is geometry.x
 
     const fetchAddresses = _.throttle(async () => {
@@ -115,13 +108,16 @@ function Explore()
 
         const query = generateEndpointUrl(`NOT(Address='') AND UPPER(Address) LIKE UPPER('%${addressQuery}%')`, 15, [])
 
-        await fetch(query).then((middle) => {
+        await fetch(query, { signal: controller.signal }).then((middle) => {
             return middle.json()
         }).then((res) => {
             setAddressesLoading(false)
             setData(res.features)
+        }).catch(err => {
+            return
+            //console.log(err.message)
         })
-    }, 750)
+    }, 750, {leading: false, trailing: true})
 
     function setQuery(value: string) {
         setAddressQuery(value.trim())
@@ -129,17 +125,20 @@ function Explore()
     }
 
     function handlePress(obj: responseType) {
+        //showResults(false)
+        controller.abort()
         setAddressQuery(obj.attributes.Address)
         initializePad(obj)
         setLoader(true)
-        triggerRequestFetch(obj)
+
+        setTimeout(() => triggerRequestFetch(obj), 1250)
     }
 
     function activateMarker(obj: responseType) {
         initializePad(obj)
 
-        setActiveMarker(obj.attributes.ReferenceNumber + markerKeySuffix)
-        setRequests([obj])
+        //setActiveMarker(obj.attributes.ReferenceNumber + markerKeySuffix)
+        setRequests([obj, ...requests])
     }
 
     useEffect(() => {
@@ -151,25 +150,32 @@ function Explore()
                 return middle.json()
             }).then((res) => {
                 setMarkers(res.features)
+            }).catch(err => {
+                return
+                //console.log(err.message)
             })
         }
 
         grabInitialProps()
-    })
+    }, [])
 
     useEffect(() => {
         async function grabRequests() {
-            const query = generateEndpointUrl(`Address='${requestFetch?.attributes.Address}'`, 100, [])
+            const query = generateEndpointUrl(`Address='${requestFetch?.attributes.Address}'`, 100, [['orderByFields', 'DateCreated']])
 
             await fetch(query).then((middle) => {
                 return middle.json()
             }).then((res) => {
                 setLoader(false)
                 setRequests(res.features)
+            }).catch(err => {
+                return
+                //console.log(err.message)
             })
         }
 
         grabRequests()
+
     }, [requestFetch])
 
     const memoizedMarkerRender = useMemo(() => markers.map((mark) => {
@@ -183,50 +189,66 @@ function Explore()
         )
     }), [markers])
 
-    //const memoizedRequestsRender = useMemo(() => requests, [requests])
-    const memoizedRequestRender = useCallback(({item} : {item: any}) => 
+    /*const memoizedRequestsRender = useCallback(({item} : {item: any}) => 
         <Request
             data={item}
             width={Dimensions.get('screen').width * 0.75}
             height={Dimensions.get('screen').height * 0.1}
             compact={true}
-    />, [requests])
+    />, [])*/
 
-    const memoizedAddressRender = useCallback(({item} : {item: any}) => 
-        <TouchableOpacity onPress={() => handlePress(item) } style={[styles.resultShadow, shadowUniversal.default]}>
-            <CustomText text={item.attributes.Address} style={styles.result} nol={0} font="JBM" />
-        </TouchableOpacity>,    
-    [data])
+    const memoizedRequestData = useMemo(() => requests.map((req, idx) => {
+        return (
+            <Request 
+                key={idx}
+                data={req}
+                width={Dimensions.get('screen').width * requestItemWidth}
+                height={Dimensions.get('screen').height * 0.1}
+                compact={true}
+            />
+        )
+    }), [requests])
+    //req.attributes.ReferenceNumber + padKeySuffix
+
+    const memoizedAddressData = useMemo(() => data.map((addr, idx) => {
+        return (
+            <TouchableOpacity key={idx} onPress={() => handlePress(addr) } style={[styles.resultShadow, shadowUniversal.default]}>
+                <CustomText text={addr.attributes.Address} style={styles.result} nol={0} font="JBM" />
+            </TouchableOpacity>
+        )
+    }), [data])
 
     return (
         <View style={{flex: 1}}>
-                <Animated.View style={[styles.requestWindow, padAnimation]}>
-                    <View style={styles.padTopBar}>
-                        <View style={styles.padLeftPartition}>
-                            <CustomText nol={3} text={padAddress} font='JBM' style={styles.padAddress} />
-                            <View style={{flexDirection: 'row', marginBottom: '1%'}}>
-                                <FontAwesome name='trash' size={30} color={global.baseGrey200} />
-                                <CustomText text='Thursday' nol={0} font='JBM-B' style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
+                <Animated.View style={[styles.requestWindow, { transform: [{ translateY: padPan }] }]}>
+                    <PanGestureHandler onEnded={detectSwipeEnd} onGestureEvent={watchSwipe}>
+                        <View style={styles.padTopBar}>
+                            <View style={styles.closeBar}></View>
+                            
+                            <View style={styles.padLeftPartition}>
+                                <CustomText nol={3} text={padAddress} font='JBM' style={styles.padAddress} />
+                                <View style={{flexDirection: 'row', marginBottom: '1%'}}>
+                                    <FontAwesome name='trash' size={30} color={global.baseGrey200} />
+                                    <CustomText text='Thursday' nol={0} font='JBM-B' style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
+                                </View>
+                            </View>
+
+                            <View style={styles.padRightPartition}>
+                                <CustomText text={padDistrict} nol={0} font='JBM' style={styles.padDistrict} />
+                                <TouchableOpacity style={styles.newRequestButton}>
+                                    <CustomText text='New Request' nol={0} font='JBM' style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
+                                </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={styles.padRightPartition}>
-                            <CustomText text={padDistrict} nol={0} font='JBM' style={styles.padDistrict} />
-                            <TouchableOpacity style={styles.newRequestButton}>
-                                <CustomText text='New Request' nol={0} font='JBM' style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity onPress={memoizedHidePad} style={{top: 5, left: -5, alignSelf: 'center'}}>
-                            <FontAwesome name='remove' size={20} color={global.baseGrey200} />
-                        </TouchableOpacity>
-                    </View>
+                    </PanGestureHandler>
                     {
                         loader ? 
                         <Loader /> :
-                        <FlatList
-                            contentContainerStyle={{alignItems: 'center', paddingBottom: Dimensions.get('screen').height * 0.05}}
-                            data={requests}
-                            keyExtractor={item => item.attributes.ReferenceNumber + padKeySuffix}
-                            renderItem={memoizedRequestRender}
+                        <FlashList
+                            contentContainerStyle={{paddingLeft: Dimensions.get('screen').width * ((1 - requestItemWidth) / 4), paddingBottom: Dimensions.get('screen').height * 0.05}}
+                            data={memoizedRequestData}
+                            renderItem={({item}) => item}
+                            estimatedItemSize={100}
                         />
                     }
                 </Animated.View>
@@ -236,16 +258,25 @@ function Explore()
                     }
                 </MapView>
                 <SearchBar value={addressQuery} style={styles.searchBar} onSubmit={() => { showResults(false) }} passUp={setQuery} onClear={() => { setAddressQuery('') }} placeholder={'Search Address'} />
-                {(
-                    addressesLoading ?
-                    <View style={[styles.searchResults, shadowUniversal.default]}><Loader /></View>:
-                    <FlatList 
-                        style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}
-                        keyExtractor={item => item.attributes.ReferenceNumber + searchKeySuffix}
-                        data={data}
-                        renderItem={memoizedAddressRender}
-                    />
-                )}
+                {
+                    (
+                        results ?
+                        <View style={[styles.searchResults, shadowUniversal.default]}>
+                            {
+                                (
+                                    addressesLoading ? 
+                                    <Loader /> :
+                                    <FlashList 
+                                        estimatedItemSize={15}
+                                        data={memoizedAddressData}
+                                        renderItem={({item}) => item}
+                                    />
+                                )
+                            }
+                        </View> :
+                        <></>
+                    )
+                }
         </View>
     )
 }
@@ -278,7 +309,6 @@ const styles = StyleSheet.create({
         top: '13.5%',
         left: '5%',
         borderRadius: 15,
-        paddingTop: '5%',
         zIndex: 5,
     },
 
@@ -291,7 +321,7 @@ const styles = StyleSheet.create({
         backgroundColor: global.baseBackground100,
         borderRadius: 10,
         alignSelf: 'center',
-        marginBottom: '2.5%',
+        marginTop: '2.5%',
         padding: '5%',
         width: '90%',
     },
@@ -327,9 +357,19 @@ const styles = StyleSheet.create({
         height: '35%',
         left: '5%',
         borderBottomColor: '#1b1b1b2f',
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         display: 'flex',
         flexDirection: 'row',
+    },
+
+    closeBar: {
+        position: 'absolute',
+        width: '25%',
+        height: 5,
+        top: 5,
+        left: '37.5%',
+        borderRadius: 15,
+        backgroundColor: global.baseGrey200,
     },
 
     requestBubble: {
