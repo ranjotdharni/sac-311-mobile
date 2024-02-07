@@ -23,7 +23,7 @@ function ButtonDumb({ text, buttonColor, textColor } : { text: string, buttonCol
     return (
         <View style={{...styles.ButtonWrapper, backgroundColor: buttonColor}}>
             <TouchableOpacity style={styles.TouchableWrapper}>
-                <CustomText nol={0} font='JBM' style={{...styles.ButtonText, color: textColor}} text={text} />
+              <CustomText nol={0} font='JBM' style={{...styles.ButtonText, color: textColor}} text={text} />
             </TouchableOpacity>
         </View>
     )

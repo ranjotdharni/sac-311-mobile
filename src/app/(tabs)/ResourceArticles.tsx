@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { global,} from "../../dummy";
+import { global,} from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useRouter } from 'expo-router';
 
@@ -24,7 +24,7 @@ export default function Resources()
                     </TouchableOpacity>
                 </View>
             </View>
-            <SearchBar style={styles.searchStyle} placeholder='Search Articles' />
+            <SearchBar value='' style={styles.searchStyle} placeholder='Search Articles' />
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
                     {/* 

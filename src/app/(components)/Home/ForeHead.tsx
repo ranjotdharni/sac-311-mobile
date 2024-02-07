@@ -1,7 +1,7 @@
 import { View, StyleSheet, Dimensions, TouchableOpacity, Text, Image } from "react-native"
-import { shadowUniversal } from "../../../dummy"
+import { shadowUniversal } from "../../../customs"
 import { MaterialIcons } from "@expo/vector-icons"
-import { global } from "../../../dummy"
+import { global } from "../../../customs"
 
 function WhatsNewButton() {
     return (

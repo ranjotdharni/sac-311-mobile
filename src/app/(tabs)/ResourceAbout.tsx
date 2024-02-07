@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { global } from "../../dummy";
+import { global } from "../../customs";
 import { useRouter } from 'expo-router';
 
 export default function Resources()

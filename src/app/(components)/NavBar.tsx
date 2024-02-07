@@ -3,13 +3,15 @@ import { View, StyleSheet } from "react-native";
 import NavItem from "./NavItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { global } from "../../dummy";
+import { global } from "../../customs";
+import { useNavigation } from "@react-navigation/native"
 
 
 export default function NavBar(this: any)
 {
     //Each NavItem 'id' attribute should be a unique value!!!
     const [activeTab, setActiveTab] = useState(0); //this useState hook should be set to the initial id of the tab to start off on
+    const [navigation, setNavigation] = useState(useNavigation())
 
     function isActive( index : number ) : boolean {
         return activeTab === index
@@ -22,16 +24,16 @@ export default function NavBar(this: any)
     return (
         <View style={styles.NavContainer}>
             <View style={styles.NavBox}>
-                <NavItem id={0} active={isActive} passUp={swapTab} title='Home' iconName='home' url='/(tabs)/Home' />
-                <NavItem id={1} active={isActive} passUp={swapTab} title='Explore' iconName='map' url='/(tabs)/Explore' />
+                <NavItem navigation={navigation} id={0} active={isActive} passUp={swapTab} title='Home' iconName='home' url='/(tabs)/Home' />
+                <NavItem navigation={navigation} id={1} active={isActive} passUp={swapTab} title='Explore' iconName='map' url='/(tabs)/Explore' />
 
                 <View style={styles.NavCenterButton}>
                     <Link href='/(request)/Type' style={styles.NavCenterLink} />
                     <MaterialIcons color='#ffffff' name='add' size={35} />
                 </View>
 
-                <NavItem id={2} active={isActive} passUp={swapTab} title='Resources' iconName='bookmark' url='/(tabs)/Resources' />
-                <NavItem id={3} active={isActive} passUp={swapTab} title='Profile' iconName='person' url='/(tabs)/Profile' />
+                <NavItem navigation={navigation} id={2} active={isActive} passUp={swapTab} title='Resources' iconName='bookmark' url='/(tabs)/Resources' />
+                <NavItem navigation={navigation} id={3} active={isActive} passUp={swapTab} title='Profile' iconName='person' url='/(tabs)/Profile' />
             </View>
         </View>
     )

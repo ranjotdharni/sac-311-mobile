@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text } from 'react-native';
 import CustomText from '../(components)/CustomText';
 import { useNavigation } from 'expo-router';
-import { global } from "../../dummy";
+import { global } from "../../customs";
 import localData from './patch.json';
 import BulletPointDisplay from './BulletPoints';
 

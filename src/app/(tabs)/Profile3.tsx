@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar, View, ScrollView, Text, StyleSheet, Pressable, Dimensions, Image, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { shadowUniversal, global } from "../../dummy";
+import { shadowUniversal, global } from "../../customs";
 import { MaterialIcons } from "@expo/vector-icons"
 
 /*

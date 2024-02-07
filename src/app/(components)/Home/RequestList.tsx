@@ -1,17 +1,34 @@
 import { Text, View, StyleSheet, Dimensions } from "react-native";
-import { dummyDataHome } from "../../../dummy";
+import { dummyDataHome, generateEndpointUrl, responseType } from "../../../customs";
 import Request from "../Request";
-import { global } from "../../../dummy";
+import { global } from "../../../customs";
+import { useEffect, useState } from "react";
 
 export default function RequestList()
 {
+    const [testData, setTestData] = useState<Array<responseType>>([])
+
+    async function fetchTestData() {
+        const query = generateEndpointUrl(`NOT(Address='')`, 5, [])
+
+        await fetch(query).then((middle) => {
+            return middle.json()
+        }).then((res) => {
+            setTestData(res.features)
+        })
+    }
+
+    useEffect(() => {
+        fetchTestData()
+    })
+
     return (
         <View style={styles.listWrapper}>
             <Text style={styles.listTitle}>Your Requests</Text>
 
             {
-                dummyDataHome.map(data => {
-                    return <Request key={data.number} category={data.category} type={data.type} reqNumber={data.number} date={data.date} status={data.status} width='90%' height={Dimensions.get('screen').height * 0.2} compact={false} />
+                testData.map(item => {
+                    return <Request key={item.attributes.ReferenceNumber} data={item} width='90%' height={Dimensions.get('screen').height * 0.2} compact={false} />
                 })
             } 
         </View>

@@ -5,8 +5,59 @@
 import { StyleSheet } from 'react-native'
 
 //                              //
+//      Static Types Section    //
+//                              //
+
+export interface responseType {
+    attributes: {
+        ReferenceNumber : string, 
+        CategoryLevel1 : string, 
+        CategoryLevel2 : string, 
+        CategoryName : string, 
+        CouncilDistrictNumber : string, 
+        DateCreated : number, 
+        DateUpdated : number, 
+        DateClosed : number, 
+        CrossStreet : string, 
+        ZIP : string, 
+        SFTicketID : string, 
+        Address : string, 
+        Data_Source : string, 
+        PublicStatus : string, 
+        Neighborhood : string, 
+        SourceLevel1 : string
+    },
+    geometry: {
+        x: number, //longitude
+        y: number  //latitude
+    }
+}
+
+//                              //
 //      Dummy Data Section      //
 //                              //
+
+const symbolReference = [
+    {category: 'Animal Control', url: '9750d7d29ebe0f642bb414e7bb60a4d4'},
+    {category: 'Building and Planning', url: '6f30eb2bf6323ab0383e57efab6c3dc1'},
+    {category: 'Code Enforcement', url: 'e3dea662e30e1a880f31107ed2743d65'},
+    {category: 'Drains', url: 'eedca6fac77ce62660fb33ee2b1e26a5'},
+    {category: 'Facilities', url: '6fa0605b4d17e4fe7323cbbd0a40f3d2'},
+    {category: 'Non-City', url: 'dbc53d72aa7fd12b0e35b259d8d05bc3'},
+    {category: 'Homeless Camp', url: 'f0b03999436715744d4f42082d55837d'},
+    {category: 'Parking', url: '3628d2b19fb65fa59c7760ac37ff392a'},
+    {category: 'Parks', url: '88af0c6e7fd1f8f47e1283175cee8852'},
+    {category: 'Sewer', url: '293d2daab0bc638de963005561a98a58'},
+    {category: 'Solid Waste', url: '768a6272c424eb7c57837e0e5c4d0813'},
+    {category: 'Streets', url: '86b083a8af0adc7acfc753f0d052689e'},
+    {category: 'Urban Forestry', url: '2aee2d289cca97d5dc7c8c380b325ed8'},
+    {category: 'Utility Billing', url: '77150615e9ef53a65a6cae6612e17c2d'},
+    {category: 'Water', url: '334ddb09d796886d797edc23f896a2c2'},
+    {category: 'Email Review', url: '48c427e81f51f55c6dfe8cd916106429'},
+    {category: 'Shared Rideables', url: 'bc4c127d82817d628a6015ccdf073e63'},
+    {category: 'Escalation', url: 'f3a7dd9487d9ca03b00ce5f015b8061c'},
+    {category: 'Other', url: 'a7427c700f875c2e789f93802fc4d1fd'},
+]
 
 export const dummyDataHome = [
     {
@@ -113,6 +164,76 @@ export function dateToFormat(arg1: string, arg2: Date): string
     return str
 }
 
+//==============================================================//
+//  Encodes query paramters according to arcGIS specifications  //
+//==============================================================//
+
+function encodeQueryParamter(query: string): string {
+    let encodedString = encodeURIComponent(query)                   //basic URI encoding
+    encodedString = encodedString.replace(/%20/g, '+')              //replace whitespaces with '+'
+    encodedString = encodedString.replace(/'/g, '%' + (`'`).charCodeAt(0).toString(16))  //encode `'`, `(`, and `)` characters
+    encodedString = encodedString.replace(/\(/g, '%' + ('(').charCodeAt(0).toString(16))
+    encodedString = encodedString.replace(/\)/g, '%' + (')').charCodeAt(0).toString(16))
+    return encodedString
+}
+
+//====================================================================//
+//  Generates full request string to arcGIS endpoint, ready to fetch  //
+//====================================================================//
+
+export function generateEndpointUrl(whereClause: string | undefined, resultCount: number, paramters: Array<[string, string]>): string {
+    // The endpoint's origin
+    const endpointOrigin: string = 'https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/query?'
+
+    // A where clause is necessary for every query so set default (I used OBJECTID to accomplish this because it should never be null)
+    const defaultWhereClause: string = 'where=' + encodeQueryParamter('OBJECTID IS NOT NULL') + (whereClause !== undefined ? encodeQueryParamter(` AND ${whereClause}`) : '')
+
+    // Set the required response fields, specify geometry required, specify spatial reference, specify json response format
+    const defaultParameters: string = '&outFields=ReferenceNumber%2C+CategoryLevel1%2C+CategoryLevel2%2C+CategoryName%2C+CouncilDistrictNumber%2C+DateCreated%2C+DateUpdated%2C+DateClosed%2C+CrossStreet%2C+ZIP%2C+SFTicketID%2C+Address%2C+Data_Source%2C+PublicStatus%2C+Neighborhood%2C+SourceLevel1&returnGeometry=true&outSR=4326&f=pjson'
+
+    // initialize query string
+    let queryString = endpointOrigin + defaultWhereClause
+
+    // append any passed in parameters
+    paramters.forEach((item) => {
+        queryString += `&${item[0]}=${encodeQueryParamter(item[1])}`
+    })
+
+    queryString += `&resultRecordCount=${Math.max(1, resultCount)}` // append the required number of response results
+    queryString += defaultParameters                                // append the default parameters
+
+    return queryString
+}
+
+//==========================================================================================================//
+//  Generate full request string to icon images endpoint based on CategoryLevel1 of object, ready to fetch  //
+//  Also provides default url in case CategoryLevel1 is not matched to any existing value                   //
+//==========================================================================================================//
+
+export function generateSymbolUrl(categoryLevel1: string): string {
+    const endpointOrigin: string = 'https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/images/'  // the image endpoint origin
+
+    for (let i = 0; i < symbolReference.length; i++) {  // loop through symbol reference
+        let subject = symbolReference[i]
+
+        if (subject.category === categoryLevel1) {  // if category match...
+            return endpointOrigin + subject.url     // return image endpoint origin with corresponding url appended
+        }
+    }
+
+    return endpointOrigin + '361c2dfe548d1b53b9da23f9219a630d'  // no category match found? Return image endpoint origin with default url appended
+}
+
+//==========================================//
+//  Get date from given number of days ago  //
+//==========================================//
+
+export function dateAtDaysAgo(daysAgo: number): Date {
+    const dateNow: Date = new Date()
+    dateNow.setDate(dateNow.getDate() - daysAgo)
+    return dateNow
+}
+
 //                                      //
 //         Custom Styles Section        //
 //                                      //
@@ -156,4 +277,5 @@ export const global = {
     baseGold300: 'rgba(190, 163, 21, 0.33)',
 
     baseGrey100: '#6F6F6F',
+    baseGrey200: 'rgba(112, 112, 112, 0.7)',
 }

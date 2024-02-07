@@ -1,26 +1,34 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, Image, Dimensions } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import React, { memo, useCallback, useState } from 'react';
+import { View, TextInput, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { global } from '../../../customs';
 
-export default function SearchBar({ placeholder, passUp, style } : { placeholder: string, passUp?: (inputText: string, keyboardOpen: boolean) => void, style?: any }) {
-    const [searchQuery, setSearchQuery] = useState('');
+interface searchBarProps { 
+    placeholder: string, 
+    value: string, 
+    passUp?: (inputText: string) => void, 
+    onSubmit?: () => void, 
+    style?: any, 
+    onClear?: () => void
+}
 
-    const handleSearch = (query: string) => {
-        setSearchQuery(query);
-    };
-
+function SearchBar({ placeholder, value, passUp, onSubmit, onClear, style } : searchBarProps ) {
     return (
         <View style={[styles.container, style ? style : {}]}>
             <View style={styles.searchInputWrapper}>
                 <Image style={styles.searchIcon} source={require('../../../assets/png/search.png')} />
-                {searchQuery === '' && <Text style={styles.placeholder}>{placeholder}</Text>}
+                {value === '' && <Text style={styles.placeholder}>{placeholder}</Text>}
                 <TextInput
-                    onSubmitEditing={() => {if (passUp !== undefined) {passUp(searchQuery, false)}}}
+                    onSubmitEditing={onSubmit}
                     style={styles.searchInput}
-                    value={searchQuery}
-                    onChangeText={(e: string) => {handleSearch(e); passUp ? passUp(e, true) : undefined}}
+                    value={value}
+                    onChangeText={passUp}
                     placeholderTextColor="#D3D3D3"
                 />
+                <TouchableOpacity onPress={onClear} style={styles.clearButton}>
+                    <FontAwesome name='remove' size={20} color={global.baseGrey200} />
+                </TouchableOpacity>
             </View>
         </View>        
     );
@@ -76,10 +84,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0)',
         fontFamily: 'JBM',
     },
+    clearButton: {
+        position: 'absolute',
+        width: '10%',
+        height: '50%',
+        left: '82.5%',
+        top: '25%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: global.baseBackground100,
+        zIndex: 2
+    },
 });
 
-
-
-
-
-
+export default memo(SearchBar)
