@@ -14,7 +14,7 @@ export default function Profile() {
   return (
     <View style={{ flex: 1 }}>
       <Text style={styles.title}>Service Requests Lookup</Text>
-      <SearchBar placeholder='Request Number' />
+      <SearchBar value='' placeholder='Request Number' />
       <View style={styles.imageContainer}>
         <Text style={styles.loginText}>Login to see your requests.</Text>
         <View style={styles.textContainer}>

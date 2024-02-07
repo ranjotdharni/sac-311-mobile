@@ -4,7 +4,16 @@ import { View, TextInput, StyleSheet, Text, Image, Dimensions, TouchableOpacity 
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { global } from '../../../customs';
 
-function SearchBar({ placeholder, value, passUp, onSubmit, onClear, style } : { placeholder: string, value: string, passUp: (inputText: string) => void, onSubmit: () => void, style?: any, onClear: () => void }) {
+interface searchBarProps { 
+    placeholder: string, 
+    value: string, 
+    passUp?: (inputText: string) => void, 
+    onSubmit?: () => void, 
+    style?: any, 
+    onClear?: () => void
+}
+
+function SearchBar({ placeholder, value, passUp, onSubmit, onClear, style } : searchBarProps ) {
     return (
         <View style={[styles.container, style ? style : {}]}>
             <View style={styles.searchInputWrapper}>

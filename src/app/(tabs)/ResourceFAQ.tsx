@@ -24,7 +24,7 @@ export default function Resources()
                     </View>
                 </View>
             </View>
-            <SearchBar style={styles.searchStyle} placeholder='Search Frequently Asked Questions' />
+            <SearchBar value='' style={styles.searchStyle} placeholder='Search Frequently Asked Questions' />
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
                     {/* 

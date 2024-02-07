@@ -3,7 +3,7 @@ import { shadowUniversal, global } from "../../customs";
 import CustomText from "./CustomText";
 import { router } from "expo-router";
 
-const borderOffset = 20 //Locally universal border radius
+const borderOffset = 20 //Locally (within component) applied border radius
 
 export default function FeedBox({ title, imgUrl, link, desc } : { title: string, imgUrl: string, link: string, desc: string }) {
     return (

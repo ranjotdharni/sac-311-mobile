@@ -50,10 +50,12 @@ function Explore()
         setPadPan(padVisibleHeight)
     }
 
-    // react-native-reanimated was giving compatability issues out the wazoo, fix the issue for 
-    // react-native-reanimated and expo complains about compatability, fix the issue for expo and
-    // react-native-reanimated complains about compatability; came up with below hacky animation 
-    // as temporary solution 
+    /* 
+        react-native-reanimated was giving compatability issues out the wazoo, fixed the issue for 
+        react-native-reanimated and expo complains about compatability, fixed the issue for expo and
+        react-native-reanimated complains about compatability; came up with below hacky animation 
+        as temporary solution 
+    */
 
     function watchSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
         setPadPan(Math.max(padVisibleHeight, padVisibleHeight + (evt.nativeEvent.translationY / 1.5)))

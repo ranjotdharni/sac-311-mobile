@@ -25,7 +25,7 @@ export default function Resources()
                     </TouchableOpacity>
                 </View>
             </View>
-            <SearchBar style={styles.searchStyle} placeholder='Search For Service Related Resources' />
+            <SearchBar value='' style={styles.searchStyle} placeholder='Search For Service Related Resources' />
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
                      {

@@ -26,7 +26,7 @@ export default function Type()
                     </TouchableOpacity>
                 </View>
             </View>
-            <SearchBar style={styles.searchStyle} placeholder='Search For A Service' />
+            <SearchBar value='' style={styles.searchStyle} placeholder='Search For A Service' />
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
                      {

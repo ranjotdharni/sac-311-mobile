@@ -47,15 +47,14 @@ export default function Explore2() {
     longitudeDelta: 0.0421,
   };
 
-  function setQuery(arg1: string, arg2: boolean) {
+  function setQuery(arg1: string) {
     const sQuery = arg1.trim();
     if (sQuery === "") return; // break clause
 
     const middle = places.filter((e) => e.address.toLowerCase().includes(sQuery.toLowerCase()));
 
     setData(middle);
-    if (!results || arg2) showResults(true);
-    if (!arg2) showResults(false);
+    if (!results) showResults(true);
   }
 
   return (
@@ -81,6 +80,7 @@ export default function Explore2() {
       <SearchBar
         style={styles.searchBar}
         passUp={setQuery}
+        value=''
         placeholder="Search Address"
       />
     </View>
