@@ -26,7 +26,7 @@ export default function NavItem({ id, title, iconName, active, url, passUp, navi
 
 const styles = StyleSheet.create({
     NavItemWrapper : {
-        width: '15%',
+        width: '18%',
         height: '100%',
     },
 
