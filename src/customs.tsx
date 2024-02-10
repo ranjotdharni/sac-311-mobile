@@ -97,6 +97,51 @@ export const dummyDataHome = [
     },
 ]
 
+export const dummyDataFAQ = [
+    {
+        tags: '',
+        type: 'App Functionality',
+        key: 1,
+        question: 'How can I make requests on the map?',
+        answer: ''
+    },
+    {
+        tags: '',
+        type: 'App Functionality',
+        key: 2,
+        question: 'How can I make a request in the app?',
+        answer: ''
+    },
+    {
+        tags: '',
+        type: 'Services',
+        key: 3,
+        question: 'What services are offered by 311?',
+        answer: ''
+    },
+    {
+        tags: '',
+        type: 'Services',
+        key: 4,
+        question: 'How can I find more information about a particular service offered?',
+        answer: ''
+    },
+    {
+        tags: '',
+        type: 'General',
+        key: 5,
+        question: 'How long will it take for my request to be serviced?',
+        answer: ''
+    },
+    {
+        tags: '',
+        type: 'General',
+        key: 6,
+        question: 'Who can I contact if I am having issues making requests?',
+        answer: ''
+    },
+]
+
 export const dummyDataNews = [
     {
         title: 'Modern Innovations in Forensic Technology Show Promising Results',
