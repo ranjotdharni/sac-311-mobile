@@ -1,6 +1,7 @@
 import { useNavigation } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { global } from "../../customs";
+import { globalFont } from "../../customs";
 
 export default function FAQFullView(){
     const nav = useNavigation()
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 25,
         marginLeft:'5%',
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color:global.baseBackground100
     },
     infoWrapper:{

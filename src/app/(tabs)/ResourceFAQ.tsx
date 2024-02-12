@@ -5,6 +5,8 @@ import SearchBar from '../(components)/Profile/SearchBar';
 import { useRouter } from 'expo-router';
 import DefaultFAQ from "./DefaultFAQ";
 import { useState } from 'react';
+import { fontGetter } from "../../customs";
+import { globalFont } from "../../customs";
 
 declare var myFilter: string
 
@@ -114,8 +116,10 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 17,
         padding: 2,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color: global.baseGold100,
+
+
     },
     faqWrapper:{
         padding:20,
@@ -134,7 +138,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     filterText:{
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         backgroundColor: global.baseBlue100,
         marginHorizontal: 5,
         fontSize: 14,

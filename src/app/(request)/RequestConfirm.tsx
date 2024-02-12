@@ -3,6 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { global } from "../../customs";
 import React from 'react';
+import { globalFont } from "../../customs";
+import { fontGetter } from "../../customs";
 
 export default function RequestConfirm() {
     const nav = useNavigation()
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     returnText: {
         color: 'white',
         fontSize: 25,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         padding:'3%',
     },
     basicText: {
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 25,
         marginLeft:'5%',
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color:global.baseBackground100
     },
     infoWrapper:{
@@ -184,7 +186,7 @@ const styles = StyleSheet.create({
     editButtonText: {
         color: 'white',
         fontSize: 15,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontWeight: 'bold',
     },
     attachmentRectangle: {
@@ -205,7 +207,7 @@ const styles = StyleSheet.create({
     attachmentButtonText: {
         color: 'white',
         fontSize: 15,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontWeight: 'bold',
     },
 

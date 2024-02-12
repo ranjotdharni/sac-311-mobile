@@ -2,6 +2,8 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { dateToFormat, global, responseType } from "../../customs";
 import CustomText from "../(components)/CustomText";
+import { fontGetter } from "../../customs";
+import { globalFont } from "../../customs";
 
 //==================================//
 //  Pass the necessary parameters   //
@@ -28,7 +30,7 @@ export default function RequestFullView(){
             <View style={styles.innerPageWrapper}>
                 {/*Main Info*/}
                 <View style={styles.infoWrapper}>
-                    <CustomText nol={2} style={styles.addressHeader} text={data.attributes.Address} font='JBM' />
+                    <CustomText nol={2} style={styles.addressHeader} text={data.attributes.Address} font={fontGetter()} />
 
                     <View style={styles.rowWrapper}>
                         <Text style={styles.basicText}>Category Level 1:</Text>
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
     returnText: {
         color: 'white',
         fontSize: 25,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         padding:'3%',
     },
     basicText: {
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 25,
         marginLeft:'5%',
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color:global.baseBackground100
     },
     infoWrapper:{

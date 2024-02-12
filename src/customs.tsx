@@ -324,3 +324,28 @@ export const global = {
     baseGrey100: '#6F6F6F',
     baseGrey200: 'rgba(112, 112, 112, 0.7)',
 }
+
+
+//                                      //
+//         Global Font Section          //
+//                                      //
+// this value is designed to be read by every entity that displays text
+// the user may change the font of the entire app, by making a selection in the settings page
+
+let chosenFont: string = "JBM";
+
+export const globalFont= {
+    chosenFont : chosenFont
+    //chosenFont: chosenFont
+}
+
+export function fontSetter(newFont:string){
+    globalFont.chosenFont = newFont;
+}
+
+export function fontGetter(){
+    return globalFont.chosenFont;
+}
+
+
+
