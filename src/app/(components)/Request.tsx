@@ -1,15 +1,19 @@
 import { View, StyleSheet, Text, DimensionValue, Dimensions } from "react-native";
-import { dateToFormat, global } from "../../dummy";
+import { dateToFormat, global, responseType } from "../../customs";
 import CustomText from "./CustomText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
+import { memo, useCallback } from "react";
+import { fontGetter } from "../../customs";
 
 
 const borderCuttoff: number = 15 //border radius of component, this will be applied to multiple wrapper components so change it universally here
 
 
-function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: number, date: Date, status: string, compact: boolean } ) {
+function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact, focusFunction } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: string, date: Date, status: string, compact: boolean, focusFunction: () => void } ) {
+    const memoizedFocusFunction = useCallback(focusFunction, [])    
+
     let internalStyle = (compact ? compactStyles : defaultStyles)
     let basicStyle = StyleSheet.create({ 
         default: {
@@ -29,37 +33,73 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
     
     return (
         <View style={[basicStyle.default, internalStyle.requestWrapper]} >
-            <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} font='JBM-B' nol={0} style={internalStyle.requestCategory} /></View>
+            {(!compact ? <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} font={fontGetter()} nol={0} style={internalStyle.requestCategory} /></View> : <></>)}
+
             <View style={defaultStyles.arrowWrapper}>
-                <View style={internalStyle.internalWrapper}>
-                    <View style={internalStyle.basicWrapper}>
-                        <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} font='JBM-B' style={[internalStyle.basicContent, internalStyle.highlightType]} />
+                <View style={[internalStyle.internalWrapper, (compact ? {width: width, height: height} : {})]}>
+                    {compact ? <CustomText text={(category.length > 15 ? category.substring(0, 15) + '...' : category)} font={fontGetter()} nol={0} style={internalStyle.requestCategory} /> : <></>}
+
+                    {
+                        (
+                            !compact ? 
+                            <View style={internalStyle.basicWrapper}>
+                                <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} font={fontGetter()} style={[internalStyle.basicContent, internalStyle.highlightType]} />
+                            </View>
+                            :
+                            <></>
+                        )
+                    }
+
+                    <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestNumber)}>
+                        {(!compact ? <Text style={internalStyle.basicTitle}>Request Number:</Text> : <></>)}
+                        <CustomText text={reqNumber.toString()} nol={0} font={fontGetter()} style={[internalStyle.basicContent, (compact ? {color: global.baseGrey100} : {})]} />
                     </View>
 
-                    <View style={internalStyle.basicWrapper}>
-                        <Text style={internalStyle.basicTitle}>Request Number:</Text><CustomText text={reqNumber.toString()} nol={0} font='JBM' style={internalStyle.basicContent} />
+                    <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestDate)}>
+                        {(!compact ? <Text style={internalStyle.basicTitle}>Date Created:</Text> : <></>)}
+                        <CustomText nol={0} font={fontGetter()} text={dateToFormat((!compact ? 'MMM DD, YYYY' : 'MM/DD/YYYY'), date)} style={internalStyle.basicContent} />
                     </View>
 
-                    <View style={internalStyle.basicWrapper}>
-                        <Text style={internalStyle.basicTitle}>Date Created:</Text><CustomText nol={0} font='JBM' text={dateToFormat('MMM DD, YYYY', date)} style={internalStyle.basicContent} />
-                    </View>
-
-                    <View style={internalStyle.basicWrapper}>
-                        <Text style={internalStyle.basicTitle}>Status:</Text><CustomText text={status} nol={0} font='JBM' style={internalStyle.basicContent} />
+                    <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestStatus)}>
+                        {(!compact ? <Text style={internalStyle.basicTitle}>Status:</Text> : <></>)}
+                        <CustomText text={status} nol={0} font={fontGetter()} style={[internalStyle.basicContent, (compact ? {marginRight: '10%', top: -2, color: (status === 'CLOSED' ? 'red' : (status === 'NEW' ? 'green' : global.baseGold100))} : {})]} />
                     </View>  
                 </View>
 
-                <TouchableOpacity style={defaultStyles.fullRequestView} onPress={() => {router.push('/(requestview)/RequestFullView')}}>
-                    <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseBlue100} />
-                </TouchableOpacity>
+                {
+                    !compact ?
+                    <TouchableOpacity style={internalStyle.fullRequestView} onPress={memoizedFocusFunction}>
+                        <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseBlue100} />
+                    </TouchableOpacity>
+                    :
+                    <></>
+                }
             </View>
+            {
+                compact ?
+                <TouchableOpacity style={internalStyle.fullRequestView} onPress={memoizedFocusFunction}>
+                    <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseGrey100} />
+                </TouchableOpacity>
+                :
+                <></>
+            }
         </View>
     )
 }
 
-export default function Request({ category, type, reqNumber, date, status, compact, width, height } : { category: string, type: string, reqNumber: number, date: Date, status: string, compact: boolean, width: DimensionValue, height: DimensionValue }) {
+function Request({ data, compact, width, height } : { data: responseType, compact: boolean, width: DimensionValue, height: DimensionValue }) {
     return ( 
-        <DefaultRequest compact={compact} width={width} height={height} category={category} type={type} reqNumber={reqNumber} date={date} status={status} />
+        <DefaultRequest
+            compact={compact} 
+            width={width} 
+            height={height} 
+            category={(data.attributes.CategoryLevel2 !== 'General' ? data.attributes.CategoryLevel2 : data.attributes.CategoryLevel1)} 
+            type={data.attributes.CategoryLevel1} 
+            reqNumber={data.attributes.ReferenceNumber} 
+            date={new Date(data.attributes.DateCreated)} 
+            status={data.attributes.PublicStatus}
+            focusFunction={() => {router.push({pathname: '/(requestview)/RequestFullView', params: {requestData: JSON.stringify(data)}})}} 
+        />
     )
 }
 
@@ -74,7 +114,6 @@ export default function Request({ category, type, reqNumber, date, status, compa
 const defaultStyles = StyleSheet.create({
     requestWrapper: {
         marginTop: '5%',
-        
     },
 
     requestCategoryWrapper: {
@@ -134,6 +173,18 @@ const defaultStyles = StyleSheet.create({
     fullRequestView: {
         position: 'relative',
         top: '35%'
+    },
+
+    requestNumber: {
+
+    },
+
+    requestDate: {
+
+    },
+
+    requestStatus: {
+
     }
 })
 
@@ -143,62 +194,60 @@ const compactStyles = StyleSheet.create({
     },
 
     requestCategoryWrapper: {
-        width: '100%',
-        height: '25%',
-        overflow: 'hidden',
-        borderTopLeftRadius: borderCuttoff,
-        borderTopRightRadius: borderCuttoff,
-        backgroundColor: global.baseBlue100,
-        justifyContent: 'center',
     },
 
     requestCategory: {
+        position: 'absolute',
+        top: '5%',
+        left: '2.5%',
         fontSize: 25,
-        width: 'auto',
-        height: 'auto',
-        color: 'white',
-        alignSelf: 'flex-start',
-        marginLeft: '2.5%',
+        color: global.baseBlue100,
     },
 
     internalWrapper: {
-        width: '100%',
-        height: '75%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
+        position: 'absolute',
     },
 
     basicWrapper: {
-        width: '80%',
-        marginLeft: '5%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        zIndex: 10,
     },
 
     basicTitle: {
-        fontSize: 15,
     },
 
     basicContent: {
-        fontSize: 15,
     },
 
     highlightType: {
-        color: global.baseGold100,
-        fontWeight: 'bold',
     },
 
     arrowWrapper: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
     },
+
     fullRequestView: {
-        width: '100%',
-        height: '100%',
+        left: '92.5%',
+        marginTop: '11%'
+    },
+
+    requestNumber: {
         position: 'absolute',
-        zIndex: 2,
+        top: '40%',
+        left: '2.5%',
+    },
+
+    requestDate: {
+        position: 'absolute',
+        top: '75%',
+        left: '4%',
+    },
+
+    requestStatus: {
+        alignSelf: 'flex-end',
+        top: '42%',
     }
 })
+
+export default memo(Request)

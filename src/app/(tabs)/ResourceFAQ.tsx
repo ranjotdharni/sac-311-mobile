@@ -1,10 +1,18 @@
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { global } from "../../dummy";
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions, Button } from 'react-native';
+import { global } from "../../customs";
+import { dummyDataFAQ } from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useRouter } from 'expo-router';
+import DefaultFAQ from "./DefaultFAQ";
+import { useState } from 'react';
+import { fontGetter } from "../../customs";
+import { globalFont } from "../../customs";
+
+declare var myFilter: string
 
 export default function Resources()
 {
+    const [myFilter, setFilter] = useState("None")
     const router = useRouter();
     return (
         <View style={styles.mainWrapper}>
@@ -24,34 +32,48 @@ export default function Resources()
                     </View>
                 </View>
             </View>
-            <SearchBar style={styles.searchStyle} placeholder='Search Frequently Asked Questions' />
+            <SearchBar value='' style={styles.searchStyle} placeholder='Search Frequently Asked Questions' />
+            <View style={styles.allFiltersWrapper}>
+                {/*When pressed, each of these buttons sets the value of myFilter*/}
+                <ScrollView horizontal={true} contentContainerStyle={styles.filterScroll}>
+                    <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilter("None")}>
+                        <Text style={styles.filterText}>Reset Filters</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilter("General")}>
+                        <Text style={styles.filterText}>General</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilter("Services")}>
+                        <Text style={styles.filterText}>Services</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilter("App Functionality")}>
+                        <Text style={styles.filterText}>App Functionality</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </View>  
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
-                    {/* 
-                    
-                    Replace with references to FAQ objects
-
-                    {
-                        requestTypes.map((obj) => {
-                            return <View style={styles.typeWrapper} key={obj.id}>
-                                <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
-                                {
-                                    
-                                    obj.subTypes.map((sub) => {
-                                        return <TouchableOpacity onPress={() => {navigateToRequestConfirm(sub.subType, sub.description)}} key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
-                                            <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
-                                            <Text style={styles.subTypeDescription}>{sub.description}</Text>
-                                    </TouchableOpacity>
-                                    })
-                                }
-                            </View>
-                        })
-                     }*/}
+                <FAQList myFilter = {myFilter}/>
                 <View style={styles.listPaddingBottom}></View>
             </ScrollView>
         </View>
+       
     )
+}
 
+function FAQList({myFilter}:{myFilter:string}){
+    return (
+        <View style={styles.faqWrapper}>
+        {
+            /*Depending on the value of myFilter, the questions of each type are rendered*/
+            dummyDataFAQ.map(data => {
+                if(myFilter.valueOf() == "None")
+                    return <DefaultFAQ width='90%' height={Dimensions.get('screen').height * 0.2} tags={data.tags} type={data.type} question={data.question} answer={data.answer} key={data.key} />
+                else if(data.type.valueOf() == myFilter)
+                    return <DefaultFAQ width='90%' height={Dimensions.get('screen').height * 0.2} tags={data.tags} type={data.type} question={data.question} answer={data.answer} key={data.key} />
+            })
+        }
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -94,23 +116,36 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 17,
         padding: 2,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color: global.baseGold100,
-    },
-    resizeIcon:{
-        width:30,
-        height:30,
-    },
-    serviceCardPlaceholder: {
-        fontSize: 25, 
-        fontFamily: 'JBM', 
-        color: '#000000', 
-        textAlign: 'center', 
-        marginTop: 15,
-    },
 
-//  
 
+    },
+    faqWrapper:{
+        padding:20,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+    },
+    filterScroll:{
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+    },
+    allFiltersWrapper:{
+        marginTop:'18%',
+        backgroundColor:'rgba(0, 0, 0, 0)',
+        flexDirection: 'row',
+        height: '7%',
+    },
+    filterWrapper:{
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+    },
+    filterText:{
+        fontFamily: globalFont.chosenFont,
+        backgroundColor: global.baseBlue100,
+        marginHorizontal: 5,
+        fontSize: 14,
+        color: 'white',
+        borderRadius: 10,
+        padding: 10,
+    },
     searchStyle: {
         position: 'absolute',
         top: '12%',
@@ -129,9 +164,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     listPaddingTop: {
-        height: '0.6%',
+        height: 0,
     },
     listPaddingBottom: {
-        height: 150,
+        height: 70,
     },
 });

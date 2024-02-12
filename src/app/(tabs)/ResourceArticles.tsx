@@ -1,7 +1,9 @@
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { global,} from "../../dummy";
+import { global,} from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useRouter } from 'expo-router';
+import RssFeed from './RssFeed';
+import { globalFont } from "../../customs";
 
 export default function Resources()
 {
@@ -24,31 +26,12 @@ export default function Resources()
                     </TouchableOpacity>
                 </View>
             </View>
-            <SearchBar style={styles.searchStyle} placeholder='Search Articles' />
-            <ScrollView contentContainerStyle={styles.listStyle}>
+            <SearchBar value='' style={styles.searchStyle} placeholder='Search Articles' />
                 <View style={styles.listPaddingTop}></View>
-                    {/* 
-                    
-                    Replace with References to Article objects
-
                     {
-                        requestTypes.map((obj) => {
-                            return <View style={styles.typeWrapper} key={obj.id}>
-                                <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
-                                {
-                                    
-                                    obj.subTypes.map((sub) => {
-                                        return <TouchableOpacity onPress={() => {navigateToRequestConfirm(sub.subType, sub.description)}} key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
-                                            <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
-                                            <Text style={styles.subTypeDescription}>{sub.description}</Text>
-                                    </TouchableOpacity>
-                                    })
-                                }
-                            </View>
-                        })
-                     }*/}
+                        <RssFeed />
+                    }
                 <View style={styles.listPaddingBottom}></View>
-            </ScrollView>
         </View>
     )
 
@@ -94,7 +77,7 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 17,
         padding: 2,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color: global.baseGold100,
     },
     resizeIcon:{
@@ -103,7 +86,7 @@ const styles = StyleSheet.create({
     },
     serviceCardPlaceholder: {
         fontSize: 25, 
-        fontFamily: 'JBM', 
+        fontFamily: globalFont.chosenFont, 
         color: '#000000', 
         textAlign: 'center', 
         marginTop: 15,
@@ -129,9 +112,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     listPaddingTop: {
-        height: '0.6%',
+        height: '3%',
     },
     listPaddingBottom: {
-        height: 150,
+        height: '10%',
     },
 });

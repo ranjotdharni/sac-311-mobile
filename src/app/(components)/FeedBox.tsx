@@ -1,17 +1,18 @@
 import { StyleSheet, Dimensions, Image, Linking, TouchableOpacity, View } from "react-native";
-import { shadowUniversal, global } from "../../dummy";
+import { shadowUniversal, global } from "../../customs";
 import CustomText from "./CustomText";
 import { router } from "expo-router";
+import { fontGetter } from "../../customs";
 
-const borderOffset = 20 //Locally universal border radius
+const borderOffset = 20 //Locally (within component) applied border radius
 
 export default function FeedBox({ title, imgUrl, link, desc } : { title: string, imgUrl: string, link: string, desc: string }) {
     return (
         <TouchableOpacity onPress={() => {router.push({ pathname: '/(web)/WebView', params: { url: link } })}} style={[styles.FeedBoxWrapper, shadowUniversal.default]}>
             <Image source={{ uri: imgUrl }} style={styles.FeedBoxImage} />
             <View style={styles.FeedBoxContentWrapper}>
-                <CustomText font='JBM-B' nol={2} text={title} style={styles.FeedBoxTitle} />
-                <CustomText font='JBM' nol={3} text={desc} style={styles.FeedBoxText} />
+                <CustomText font={fontGetter()} nol={2} text={title} style={styles.FeedBoxTitle} />
+                <CustomText font={fontGetter()} nol={3} text={desc} style={styles.FeedBoxText} />
             </View>
         </TouchableOpacity>
     )

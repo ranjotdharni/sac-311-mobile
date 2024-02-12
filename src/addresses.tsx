@@ -1,4 +1,4 @@
-import { generateSudoId } from "./dummy"
+import { generateSudoId } from "./customs"
 
 export const places = [
     { "id": 229340, "address": "123 Main St, Cityville, USA", "latitude": 38.54269, "longitude": -121.523169},

@@ -1,7 +1,8 @@
 import { View, StyleSheet, Dimensions, TouchableOpacity, Text, Image } from "react-native"
-import { shadowUniversal } from "../../../dummy"
+import { shadowUniversal } from "../../../customs"
 import { MaterialIcons } from "@expo/vector-icons"
-import { global } from "../../../dummy"
+import { global } from "../../../customs"
+import { useRouter } from 'expo-router';
 
 function WhatsNewButton() {
     return (
@@ -12,15 +13,8 @@ function WhatsNewButton() {
     )
 }
 
-function SearchButton() {
-    return (
-        <TouchableOpacity style={styles.SearchButton}>
-            <MaterialIcons name="search" size={Dimensions.get('screen').width * 0.085} color={global.baseBackground100} />
-        </TouchableOpacity>
-    )
-}
-
 export default function ForeHead() {
+    const router = useRouter()
     return (
         <View style={[styles.ForeHeadWrapper]}>
             <View style={[shadowUniversal.homeHeader, styles.ForeHeadCover]}>
@@ -28,7 +22,12 @@ export default function ForeHead() {
                     <Image style={styles.Logo} source={require('../../../assets/png/icon.png')} />
                 </View>
 
-                <SearchButton />
+                <TouchableOpacity style={styles.SearchButton}>
+                    <MaterialIcons name="search" size={Dimensions.get('screen').width * 0.085} color={global.baseBackground100} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.SettingsButton} onPress={() => {router.replace('/(tabs)/Settings')}}>
+                    <MaterialIcons name="settings" size={Dimensions.get('screen').width * 0.085} color={global.baseBackground100} />
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -50,7 +49,9 @@ const styles = StyleSheet.create({
             height: -2,
         },
         backgroundColor: global.baseBlue100, //If changed, navigate to /(tabs)/Home.tsx and change the backgroundColor of View with key '0o10101' to match this!!!!!!!!
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+
     },
 
     NewButton: {
@@ -105,5 +106,23 @@ const styles = StyleSheet.create({
         marginRight: '5%',
         position: 'relative',
         top: Dimensions.get('screen').height * 0.0025, //Must be 1/2 the height of the View in Home.tsx with key '0o10101'
+        height:'100%'
+    },
+
+    SettingsButton: {
+        backgroundColor: global.baseBlue100,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        alignSelf: 'flex-end',
+        paddingLeft: '1%',
+        paddingTop: '0.5%',
+        paddingBottom: '0.5%',
+        borderRadius: 15,
+        marginRight: '5%',
+        position: 'relative',
+        top: Dimensions.get('screen').height * 0.0025, //Must be 1/2 the height of the View in Home.tsx with key '0o10101'
+        height:'100%'
     },
 })

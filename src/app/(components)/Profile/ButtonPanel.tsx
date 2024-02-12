@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import CustomText from '../CustomText';
+import { fontGetter } from '../../../customs';
+import { fontSetter } from '../../../customs';
 
 interface ButtonProps {
   text: string;
@@ -13,7 +15,7 @@ function Button({ text, buttonColor, textColor, onPress }: ButtonProps) {
   return (
     <View style={{ ...styles.ButtonWrapper, backgroundColor: buttonColor }}>
       <TouchableOpacity style={styles.TouchableWrapper} onPress={onPress}>
-        <CustomText nol={0} font="JBM" style={{ ...styles.ButtonText, color: textColor }} text={text} />
+        <CustomText nol={0} font={fontGetter()} style={{ ...styles.ButtonText, color: textColor }} text={text} />
       </TouchableOpacity>
     </View>
   );
@@ -23,17 +25,18 @@ function ButtonDumb({ text, buttonColor, textColor } : { text: string, buttonCol
     return (
         <View style={{...styles.ButtonWrapper, backgroundColor: buttonColor}}>
             <TouchableOpacity style={styles.TouchableWrapper}>
-                <CustomText nol={0} font='JBM' style={{...styles.ButtonText, color: textColor}} text={text} />
+              <CustomText nol={0} font={fontGetter()} style={{...styles.ButtonText, color: textColor}} text={text} />
             </TouchableOpacity>
         </View>
     )
 }
 
-export default function ButtonPanel({ onPressLoginSignup }: { onPressLoginSignup: () => void }) {
+export default function ButtonPanel({ onPressLoginSignup }: { onPressLoginSignup: () => void },) {
   return (
     <View style={styles.ButtonPanelWrapper}>
       <Button text="Login or Signup" buttonColor="white" textColor="grey" onPress={onPressLoginSignup} />
       <ButtonDumb text="Submit New Request" buttonColor="#2F2DA3" textColor="white" />
+      <Button text ="Change to accessibility font" buttonColor="white" textColor="grey" onPress={() => fontSetter('opendyslexic')} />
     </View>
   );
 }
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
     
     ButtonWrapper: {
         width: '92.5%',
-        height: '40%',
+        height: '20%',
         marginVertical: '3%',
         borderRadius: 10,
         justifyContent: 'center',

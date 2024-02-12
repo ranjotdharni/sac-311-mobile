@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text, ScrollView } from 'react-native';
 import CustomText from '../(components)/CustomText';
-import { global, shadowUniversal } from "../../dummy";
+import { global, shadowUniversal } from "../../customs";
 //import SearchBar from '../(components)/RequestType/SearchBar';
 import SearchBar from '../(components)/Profile/SearchBar';
 import CreateButton from '../(components)/RequestConfirmation/SubmitButton';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { requestTypes } from '../../addresses';
+import { globalFont } from '../../customs';
 
 export default function Type()
 {
@@ -26,7 +27,7 @@ export default function Type()
                     </TouchableOpacity>
                 </View>
             </View>
-            <SearchBar style={styles.searchStyle} placeholder='Search For A Service' />
+            <SearchBar value='' style={styles.searchStyle} placeholder='Search For A Service' />
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
                      {
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 25,
         marginLeft:'5%',
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color: global.baseBackground100,
     },
     resizeIcon:{
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     },
     serviceCardPlaceholder: {
         fontSize: 25, 
-        fontFamily: 'JBM', 
+        fontFamily: globalFont.chosenFont, 
         color: '#000000', 
         textAlign: 'center', 
         marginTop: 15,
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     typeTitle: {
         fontSize: 25,
         color: global.baseBlue100,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         marginLeft: '2%',
     },
     subTypeWrapper: {
@@ -155,14 +156,14 @@ const styles = StyleSheet.create({
     },
     subTypeTitle: {
         marginLeft: '2.5%',
-        fontFamily: 'JBM-B',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: global.baseBackground100
     },
     subTypeDescription: {
         marginTop: '3%',
         marginLeft: '3%',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 15,
         color: global.baseGrey100,
     },

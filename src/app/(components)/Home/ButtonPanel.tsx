@@ -1,15 +1,16 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { View, StyleSheet, Dimensions, TouchableOpacity, Linking, Text} from "react-native";
-import { global } from "../../../dummy";
+import { global } from "../../../customs";
+import { globalFont } from "../../../customs";
+import { fontGetter } from "../../../customs";
 import CustomText  from "../CustomText";
-//import {FontGetter, FontSetter }  from "../CustomText";
 import { router } from "expo-router";
 
 function Button({ text, logo, url } : { text: string, logo: any, url: any}) {     //Ensure values passed in for logo corresond to FontAwesome Icons!!!!!!!!!!!!!!!
     return (
         <TouchableOpacity onPress={() => {router.push({ pathname: '/(web)/WebView', params: { url: url } })}} style={styles.ButtonWrapper}>
             <FontAwesome name={logo} size={Dimensions.get('screen').width * 0.15} color='#2B60E9' />
-            <CustomText nol={0} font='JBM' style={styles.ButtonText} text={text}/>
+            <CustomText nol={0} font={fontGetter()} style={styles.ButtonText} text={text}/>
         </TouchableOpacity>
     )
 }
@@ -18,7 +19,7 @@ function Button({ text, logo, url } : { text: string, logo: any, url: any}) {   
 export default function ButtonPanel() {
     return (
         <View style={styles.ButtonPanelWrapper}>
-            <CustomText nol={0} font='JBM-B' text='Are You A...' style={styles.ButtonPanelTitle} />
+            <CustomText nol={0} font={fontGetter()} text='Are You A...' style={styles.ButtonPanelTitle} />
             
             <View style={styles.ButtonPanelContainer}>
 

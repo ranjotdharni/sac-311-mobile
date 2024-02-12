@@ -1,15 +1,76 @@
-import { View, StyleSheet, ScrollView, Dimensions, Text} from "react-native";
-import { Component } from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal } from "../../dummy";
-import { places } from "../../addresses";
-import { useRef, useState } from "react";
+import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl } from "../../customs";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
+import Request from "../(components)/Request";
+import { FontAwesome } from "@expo/vector-icons";
+import CustomMarker from "../(components)/CustomMarker";
+import { Loader } from "../(components)/Loader";
+import Animated from "react-native-reanimated";
+import { FlashList } from "@shopify/flash-list"
+import _ from 'lodash'
+import { fontGetter } from "../../customs";
 
-export default function Explore()
+//const padKeySuffix: string = '-padRequests'
+const markerKeySuffix: string = '-markers'
+//const searchKeySuffix: string = '-scrollAddresses'
+
+const padHiddenHeight = Dimensions.get('screen').height
+const padVisibleHeight = Dimensions.get('screen').height * 0.47
+
+const requestItemWidth = 0.75 // as a decimal percentage of screen width, used in multiple places synchronously so stored here for maintainability 
+//const padAnimationTiming = 1000
+
+function Explore()
 {
+    const controller = new AbortController()
+
+    const mapRef = useRef<MapView>(null)
+
+    const [addressQuery, setAddressQuery] = useState<string>('')
+    const [markers, setMarkers] = useState<Array<responseType>>([])
+    const [padDistrict, setPadDistrict] = useState<string>('')
+    const [padAddress, setPadAddress] = useState<string>('')
+    const [loader, setLoader] = useState<boolean>(false)
+    const [addressesLoading, setAddressesLoading] = useState<boolean>(false)
+    const [requests, setRequests] = useState<Array<responseType>>([])
+    const [data, setData] = useState<Array<responseType>>([])
+    const [results, showResults] = useState<boolean>(false)
+    const [requestFetch, triggerRequestFetch] = useState<responseType>()
+    const [padPan, setPadPan] = useState(padHiddenHeight)
+
+    function hidePad() {
+        //setActiveMarker('')
+        setPadPan(padHiddenHeight)
+    }
+
+    function showPad() {
+        setPadPan(padVisibleHeight)
+    }
+
+    /* 
+        react-native-reanimated was giving compatability issues out the wazoo, fixed the issue for 
+        react-native-reanimated and expo complains about compatability, fixed the issue for expo and
+        react-native-reanimated complains about compatability; came up with below hacky animation 
+        as temporary solution 
+    */
+
+    function watchSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
+        setPadPan(Math.max(padVisibleHeight, padVisibleHeight + (evt.nativeEvent.translationY / 1.5)))
+    }
+
+    function detectSwipeEnd() {
+        if (padPan > padVisibleHeight + 100) {
+            hidePad()
+        }
+        else {
+            setPadPan(padVisibleHeight)
+        }
+    }
+
     function getInitialState() {
         return (
             {
@@ -21,79 +82,204 @@ export default function Explore()
         )
     }
 
-    let sQuery = ''
-
-    const [data, setData] = useState<Array<{address: string, latitude: number, longitude: number}>>([])
-    const [results, showResults] = useState(data.length !== 0)
-
     //WIP for fetching and parsing the JSON data, uncommenting this makes Expo Go crash every minute or so
     //const [requests, setRequests] = useState([]);
     //fetch('https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
     //.then(response => response.json())
     //.then(json => setRequests(json));
 
-    const mapRef = useRef<MapView>(null)
-
-    function setQuery(arg1: string, arg2: boolean) {
-        sQuery = arg1.trim()
-        if (sQuery === '')     return    //break clause
-        
-        let middle = places.filter((e) => {
-            return e.address.toLowerCase().includes(sQuery.toLowerCase())
-        })
-
-        setData(middle)
-        if (!results || arg2)   showResults(true)
-        if (!arg2)  showResults(false)
-    }
-
-    function handlePress(obj : { address: string, latitude: number, longitude: number }) {
-        setData([])
+    function initializePad(obj: responseType) { //will wipe current active marker!!!!!!!!!!!!!!
+        //setActiveMarker('')
+        //setData([])
+        //setRequests([])
         showResults(false)
-        mapRef.current?.animateToRegion({latitude: obj.latitude, longitude: obj.longitude, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+        setPadDistrict(obj.attributes.CouncilDistrictNumber)
+        setPadAddress(obj.attributes.Address)
+        mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.005, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+        showPad()
+    }   //notice: latitude is geometry.y and longitude is geometry.x
+
+    const fetchAddresses = _.throttle(async () => {
+        if (addressQuery === '') {
+            setAddressesLoading(false)
+            showResults(false)
+            return
+        }   //break clause
+
+        setAddressesLoading(true)
+        showResults(true)
+
+        const query = generateEndpointUrl(`NOT(Address='') AND UPPER(Address) LIKE UPPER('%${addressQuery}%')`, 15, [])
+
+        await fetch(query, { signal: controller.signal }).then((middle) => {
+            return middle.json()
+        }).then((res) => {
+            setAddressesLoading(false)
+            setData(res.features)
+        }).catch(err => {
+            return
+            //console.log(err.message)
+        })
+    }, 750, {leading: false, trailing: true})
+
+    function setQuery(value: string) {
+        setAddressQuery(value.trim())
+        fetchAddresses()
     }
+
+    function handlePress(obj: responseType) {
+        //showResults(false)
+        controller.abort()
+        setAddressQuery(obj.attributes.Address)
+        initializePad(obj)
+        setLoader(true)
+
+        setTimeout(() => triggerRequestFetch(obj), 1250)
+    }
+
+    function activateMarker(obj: responseType) {
+        initializePad(obj)
+
+        //setActiveMarker(obj.attributes.ReferenceNumber + markerKeySuffix)
+        setRequests([obj, ...requests])
+    }
+
+    useEffect(() => {
+        async function grabInitialProps() {
+            // default markers are requests w/ valid addresses and created within in the last 7 days
+            const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(7))}'`, 1500, [['orderByFields', 'Address']])
+        
+            await fetch(query).then((middle) => {
+                return middle.json()
+            }).then((res) => {
+                setMarkers(res.features)
+            }).catch(err => {
+                return
+                //console.log(err.message)
+            })
+        }
+
+        grabInitialProps()
+    }, [])
+
+    useEffect(() => {
+        async function grabRequests() {
+            const query = generateEndpointUrl(`Address='${requestFetch?.attributes.Address}'`, 100, [['orderByFields', 'DateCreated']])
+
+            await fetch(query).then((middle) => {
+                return middle.json()
+            }).then((res) => {
+                setLoader(false)
+                setRequests(res.features)
+            }).catch(err => {
+                return
+                //console.log(err.message)
+            })
+        }
+
+        grabRequests()
+
+    }, [requestFetch])
+
+    const memoizedMarkerRender = useMemo(() => markers.map((mark) => {
+        return (
+            <CustomMarker 
+                key={mark.attributes.ReferenceNumber + markerKeySuffix} 
+                markerData={mark} 
+                image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
+                passUp={activateMarker}
+            />
+        )
+    }), [markers])
+
+    /*const memoizedRequestsRender = useCallback(({item} : {item: any}) => 
+        <Request
+            data={item}
+            width={Dimensions.get('screen').width * 0.75}
+            height={Dimensions.get('screen').height * 0.1}
+            compact={true}
+    />, [])*/
+
+    const memoizedRequestData = useMemo(() => requests.map((req, idx) => {
+        return (
+            <Request 
+                key={idx}
+                data={req}
+                width={Dimensions.get('screen').width * requestItemWidth}
+                height={Dimensions.get('screen').height * 0.1}
+                compact={true}
+            />
+        )
+    }), [requests])
+    //req.attributes.ReferenceNumber + padKeySuffix
+
+    const memoizedAddressData = useMemo(() => data.map((addr, idx) => {
+        return (
+            <TouchableOpacity key={idx} onPress={() => handlePress(addr) } style={[styles.resultShadow, shadowUniversal.default]}>
+                <CustomText text={addr.attributes.Address} style={styles.result} nol={0} font={fontGetter()} />
+            </TouchableOpacity>
+        )
+    }), [data])
 
     return (
         <View style={{flex: 1}}>
-                <ScrollView showsVerticalScrollIndicator={false} style={[styles.requestWindow]}>
-                    <Text style={{padding:5, textAlign:"center", color:"#8c6f2b"}}>Placeholder for the JSON data.</Text>
-                    {/*Start of placeholder bubbles, replace with real requests from the JSON later*/}
-                    <View style={styles.requestBubble}>
-                        <Text style={styles.requestText}>Request Type: Animal Control</Text>
-                        <Text style={styles.requestText}>Location: N/A</Text>
-                        <Text style={styles.requestText}>Status: CLOSED</Text>
-                    </View>
-                    <View style={styles.requestBubble}>
-                        <Text style={styles.requestText}>Request Type: Parking Violation</Text>
-                        <Text style={styles.requestText}>Location: N/A</Text>
-                        <Text style={styles.requestText}>Status: ACTIVE</Text>
-                    </View>
-                    <View style={styles.requestBubble}>
-                        <Text style={styles.requestText}>Request Type: Dead Animal</Text>
-                        <Text style={styles.requestText}>Location: N/A</Text>
-                        <Text style={styles.requestText}>Status: CLOSED</Text>
-                    </View>
-                    <View style={styles.requestBubble}>
-                        <Text style={styles.requestText}>Request Type: Graffiti</Text>
-                        <Text style={styles.requestText}>Location: N/A</Text>
-                        <Text style={styles.requestText}>Status: ACTIVE</Text>
-                    </View>
-                    {/*End of placeholder bubble */}
-                </ScrollView>
-                <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}} />
-                <SearchBar style={styles.searchBar} passUp={setQuery} placeholder='Search Address' />
-                <ScrollView style={[styles.searchResults, shadowUniversal.default, {display: (results ? 'flex' : 'none')}]}>
-                    {
-                        data.map((obj: { address: string, latitude: number, longitude: number }) => {
-                            return (
-                                <TouchableOpacity onPress={() => {handlePress(obj)}} key={Math.floor(Math.random() * 100000000)} style={[styles.resultShadow, shadowUniversal.default]}>
-                                    <CustomText text={obj.address} style={styles.result} nol={0} font="JBM" />
+                <Animated.View style={[styles.requestWindow, { transform: [{ translateY: padPan }] }]}>
+                    <PanGestureHandler onEnded={detectSwipeEnd} onGestureEvent={watchSwipe}>
+                        <View style={styles.padTopBar}>
+                            <View style={styles.closeBar}></View>
+                            
+                            <View style={styles.padLeftPartition}>
+                                <CustomText nol={3} text={padAddress} font={fontGetter()} style={styles.padAddress} />
+                                <View style={{flexDirection: 'row', marginBottom: '1%'}}>
+                                    <FontAwesome name='trash' size={30} color={global.baseGrey200} />
+                                    <CustomText text='Thursday' nol={0} font={fontGetter()} style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
+                                </View>
+                            </View>
+
+                            <View style={styles.padRightPartition}>
+                                <CustomText text={padDistrict} nol={0} font={fontGetter()} style={styles.padDistrict} />
+                                <TouchableOpacity style={styles.newRequestButton}>
+                                    <CustomText text='New Request' nol={0} font={fontGetter()} style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
                                 </TouchableOpacity>
-                            )
-                        })
+                            </View>
+                        </View>
+                    </PanGestureHandler>
+                    {
+                        loader ? 
+                        <Loader /> :
+                        <FlashList
+                            contentContainerStyle={{paddingLeft: Dimensions.get('screen').width * ((1 - requestItemWidth) / 4), paddingBottom: Dimensions.get('screen').height * 0.05}}
+                            data={memoizedRequestData}
+                            renderItem={({item}) => item}
+                            estimatedItemSize={100}
+                        />
                     }
-                    <View style={styles.searchResultsPaddingBottom} />
-                </ScrollView>
+                </Animated.View>
+                <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}}>
+                    {
+                        memoizedMarkerRender
+                    }
+                </MapView>
+                <SearchBar value={addressQuery} style={styles.searchBar} onSubmit={() => { showResults(false) }} passUp={setQuery} onClear={() => { setAddressQuery('') }} placeholder={'Search Address'} />
+                {
+                    (
+                        results ?
+                        <View style={[styles.searchResults, shadowUniversal.default]}>
+                            {
+                                (
+                                    addressesLoading ? 
+                                    <Loader /> :
+                                    <FlashList 
+                                        estimatedItemSize={15}
+                                        data={memoizedAddressData}
+                                        renderItem={({item}) => item}
+                                    />
+                                )
+                            }
+                        </View> :
+                        <></>
+                    )
+                }
         </View>
     )
 }
@@ -126,7 +312,7 @@ const styles = StyleSheet.create({
         top: '13.5%',
         left: '5%',
         borderRadius: 15,
-        paddingTop: '5%',
+        zIndex: 5,
     },
 
     searchResultsPaddingBottom: {
@@ -138,7 +324,7 @@ const styles = StyleSheet.create({
         backgroundColor: global.baseBackground100,
         borderRadius: 10,
         alignSelf: 'center',
-        marginBottom: '2.5%',
+        marginTop: '2.5%',
         padding: '5%',
         width: '90%',
     },
@@ -149,13 +335,11 @@ const styles = StyleSheet.create({
     },
 
     requestWindow: {
-        backgroundColor: '#ffffffdd',
-        opacity: 1,
+        backgroundColor: global.baseBackground100,
         borderRadius: 15,
         alignSelf: 'center',
         width: '88%',
-        height: '20%',
-        top: '67%',
+        height: '40%',
         overflow: 'scroll',
         zIndex: 3,
         position: 'absolute',
@@ -168,6 +352,27 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 6,
         elevation: 9,
+    },
+
+    padTopBar: {
+        backgroundColor: global.baseBackground100,
+        width: '90%',
+        height: '35%',
+        left: '5%',
+        borderBottomColor: '#1b1b1b2f',
+        borderBottomWidth: 2,
+        display: 'flex',
+        flexDirection: 'row',
+    },
+
+    closeBar: {
+        position: 'absolute',
+        width: '25%',
+        height: 5,
+        top: 5,
+        left: '37.5%',
+        borderRadius: 15,
+        backgroundColor: global.baseGrey200,
     },
 
     requestBubble: {
@@ -194,5 +399,41 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         left: "5%",
         fontSize: 14
+    },
+
+    padLeftPartition: {
+        width: '60%',
+        height: '100%',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+
+    padRightPartition: {
+        width: '40%',
+        height: '100%',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+
+    padAddress: {
+        marginTop: '10%',
+        color: global.baseGold100,
+        fontSize: 18.5,
+    },
+
+    padDistrict: {
+        marginTop: '16%',
+        marginRight: '10%',
+        color: global.baseGrey100,
+        fontSize: 15,
+        alignSelf: 'flex-end'
+    },
+
+    newRequestButton: {
+        backgroundColor: global.baseBlue100,
+        borderRadius: 30,
+        marginBottom: '5%',
     }
 })
+
+export default Explore

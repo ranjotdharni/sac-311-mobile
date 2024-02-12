@@ -1,6 +1,7 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { global } from "../../dummy";
+import { global } from "../../customs";
 import { useRouter } from 'expo-router';
+import { globalFont } from "../../customs";
 
 export default function Resources()
 {
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 17,
         padding: 2,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color: global.baseGold100,
     },
     resizeIcon:{
@@ -92,12 +93,12 @@ const styles = StyleSheet.create({
     },
     aboutText:{
         fontSize: 15,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         alignSelf:'center',
     },
     aboutTitle:{
         fontSize: 45,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         alignSelf:'center',
     },
     aboutWrapper:{

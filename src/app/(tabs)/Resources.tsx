@@ -1,12 +1,29 @@
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { global, shadowUniversal } from "../../dummy";
-import SearchBar from '../(components)/Profile/SearchBar';
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, TextInput, Image } from 'react-native';
+import { global, shadowUniversal } from "../../customs";
 import { useRouter } from 'expo-router';
 import { requestTypes } from '../../addresses';
+import { FontAwesome } from '@expo/vector-icons';
+import { globalFont } from '../../customs';
 
-export default function Resources()
-{
-    const router = useRouter()
+export default function Resources() {
+    const router = useRouter();
+    const [searchValue, setSearchValue] = useState('');
+
+    // Function to filter requestTypes based on searchValue
+    const filteredRequestTypes = requestTypes.map(obj => {
+        // Filter subtypes based on search value
+        const filteredSubTypes = obj.subTypes.filter(sub => {
+            const combinedText = `${sub.subType.toLowerCase()} ${sub.description.toLowerCase()}`;
+            return combinedText.includes(searchValue.toLowerCase());
+        });
+        // Return the main type object with filtered subtypes
+        return {
+            ...obj,
+            subTypes: filteredSubTypes
+        };
+    }).filter(obj => obj.subTypes.length > 0);
+
     return (
         <View style={styles.mainWrapper}>
             <View style={styles.exitWrapper}>
@@ -14,65 +31,75 @@ export default function Resources()
                     <View style={styles.tabNamesWrapperSelected}>
                         <Text style={styles.barText}>Services</Text>
                     </View>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/ResourceArticles')}}>
+                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceArticles') }}>
                         <Text style={styles.barText}>Articles</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/ResourceAbout')}}>
+                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceAbout') }}>
                         <Text style={styles.barText}>About</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/ResourceFAQ')}}>
+                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceFAQ') }}>
                         <Text style={styles.barText}>FAQ</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <SearchBar style={styles.searchStyle} placeholder='Search For Service Related Resources' />
+            <View style={styles.searchContainer}>
+                <Image style={styles.searchIcon} source={require('../../assets/png/search.png')} />
+                <TextInput
+                    style={styles.searchInput}
+                    value={searchValue}
+                    onChangeText={text => setSearchValue(text)}
+                    placeholder='Search For Service Related Resources'
+                    placeholderTextColor='#D3D3D3'
+                />
+                <TouchableOpacity onPress={() => setSearchValue('')} style={styles.clearButton}>
+                    <FontAwesome name='remove' size={20} color={global.baseGrey200} />
+                </TouchableOpacity>
+            </View>
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
-                     {
-                        requestTypes.map((obj) => {
-                            return <View style={styles.typeWrapper} key={obj.id}>
-                                <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
-                                {
-                                    obj.subTypes.map((sub) => {
-                                        return <TouchableOpacity key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
-                                            <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
-                                            <Text style={styles.subTypeDescription}>{sub.description}</Text>
-                                        </TouchableOpacity>
-                                    })
-                                }
-                            </View>
-                        })
-                     }
+                {filteredRequestTypes.map((obj) => {
+                    return (
+                        <View style={styles.typeWrapper} key={obj.id}>
+                            <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
+                            {obj.subTypes.map((sub) => {
+                                return (
+                                    <TouchableOpacity key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
+                                        <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
+                                        <Text style={styles.subTypeDescription}>{sub.description}</Text>
+                                    </TouchableOpacity>
+                                );
+                            })}
+                        </View>
+                    );
+                })}
                 <View style={styles.listPaddingBottom}></View>
             </ScrollView>
         </View>
-    )
-
+    );
 }
 
 const styles = StyleSheet.create({
     mainWrapper: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0)',
+        flex: 1,
+        backgroundColor: 'white',
     },
-    exitWrapper:{
+    exitWrapper: {
         backgroundColor: global.baseBackground100,
-        width:'100%',
+        width: '100%',
         shadowColor: '#000',
-        shadowOffset:{
-            width:-2,
-            height:2,
+        shadowOffset: {
+            width: -2,
+            height: 2,
         },
-        shadowOpacity:0.25,
-        shadowRadius:4,
-        elevation:5,
-        height:'12%',
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        height: '12%',
     },
-    innerExitWrapper:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        marginTop:'15%',
+    innerExitWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: '15%',
         paddingHorizontal: 15,
     },
     tabNamesWrapper: {
@@ -90,31 +117,47 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 17,
         padding: 2,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color: global.baseGold100,
     },
-
-//  
-
-    searchStyle: {
-        position: 'absolute',
-        top: '12%',
-        zIndex: 1,
-        width: '95%',
-        left: '2.5%',
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+        marginHorizontal: 10,
+        borderRadius: 25,
+        overflow: 'hidden',
         borderWidth: 1,
         borderColor: global.baseBlue100,
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        width: '96%',
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+    },
+    searchIcon: {
+        width: 20,
+        height: 20,
+        marginRight: 5,
+    },
+    searchInput: {
+        flex: 1,
+        marginLeft: 10,
+        fontFamily: globalFont.chosenFont
+    },
+    clearButton: {
+        marginLeft: 5,
     },
     listStyle: {
-        width: '100%',
-        position: 'absolute',
-        display: 'flex',
-        flexDirection: 'column',
+        flexGrow: 1,
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     listPaddingTop: {
-        height: '0.6%',
+        height: 10,
     },
     listPaddingBottom: {
         height: 150,
@@ -122,9 +165,6 @@ const styles = StyleSheet.create({
     typeWrapper: {
         width: '100%',
         marginBottom: 15,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
     },
     typeTitleWrapper: {
         width: '100%',
@@ -134,7 +174,7 @@ const styles = StyleSheet.create({
     typeTitle: {
         fontSize: 25,
         color: global.baseBlue100,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         marginLeft: '2%',
     },
     subTypeWrapper: {
@@ -142,9 +182,6 @@ const styles = StyleSheet.create({
         marginTop: 15,
         borderRadius: 15,
         backgroundColor: global.baseBackground100,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
         padding: 10,
     },
     subTypeTitleWrapper: {
@@ -155,14 +192,14 @@ const styles = StyleSheet.create({
     },
     subTypeTitle: {
         marginLeft: '2.5%',
-        fontFamily: 'JBM-B',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: global.baseBackground100
     },
     subTypeDescription: {
         marginTop: '3%',
         marginLeft: '3%',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 15,
         color: global.baseGrey100,
     },
