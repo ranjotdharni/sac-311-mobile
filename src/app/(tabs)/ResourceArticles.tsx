@@ -3,6 +3,7 @@ import { global,} from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useRouter } from 'expo-router';
 import RssFeed from './RssFeed';
+import { globalFont } from "../../customs";
 
 export default function Resources()
 {
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 17,
         padding: 2,
-        fontFamily:'JBM',
+        fontFamily: globalFont.chosenFont,
         color: global.baseGold100,
     },
     resizeIcon:{
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     },
     serviceCardPlaceholder: {
         fontSize: 25, 
-        fontFamily: 'JBM', 
+        fontFamily: globalFont.chosenFont, 
         color: '#000000', 
         textAlign: 'center', 
         marginTop: 15,

@@ -5,6 +5,7 @@ import { useNavigation } from 'expo-router';
 import { global } from "../../customs";
 import localData from './patch.json';
 import BulletPointDisplay from './BulletPoints';
+import { globalFont } from '../../customs';
 
 export type WhatsNewData = {
     header: string;
@@ -115,14 +116,14 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 18,
         color: 'black',
-        fontFamily: 'JBM-B',
+        fontFamily: globalFont.chosenFont,
         textAlign: 'center',
     },
     bodyText: {
         fontSize: 16,
         top: 20,
         color: 'black',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         textAlign: 'center',
     },
 });

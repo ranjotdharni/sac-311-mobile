@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Pressable} from "react-native";
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
+import { globalFont } from "../../customs";
 
 
 export default function Profile0()
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
         fontSize: 35,
         fontWeight: 'bold',
         color: '#2F2DA3',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         textAlign: 'center',
         marginBottom: '5%'
     },
@@ -164,13 +165,13 @@ const styles = StyleSheet.create({
     },
     firstRowFieldText: {
         fontSize: 20,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         color: '#2F2DA3',
         textAlign: 'center',
     },
     fieldText: {
         fontSize: 20,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         color: '#2F2DA3',
         alignSelf: "flex-start",
         paddingLeft: 59,

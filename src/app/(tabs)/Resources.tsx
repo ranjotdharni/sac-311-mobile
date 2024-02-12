@@ -4,6 +4,7 @@ import { global, shadowUniversal } from "../../customs";
 import { useRouter } from 'expo-router';
 import { requestTypes } from '../../addresses';
 import { FontAwesome } from '@expo/vector-icons';
+import { globalFont } from '../../customs';
 
 export default function Resources() {
     const router = useRouter();
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     barText: {
         fontSize: 17,
         padding: 2,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         color: global.baseGold100,
     },
     searchContainer: {
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     searchInput: {
         flex: 1,
         marginLeft: 10,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont
     },
     clearButton: {
         marginLeft: 5,
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     typeTitle: {
         fontSize: 25,
         color: global.baseBlue100,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         marginLeft: '2%',
     },
     subTypeWrapper: {
@@ -191,14 +192,14 @@ const styles = StyleSheet.create({
     },
     subTypeTitle: {
         marginLeft: '2.5%',
-        fontFamily: 'JBM-B',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: global.baseBackground100
     },
     subTypeDescription: {
         marginTop: '3%',
         marginLeft: '3%',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 15,
         color: global.baseGrey100,
     },
