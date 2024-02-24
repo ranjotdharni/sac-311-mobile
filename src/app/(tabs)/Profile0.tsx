@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Pressable} from "react-native";
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
+import { globalFont } from "../../customs";
 
 
 export default function Profile0()
@@ -18,13 +19,30 @@ export default function Profile0()
 
     const navigation = useNavigation();
 
+    //This will check if the account creation attempt will be a unique account when we get access to salesforce
+    const checkIfUnique = () => {
+        return true;
+    }
+
+    //Will create the account
+    const createAccount = () => {
+    }
+
     //Currently the cancel and create account buttons just lead back to other profile pages
     const cancelPress = () => {
         (navigation.navigate as (screen: string) => void)('Profile2');
     };
 
     const createPress = () => {
-        (navigation.navigate as (screen: string) => void)('Profile');
+        if((password.match(passConfirmation) === null) || (passConfirmation.match(password) === null)){ //checks that both passwords are the same
+            window.alert('Passwords must be identical');
+        }else{
+            if(checkIfUnique()){
+                createAccount();
+                (navigation.navigate as (screen: string) => void)('Profile');
+            };
+        }
+        
     };
 
     return (
@@ -120,7 +138,7 @@ const styles = StyleSheet.create({
         fontSize: 35,
         fontWeight: 'bold',
         color: '#2F2DA3',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         textAlign: 'center',
         marginBottom: '5%'
     },
@@ -164,13 +182,13 @@ const styles = StyleSheet.create({
     },
     firstRowFieldText: {
         fontSize: 20,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         color: '#2F2DA3',
         textAlign: 'center',
     },
     fieldText: {
         fontSize: 20,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         color: '#2F2DA3',
         alignSelf: "flex-start",
         paddingLeft: 59,

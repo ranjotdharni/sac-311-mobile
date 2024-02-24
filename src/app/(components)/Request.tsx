@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import { memo, useCallback } from "react";
+import { fontGetter } from "../../customs";
 
 
 const borderCuttoff: number = 15 //border radius of component, this will be applied to multiple wrapper components so change it universally here
@@ -32,17 +33,17 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
     
     return (
         <View style={[basicStyle.default, internalStyle.requestWrapper]} >
-            {(!compact ? <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} font='JBM-B' nol={0} style={internalStyle.requestCategory} /></View> : <></>)}
+            {(!compact ? <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} font={fontGetter()} nol={0} style={internalStyle.requestCategory} /></View> : <></>)}
 
             <View style={defaultStyles.arrowWrapper}>
                 <View style={[internalStyle.internalWrapper, (compact ? {width: width, height: height} : {})]}>
-                    {compact ? <CustomText text={(category.length > 15 ? category.substring(0, 15) + '...' : category)} font='JBM' nol={0} style={internalStyle.requestCategory} /> : <></>}
+                    {compact ? <CustomText text={(category.length > 15 ? category.substring(0, 15) + '...' : category)} font={fontGetter()} nol={0} style={internalStyle.requestCategory} /> : <></>}
 
                     {
                         (
                             !compact ? 
                             <View style={internalStyle.basicWrapper}>
-                                <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} font='JBM-B' style={[internalStyle.basicContent, internalStyle.highlightType]} />
+                                <Text style={internalStyle.basicTitle}>Type:</Text><CustomText text={type} nol={0} font={fontGetter()} style={[internalStyle.basicContent, internalStyle.highlightType]} />
                             </View>
                             :
                             <></>
@@ -51,17 +52,17 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
 
                     <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestNumber)}>
                         {(!compact ? <Text style={internalStyle.basicTitle}>Request Number:</Text> : <></>)}
-                        <CustomText text={reqNumber.toString()} nol={0} font='JBM' style={[internalStyle.basicContent, (compact ? {color: global.baseGrey100} : {})]} />
+                        <CustomText text={reqNumber.toString()} nol={0} font={fontGetter()} style={[internalStyle.basicContent, (compact ? {color: global.baseGrey100} : {})]} />
                     </View>
 
                     <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestDate)}>
                         {(!compact ? <Text style={internalStyle.basicTitle}>Date Created:</Text> : <></>)}
-                        <CustomText nol={0} font='JBM' text={dateToFormat((!compact ? 'MMM DD, YYYY' : 'MM/DD/YYYY'), date)} style={internalStyle.basicContent} />
+                        <CustomText nol={0} font={fontGetter()} text={dateToFormat((!compact ? 'MMM DD, YYYY' : 'MM/DD/YYYY'), date)} style={internalStyle.basicContent} />
                     </View>
 
                     <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestStatus)}>
                         {(!compact ? <Text style={internalStyle.basicTitle}>Status:</Text> : <></>)}
-                        <CustomText text={status} nol={0} font='JBM' style={[internalStyle.basicContent, (compact ? {marginRight: '10%', top: -2, color: (status === 'CLOSED' ? 'red' : (status === 'NEW' ? 'green' : global.baseGold100))} : {})]} />
+                        <CustomText text={status} nol={0} font={fontGetter()} style={[internalStyle.basicContent, (compact ? {marginRight: '10%', top: -2, color: (status === 'CLOSED' ? 'red' : (status === 'NEW' ? 'green' : global.baseGold100))} : {})]} />
                     </View>  
                 </View>
 

@@ -3,6 +3,7 @@ import { dummyDataHome, generateEndpointUrl, responseType } from "../../../custo
 import Request from "../Request";
 import { global } from "../../../customs";
 import { useEffect, useState } from "react";
+import { globalFont } from "../../../customs";
 
 export default function RequestList()
 {
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
         height: 'auto',
         alignItems: 'center',
         overflow: 'visible',
+        
     },
 
     listTitleWrapper: {
@@ -53,6 +55,7 @@ const styles = StyleSheet.create({
     listTitle: {
         color: 'white',
         alignSelf: 'flex-start',
+        fontFamily: globalFont.chosenFont,
         fontSize: 30,
         padding: 0,
         backgroundColor: global.baseGold100,

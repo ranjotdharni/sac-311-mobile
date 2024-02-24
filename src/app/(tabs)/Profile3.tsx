@@ -4,12 +4,18 @@ import { StatusBar, View, ScrollView, Text, StyleSheet, Pressable, Dimensions, I
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { shadowUniversal, global } from "../../customs";
 import { MaterialIcons } from "@expo/vector-icons"
+import { FIRESTORE_DB } from "../../FirebaseConfig";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+
 
 /*
 TODO:
 - remove navbar when keyboard is open
 - shadows on boxes behind input fields and forehead buttons (inputBacking)
     - change background color of main container (container) to white once shadows are implemented
+- Add City and State fields for address section
+- add real sign out functionality
+    - sign out button only returns user to login page currently
 */
 
 export default function Profile3(){
@@ -41,12 +47,6 @@ export default function Profile3(){
             thirdPartRef.current.focus();
         }
     };
-    
-
-    //go back to initial profile screen if user presses "Sign out" button
-    const navigateToProfile = () => {
-        (navigation.navigate as (screen: string) => void)('Profile');
-    };
 
     //navigate to "Business" page when "Business" button is pressed
     const handleBusinessPress = () => {
@@ -58,6 +58,63 @@ export default function Profile3(){
         await AsyncStorage.clear(); // clear user data
         (navigation.navigate as (screen: string) => void)('Profile2');
     };
+
+
+    //fetch user data from firestore dummy database
+    const fetchUserData = async () => {
+        //create a reference to the Firestore document
+        const userDocRef = doc(FIRESTORE_DB, 'Users', 'UserInfo');
+        
+        //attempt to fetch the document
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if(userData){   //check if userData is undefined
+                setUserAddress(userData.StreetAddress || '');
+                setAptNum(userData.Suite || '');
+                setZipCode(userData.ZipCode || '');
+                setFirstName(userData.FirstName || '');
+                setLastName(userData.LastName || '');
+                setUserEmail(userData.Email || '');
+                if (userData.PhoneNumber) {
+                    const parts = userData.PhoneNumber.split('-');//assumes phone number is saved as "xxx-xxx-xxxx"
+                    setFirstPart(parts[0] || '');
+                    setSecondPart(parts[1] || '');
+                    setThirdPart(parts[2] || '');
+                }
+            }
+            else{
+                //default values loaded into fields
+            }
+        } else {
+            console.log('No user data found');
+        }
+    };
+
+
+    //save data to firestore dummy database
+    const saveUserData = async () => {
+        //create a reference to the Firestore document
+        const userDocRef = doc(FIRESTORE_DB, 'Users', 'UserInfo');
+      
+        const phoneNumber = `${firstPart}-${secondPart}-${thirdPart}`;
+      
+        //use setDoc to update the document
+        await setDoc(userDocRef, {
+          Email: userEmail,
+          FirstName: firstName,
+          LastName: lastName,
+          PhoneNumber: phoneNumber,
+          StreetAddress: userAddress,
+          Suite: aptNum,
+          ZipCode: zipCode,
+        }, { merge: true }); //using merge: true to update the document without overwriting it entirely
+      
+        console.log('User data updated successfully');
+    };
+
+/*  old fetch/save functions
 
     // save user data in async storage
     const saveUserData = async () => {
@@ -97,15 +154,16 @@ export default function Profile3(){
           // handle errors here
         }
     };
+    */
 
     // load user data when user clicks back into profile view
     React.useEffect(() => {
-        loadUserData();
+        fetchUserData();
     }, []);
     
     // undo profile changes
-    const revertUserData = async () => { 
-        loadUserData();
+    const revertUserData = async () => {
+        fetchUserData();
     };
         
 
@@ -132,7 +190,8 @@ export default function Profile3(){
                 <View style={styles.titleWrapper}>
                     <Text style={styles.titleText}>My Profile</Text>
                     <Pressable style={styles.signOutButton} onPress={handleSignOutPress}>
-                        <Image style={styles.loginIcon} source={require('../../assets/png/login1.png')} />{/*login1.png from icons8.com*/}
+                        <Image style={styles.loginIcon} source={require('../../assets/png/login1.png')} />
+                        {/*login1.png from icons8.com*/}
                         <Text style={styles.signOutText}>Sign Out</Text>
                     </Pressable>
                 </View>

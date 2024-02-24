@@ -4,6 +4,7 @@ import { View, StyleSheet, Pressable } from "react-native"
 import { global } from "../../customs"
 import CustomText from "./CustomText"
 import { Link } from "expo-router"
+import { fontGetter } from "../../customs";
 
 export default function NavItem({ id, title, iconName, active, url, passUp, navigation } : { id: number, title: string | undefined, iconName: keyof typeof MaterialIcons.glyphMap, active: (arg1: number) => boolean, url: Href<string>, passUp: (arg1: number) => void, navigation: any })
 {
@@ -16,7 +17,7 @@ export default function NavItem({ id, title, iconName, active, url, passUp, navi
             <Link href={url} onPressOut={ () => { passUp(id) } } style={{width: '100%', height: '100%', zIndex: 2}} />
             <View style={styles.NavPress}>
                 <MaterialIcons style={styles.NavIcon} name={iconName} color={(active(id) ? global.baseGold100 : global.baseGrey100)} size={25} />
-                <CustomText font='JBM' nol={0} text={title!} style={{fontSize: 10, color: (active(id) ? global.baseGold100 : global.baseGrey100)}} />
+                <CustomText font={fontGetter()} nol={0} text={title!} style={{fontSize: 10, color: (active(id) ? global.baseGold100 : global.baseGrey100)}} />
             </View>
         </Pressable>
     )
@@ -26,7 +27,7 @@ export default function NavItem({ id, title, iconName, active, url, passUp, navi
 
 const styles = StyleSheet.create({
     NavItemWrapper : {
-        width: '15%',
+        width: '18%',
         height: '100%',
     },
 

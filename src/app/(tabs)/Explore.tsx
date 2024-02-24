@@ -12,6 +12,7 @@ import { Loader } from "../(components)/Loader";
 import Animated from "react-native-reanimated";
 import { FlashList } from "@shopify/flash-list"
 import _ from 'lodash'
+import { fontGetter } from "../../customs";
 
 //const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markers'
@@ -215,7 +216,7 @@ function Explore()
     const memoizedAddressData = useMemo(() => data.map((addr, idx) => {
         return (
             <TouchableOpacity key={idx} onPress={() => handlePress(addr) } style={[styles.resultShadow, shadowUniversal.default]}>
-                <CustomText text={addr.attributes.Address} style={styles.result} nol={0} font="JBM" />
+                <CustomText text={addr.attributes.Address} style={styles.result} nol={0} font={fontGetter()} />
             </TouchableOpacity>
         )
     }), [data])
@@ -228,17 +229,17 @@ function Explore()
                             <View style={styles.closeBar}></View>
                             
                             <View style={styles.padLeftPartition}>
-                                <CustomText nol={3} text={padAddress} font='JBM' style={styles.padAddress} />
+                                <CustomText nol={3} text={padAddress} font={fontGetter()} style={styles.padAddress} />
                                 <View style={{flexDirection: 'row', marginBottom: '1%'}}>
                                     <FontAwesome name='trash' size={30} color={global.baseGrey200} />
-                                    <CustomText text='Thursday' nol={0} font='JBM-B' style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
+                                    <CustomText text='Thursday' nol={0} font={fontGetter()} style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
                                 </View>
                             </View>
 
                             <View style={styles.padRightPartition}>
-                                <CustomText text={padDistrict} nol={0} font='JBM' style={styles.padDistrict} />
+                                <CustomText text={padDistrict} nol={0} font={fontGetter()} style={styles.padDistrict} />
                                 <TouchableOpacity style={styles.newRequestButton}>
-                                    <CustomText text='New Request' nol={0} font='JBM' style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
+                                    <CustomText text='New Request' nol={0} font={fontGetter()} style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
                                 </TouchableOpacity>
                             </View>
                         </View>

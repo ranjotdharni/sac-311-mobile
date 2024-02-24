@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import CustomText from '../CustomText';
+import { fontGetter } from '../../../customs';
 
 interface ButtonProps {
   text: string;
@@ -13,7 +14,7 @@ function CreateButtonn({ text, buttonColor, textColor, onPress }: ButtonProps) {
   return (
     <View style={{ ...styles.ButtonWrapper, backgroundColor: buttonColor }}>
       <TouchableOpacity style={styles.TouchableWrapper} onPress={onPress}>
-        <CustomText nol={0} font="JBM" style={{ ...styles.ButtonText, color: textColor }} text={text} />
+        <CustomText nol={0} font={fontGetter()} style={{ ...styles.ButtonText, color: textColor }} text={text} />
       </TouchableOpacity>
     </View>
   );
@@ -23,7 +24,7 @@ function ButtonDumb({ text, buttonColor, textColor } : { text: string, buttonCol
     return (
         <View style={{...styles.ButtonWrapper, backgroundColor: buttonColor}}>
             <TouchableOpacity style={styles.TouchableWrapper}>
-                <CustomText nol={0} font='JBM' style={{...styles.ButtonText, color: textColor}} text={text} />
+                <CustomText nol={0} font={fontGetter()} style={{...styles.ButtonText, color: textColor}} text={text} />
             </TouchableOpacity>
         </View>
     )

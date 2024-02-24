@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, Image } from 'react-native';
+import { globalFont } from "../../../customs";
 
 export default function SearchBar() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
         position: 'absolute', // Add this line
         left: 40, // Add this line
         top: 15, // Adjust this value as needed
-        fontFamily: 'JBM', // Add this line
+        fontFamily: globalFont.chosenFont, // Add this line
         color: '#D3D3D3', // Add this line
     },
     searchIcon: {
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
         paddingLeft: 40, // Adjust this value as needed to make room for the icon
         paddingRight: 10,
         backgroundColor: 'transparent',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont
     },
 });
 
