@@ -16,13 +16,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Allow app to use your location"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/png/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions":[
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "INTERNET"
+      ]
     },
     "web": {
       "bundler": "metro",
