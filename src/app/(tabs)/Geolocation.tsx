@@ -3,6 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import { getLocationPermission, getCurrentLocation } from '../(components)/LocationService';
 import { LocationObject } from 'expo-location';
 
+//Geolocation function that can be slotted into the app where needed
+
 export default function Geoloc() {
   const [location, setLocation] = useState<LocationObject | null>(null);
 
@@ -13,12 +15,18 @@ export default function Geoloc() {
       if (permissionGranted) {
         const currentLocation = await getCurrentLocation();
         setLocation(currentLocation);
+        //print to console
+        if (currentLocation) {
+          console.log('Latitude:', currentLocation.coords.latitude);
+          console.log('Longitude:', currentLocation.coords.longitude);
+        }
       }
     };
 
     fetchLocation();
   }, []);
 
+  //Style view for testing purposes
   return (
     <View style = {styles.container}>
       {location ? (
