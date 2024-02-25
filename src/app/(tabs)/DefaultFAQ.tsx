@@ -6,9 +6,10 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import { fontGetter } from "../../customs";
 
+
 const borderCuttoff: number = 15 //border radius of component, this will be applied to multiple wrapper components so change it universally here
 
-function DefaultFAQ( { width, height, tags, type, question, answer} : { width: DimensionValue, height: DimensionValue, tags: string, type: string, question: string, answer: string} ) {
+function DefaultFAQ( { width, height, type, question, answer} : { width: DimensionValue, height: DimensionValue, type: string, question: string, answer: string} ) {
     let basicStyle = StyleSheet.create({
         default: {
             width: width,
@@ -31,7 +32,7 @@ function DefaultFAQ( { width, height, tags, type, question, answer} : { width: D
                 <View style={defaultStyles.basicWrapper}>
                     <CustomText text={question} nol={0} font={fontGetter()} style={defaultStyles.basicContent} />
                 </View>
-                <TouchableOpacity style={defaultStyles.fullRequestView} onPress={() => {router.push('/FAQFullView')}}>
+                <TouchableOpacity style={defaultStyles.fullRequestView} onPress={() => {router.push({pathname: '/FAQFullView', params: {type, answer, question}})}}>
                     <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseBlue100} paddingRight={10}/>
                 </TouchableOpacity>
             </View>
@@ -39,15 +40,15 @@ function DefaultFAQ( { width, height, tags, type, question, answer} : { width: D
     )
 }
 
-export default function FAQ({ width, height, tags, type, question, answer} : { width: DimensionValue, height: DimensionValue, tags: string, type: string, question: string, answer: string, key: number}) {
+export default function FAQ({ width, height, type, question, answer} : { width: DimensionValue, height: DimensionValue, type: string, question: string, answer: string, key: number}) {
     return (
-        <DefaultFAQ width={width} height={height} tags={tags} type={type} question={question} answer={answer} />
+        <DefaultFAQ width={width} height={height} type={type} question={question} answer={answer} />
     )
 }
 
 const defaultStyles = StyleSheet.create({
     requestWrapper: {
-        marginTop: '5%',
+        marginBottom: '5%',
         height: 'auto',
     },
     requestCategoryWrapper: {
