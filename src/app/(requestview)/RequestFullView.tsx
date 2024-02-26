@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     },
     basicText: {
         fontSize: 22,
+        fontFamily: globalFont.chosenFont,
         lineHeight: 50,
     },
     barText: {

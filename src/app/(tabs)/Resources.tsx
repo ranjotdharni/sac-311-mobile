@@ -9,6 +9,7 @@ import { globalFont } from '../../customs';
 export default function Resources() {
     const router = useRouter();
     const [searchValue, setSearchValue] = useState('');
+    const [filterValue, setFilterValue] = useState('None');
 
     // Function to filter requestTypes based on searchValue
     const filteredRequestTypes = requestTypes.map(obj => {
@@ -17,11 +18,34 @@ export default function Resources() {
             const combinedText = `${sub.subType.toLowerCase()} ${sub.description.toLowerCase()}`;
             return combinedText.includes(searchValue.toLowerCase());
         });
-        // Return the main type object with filtered subtypes
-        return {
-            ...obj,
-            subTypes: filteredSubTypes
-        };
+        //empty subtype value to be used as null
+        const emptySubtype = obj.subTypes.filter(sub => {
+            const nullTxt = ``;
+            return nullTxt.includes("empty");
+        });
+        // If no filter chosen, only use the subtype search term
+        if (filterValue == 'None'){
+            return {
+                ...obj,
+                subTypes: filteredSubTypes,
+                type: obj.type
+            };
+        }
+        //if a filter is chosen, then only search through the subtypes of the filtered type
+        else if (filterValue == obj.type.valueOf()){
+            return {
+                ...obj,
+                subTypes: filteredSubTypes,
+                type: filterValue
+            };
+        }
+        //otherwise return null
+        else
+            return {
+                ...obj,
+                subTypes: emptySubtype,
+                type: ''
+            };
     }).filter(obj => obj.subTypes.length > 0);
 
     return (
@@ -48,13 +72,28 @@ export default function Resources() {
                     style={styles.searchInput}
                     value={searchValue}
                     onChangeText={text => setSearchValue(text)}
-                    placeholder='Search For Service Related Resources'
+                    placeholder='Search for Services'
                     placeholderTextColor='#D3D3D3'
                 />
                 <TouchableOpacity onPress={() => setSearchValue('')} style={styles.clearButton}>
                     <FontAwesome name='remove' size={20} color={global.baseGrey200} />
                 </TouchableOpacity>
             </View>
+            <View style={styles.allFiltersWrapper}>
+                
+                <ScrollView horizontal={true} contentContainerStyle={styles.filterScroll}>
+                    <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
+                        <Text style={styles.filterText}>Clear Filter</Text>
+                    </TouchableOpacity>
+                    {requestTypes.map((obj) => {
+                        return (
+                            <TouchableOpacity key={obj.id} style={styles.filterWrapper} onPress={() => setFilterValue(obj.type)}>
+                                <Text style={styles.filterText}>{obj.type}</Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </ScrollView>
+            </View>  
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
                 {filteredRequestTypes.map((obj) => {
@@ -178,11 +217,12 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
     },
     subTypeWrapper: {
-        width: '90%',
+        width: '96%',
         marginTop: 15,
         borderRadius: 15,
         backgroundColor: global.baseBackground100,
         padding: 10,
+        marginLeft: '2%'
     },
     subTypeTitleWrapper: {
         width: '100%',
@@ -202,5 +242,26 @@ const styles = StyleSheet.create({
         fontFamily: globalFont.chosenFont,
         fontSize: 15,
         color: global.baseGrey100,
+    },
+    filterScroll:{
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+    },
+    allFiltersWrapper:{
+        marginTop:'3%',
+        backgroundColor:'rgba(0, 0, 0, 0)',
+        flexDirection: 'row',
+        height: '7%',
+    },
+    filterWrapper:{
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+    },
+    filterText:{
+        fontFamily: globalFont.chosenFont,
+        backgroundColor: global.baseBlue100,
+        marginHorizontal: 5,
+        fontSize: 14,
+        color: 'white',
+        borderRadius: 10,
+        padding: 10,
     },
 });

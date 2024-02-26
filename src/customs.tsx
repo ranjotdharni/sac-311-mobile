@@ -103,42 +103,42 @@ export const dummyDataFAQ = [
         type: 'App Functionality',
         key: 1,
         question: 'How can I make requests on the map?',
-        answer: ''
+        answer: 'Choose any address on the map, then click "Make A New Request" to make a new request.'
     },
     {
         tags: '',
         type: 'App Functionality',
         key: 2,
         question: 'How can I make a request in the app?',
-        answer: ''
+        answer: 'You can make a request by clicking on the blue plus button on the center of the navigation bar.'
     },
     {
         tags: '',
         type: 'Services',
         key: 3,
         question: 'What services are offered by 311?',
-        answer: ''
+        answer: '311 offers a large variety of services, all of which can be found on the Services page, which can be found under the Resources tab.'
     },
     {
         tags: '',
         type: 'Services',
         key: 4,
         question: 'How can I find more information about a particular service offered?',
-        answer: ''
+        answer: 'You can find more information by clicking on one of the offered services on the Services page, which can be found under the Resources tab.'
     },
     {
         tags: '',
         type: 'General',
         key: 5,
         question: 'How long will it take for my request to be serviced?',
-        answer: ''
+        answer: 'Request service times vary, but if your request has been submitted, we assure we are working on it. In case of an emergency, please instead call 911.'
     },
     {
         tags: '',
         type: 'General',
         key: 6,
         question: 'Who can I contact if I am having issues making requests?',
-        answer: ''
+        answer: 'If you would like to talk directly to a city employee, please dial 311 to make a request over the phone.'
     },
 ]
 
@@ -332,11 +332,10 @@ export const global = {
 // this value is designed to be read by every entity that displays text
 // the user may change the font of the entire app, by making a selection in the settings page
 
-let chosenFont: string = "JBM";
+let chosenFont: string = 'Helvetica';
 
 export const globalFont= {
     chosenFont : chosenFont
-    //chosenFont: chosenFont
 }
 
 export function fontSetter(newFont:string){
@@ -347,5 +346,45 @@ export function fontGetter(){
     return globalFont.chosenFont;
 }
 
+//                                      //
+//         Global Color Theme Section   //
+//                                      //
+// this value is designed to be read by every entity that displays color
+// the user may change the color theme of the entire app, by making a selection in the settings page
+
+let chosenColorTheme: any = 'lightMode';
 
 
+export const globalColorTheme= {
+    chosenColorTheme : chosenColorTheme,
+    backgroundColor : '#808080',
+    color : '#ffffff',
+    theme : 'globalTheme'
+
+}
+
+export function colorThemeSetter(newTheme:string){
+    globalColorTheme.chosenColorTheme = newTheme;
+    if (newTheme == 'lightTheme'){
+        chosenColorTheme.backgroundColor = '#000000';
+        chosenColorTheme.color = '#ffffff';
+        globalColorTheme.theme = 'lightTheme';
+        globalColorTheme.backgroundColor = '#000000';
+        globalColorTheme.color = '#ffffff';
+    }
+    
+    else if (newTheme == 'darkTheme'){
+        chosenColorTheme.backgroundColor = '#ffffff';
+        chosenColorTheme.color = '#000000';
+        globalColorTheme.theme = 'darkTheme';
+        globalColorTheme.backgroundColor = '#ffffff';
+        globalColorTheme.color = '#000000';
+    }
+
+}
+
+export function colorThemeGetter(){
+    return globalColorTheme.color;
+    
+
+}

@@ -2,12 +2,17 @@ import { View, StyleSheet, Text, Dimensions, ScrollView } from "react-native";
 import FeedBox from "../FeedBox";
 import { dummyDataNews } from "../../../customs";
 import { global } from "../../../customs";
+import { globalFont } from '../../../customs';
 import Carousel from "../Carousel";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from '@react-navigation/native';
 
 //  To-Do   //
 // Carousel Slider - completed on 11/6/2023
 
 export default function NewsFeed() {
+
+    const navigation = useNavigation();
 
     function callback(data: any) {
         return data.map( (item: any): any => {
@@ -17,7 +22,9 @@ export default function NewsFeed() {
 
     return (
         <View style={styles.NewsFeedWrapper}>
-            <Text style={styles.NewsFeedTitle}>News</Text>
+            <TouchableOpacity onPress={() => {(navigation.navigate as (screen: string) => void)('News')}}>
+                <Text style={styles.NewsFeedTitle}>Local News</Text>
+            </TouchableOpacity>
             <Carousel bubbles={{radius: 5, spacing: 0.08, color: global.baseGrey100, activeColor: global.baseBlue100, activeRadius: 6}} nestData={dummyDataNews} nestCallback={callback} itemCount={dummyDataNews.length} endPadding={'5%'} scrollOffset={Dimensions.get('screen').width * 0.95} minScroll={100} />
         </View>
     )
@@ -36,16 +43,25 @@ const styles = StyleSheet.create({
     },
 
     NewsFeedTitle: {
+        color: global.baseBlue100,
+        alignSelf: 'flex-start',
+        fontSize: 25,
+        fontWeight: 'bold',
+        paddingTop: '2%',
+        paddingLeft: '3%',
+        /*
         color: 'white',
         backgroundColor: global.baseGold100,
         alignSelf: 'center',
         textAlign: 'center',
         fontSize: 30,
+        fontFamily: globalFont.chosenFont,
         width: '95%',//Dimensions.get('screen').width + 2,
         marginTop: '1%',
         borderRadius: 7,
         overflow: 'hidden',
         paddingLeft: '1%',
         paddingRight: '1%',
+        */
     }
 })
