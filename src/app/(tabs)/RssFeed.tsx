@@ -5,6 +5,7 @@ import axios from 'axios';
 import * as Parser from 'react-native-rss-parser';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { globalFont } from '../../customs';
 
 const borderOffset = 20;
 const RssFeed: React.FC = () => {
@@ -81,6 +82,7 @@ const styles = StyleSheet.create({
     title:{
         fontSize: 18,
         fontWeight: 'bold',
+        fontFamily: globalFont.chosenFont,
         marginBottom: 2,
         borderRadius: 15,
         backgroundColor: 'lightblue', 

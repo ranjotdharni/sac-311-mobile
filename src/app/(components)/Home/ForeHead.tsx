@@ -3,6 +3,7 @@ import { shadowUniversal } from "../../../customs"
 import { MaterialIcons } from "@expo/vector-icons"
 import { global } from "../../../customs"
 import { useRouter } from 'expo-router';
+import { globalFont } from '../../../customs';
 
 function WhatsNewButton() {
     return (
@@ -73,7 +74,8 @@ const styles = StyleSheet.create({
 
     NewButtonText: {
         color: global.baseBackground100,
-        fontSize: Dimensions.get('screen').width * 0.04
+        fontSize: Dimensions.get('screen').width * 0.04,
+        fontFamily: globalFont.chosenFont
     },
 
     LogoWrapper: {

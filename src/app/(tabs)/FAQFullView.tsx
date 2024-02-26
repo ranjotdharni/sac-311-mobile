@@ -82,9 +82,11 @@ const styles = StyleSheet.create({
     },
     questionText:{
         fontSize: 30,
+        fontFamily: globalFont.chosenFont,
     },
     answerText:{
         fontSize: 20,
+        fontFamily: globalFont.chosenFont,
     },
     innerExitWrapper:{
         flexDirection:'row',

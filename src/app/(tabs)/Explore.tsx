@@ -13,6 +13,7 @@ import Animated from "react-native-reanimated";
 import { FlashList } from "@shopify/flash-list"
 import _ from 'lodash'
 import { fontGetter } from "../../customs";
+import { globalFont } from '../../customs';
 
 //const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markers'
@@ -398,7 +399,8 @@ const styles = StyleSheet.create({
     requestText: {
         color: '#ffffff',
         left: "5%",
-        fontSize: 14
+        fontSize: 14,
+        fontFamily: globalFont.chosenFont
     },
 
     padLeftPartition: {
@@ -419,6 +421,7 @@ const styles = StyleSheet.create({
         marginTop: '10%',
         color: global.baseGold100,
         fontSize: 18.5,
+        fontFamily: globalFont.chosenFont,
     },
 
     padDistrict: {
@@ -426,6 +429,7 @@ const styles = StyleSheet.create({
         marginRight: '10%',
         color: global.baseGrey100,
         fontSize: 15,
+        fontFamily: globalFont.chosenFont,
         alignSelf: 'flex-end'
     },
 

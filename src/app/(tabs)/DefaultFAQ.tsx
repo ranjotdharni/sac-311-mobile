@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import { fontGetter } from "../../customs";
+import { globalFont } from '../../customs';
 
 
 const borderCuttoff: number = 15 //border radius of component, this will be applied to multiple wrapper components so change it universally here
@@ -62,6 +63,7 @@ const defaultStyles = StyleSheet.create({
     },
     requestCategory: {
         fontSize: 25,
+        fontFamily: globalFont.chosenFont,
         width: 'auto',
         height: 'auto',
         color: 'white',
@@ -84,6 +86,7 @@ const defaultStyles = StyleSheet.create({
     },
     basicContent: {
         fontSize: 20,
+        fontFamily: globalFont.chosenFont,
     },
     highlightType: {
         color: global.baseGold100,

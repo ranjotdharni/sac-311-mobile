@@ -332,11 +332,10 @@ export const global = {
 // this value is designed to be read by every entity that displays text
 // the user may change the font of the entire app, by making a selection in the settings page
 
-let chosenFont: string = "JBM";
+let chosenFont: string = 'Helvetica';
 
 export const globalFont= {
     chosenFont : chosenFont
-    //chosenFont: chosenFont
 }
 
 export function fontSetter(newFont:string){
@@ -347,5 +346,45 @@ export function fontGetter(){
     return globalFont.chosenFont;
 }
 
+//                                      //
+//         Global Color Theme Section   //
+//                                      //
+// this value is designed to be read by every entity that displays color
+// the user may change the color theme of the entire app, by making a selection in the settings page
+
+let chosenColorTheme: any = 'lightMode';
 
 
+export const globalColorTheme= {
+    chosenColorTheme : chosenColorTheme,
+    backgroundColor : '#808080',
+    color : '#ffffff',
+    theme : 'globalTheme'
+
+}
+
+export function colorThemeSetter(newTheme:string){
+    globalColorTheme.chosenColorTheme = newTheme;
+    if (newTheme == 'lightTheme'){
+        chosenColorTheme.backgroundColor = '#000000';
+        chosenColorTheme.color = '#ffffff';
+        globalColorTheme.theme = 'lightTheme';
+        globalColorTheme.backgroundColor = '#000000';
+        globalColorTheme.color = '#ffffff';
+    }
+    
+    else if (newTheme == 'darkTheme'){
+        chosenColorTheme.backgroundColor = '#ffffff';
+        chosenColorTheme.color = '#000000';
+        globalColorTheme.theme = 'darkTheme';
+        globalColorTheme.backgroundColor = '#ffffff';
+        globalColorTheme.color = '#000000';
+    }
+
+}
+
+export function colorThemeGetter(){
+    return globalColorTheme.color;
+    
+
+}

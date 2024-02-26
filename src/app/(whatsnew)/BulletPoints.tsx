@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import bulletPointsData from './patch.json';
+import { globalFont } from '../../customs';
 
 interface BulletPoints {
   points: string[];
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 18,
+    fontFamily: globalFont.chosenFont,
   },
   bulletPointContainer: {
     flexDirection: 'row',
@@ -34,6 +36,7 @@ const styles = StyleSheet.create({
   bulletPoint: {
     padding: 5,
     fontSize: 16,
+    fontFamily: globalFont.chosenFont,
   },
 });
 

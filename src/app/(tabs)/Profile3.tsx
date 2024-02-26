@@ -6,6 +6,7 @@ import { shadowUniversal, global } from "../../customs";
 import { MaterialIcons } from "@expo/vector-icons"
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { globalFont } from '../../customs';
 
 
 /*
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFF',
         fontSize: 16,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
     },
     phoneInputContainer: {
         flexDirection: 'row',
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#676767',
         fontSize: 18,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
     },
     phoneInputLast: {
         height: 40,
@@ -380,10 +381,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#676767',
         fontSize: 18,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
     },
     phoneFormat: {
         fontSize: 16,
+        fontFamily: globalFont.chosenFont,
     },
     infoWrapper: {
         justifyContent: 'center',
@@ -392,7 +394,7 @@ const styles = StyleSheet.create({
     userInput: {// user input text
         color: '#676767',
         fontSize: 18,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         textAlign: 'left',
     },
     inputBacking: {// white rectangle behind personal info sections
@@ -409,7 +411,7 @@ const styles = StyleSheet.create({
     },
     inputTextTitle: {
         fontSize: 13,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         textAlign: 'left',
         color: '#9B9B9B',
         //paddingVertical: 10,
@@ -423,7 +425,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         //fontWeight: 'bold',   //bold makes this font look weird o.O
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 26,
         color: '#2F2DA3',
         textAlign: 'left',
@@ -450,7 +452,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 8,
         fontSize: 17,
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
     },
     foreheadWrapper: {// forehead button wrapper
         flexDirection: 'row', 
@@ -469,7 +471,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     subtitle: {
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: '#BEA315',
         textAlign: 'left',
@@ -478,6 +480,7 @@ const styles = StyleSheet.create({
     },
     infoHeader: {
         fontSize: 26,
+        fontFamily: globalFont.chosenFont,
         color: '#2F2DA3',
         textAlign: 'left',
     },
@@ -486,7 +489,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         alignItems: 'center',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: '#BEA315',
         height: '100%',
@@ -497,7 +500,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         alignItems: 'center',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: '#6F6F6F',
         height: '100%',

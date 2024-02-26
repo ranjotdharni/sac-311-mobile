@@ -2,6 +2,7 @@ import { View, StyleSheet, Text, Dimensions, ScrollView } from "react-native";
 import FeedBox from "../FeedBox";
 import { dummyDataNews } from "../../../customs";
 import { global } from "../../../customs";
+import { globalFont } from '../../../customs';
 import Carousel from "../Carousel";
 
 //  To-Do   //
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         textAlign: 'center',
         fontSize: 30,
+        fontFamily: globalFont.chosenFont,
         width: '95%',//Dimensions.get('screen').width + 2,
         marginTop: '1%',
         borderRadius: 7,

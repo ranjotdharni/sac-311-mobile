@@ -17,12 +17,11 @@ import { globalFont } from "../../customs"
 //      nol: number of lines to display, set to 0 to disable or as default behavior     //
 
 
-let includedFonts: "JBM" | "JBM-B"
 
 
-export default function CustomText({ text, style, font, nol } : { text: string, style: any, font:typeof globalFont.chosenFont, nol: number }) {
+export default function CustomText({ text, style, font, nol } : { text: string, style: any, font: any, nol: number }) {
     let [fontsLoaded] = useFonts({
-        'JBM': require('../../assets/fonts/JBM.ttf'),
+        'jbm': require('../../assets/fonts/jbm.ttf'),
         'JBM-B': require('../../assets/fonts/JBM-B.ttf'),
         'opendyslexic': require('../../assets/fonts/opendyslexic.ttf')
     })
@@ -30,7 +29,7 @@ export default function CustomText({ text, style, font, nol } : { text: string, 
     return (
         (
             fontsLoaded ? 
-            <Text numberOfLines={nol} style={[ style, { fontFamily: font }]}>{text}</Text> :    //nol can be set to 0 to disable numberOfLines
+            <Text numberOfLines={nol} style={[ style, { fontFamily: globalFont.chosenFont }]}>{text}</Text> :    //nol can be set to 0 to disable numberOfLines
             <></>
         )
     )
