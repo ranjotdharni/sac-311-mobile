@@ -17,7 +17,7 @@ export default function NewsFeed() {
 
     return (
         <View style={styles.NewsFeedWrapper}>
-            <Text style={styles.NewsFeedTitle}>News</Text>
+            <Text style={styles.NewsFeedTitle}>Local News</Text>
             <Carousel bubbles={{radius: 5, spacing: 0.08, color: global.baseGrey100, activeColor: global.baseBlue100, activeRadius: 6}} nestData={dummyDataNews} nestCallback={callback} itemCount={dummyDataNews.length} endPadding={'5%'} scrollOffset={Dimensions.get('screen').width * 0.95} minScroll={100} />
         </View>
     )
@@ -36,6 +36,13 @@ const styles = StyleSheet.create({
     },
 
     NewsFeedTitle: {
+        color: global.baseBlue100,
+        alignSelf: 'flex-start',
+        fontSize: 25,
+        fontWeight: 'bold',
+        paddingTop: '2%',
+        paddingLeft: '3%',
+        /*
         color: 'white',
         backgroundColor: global.baseGold100,
         alignSelf: 'center',
@@ -47,5 +54,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         paddingLeft: '1%',
         paddingRight: '1%',
+        */
     }
 })

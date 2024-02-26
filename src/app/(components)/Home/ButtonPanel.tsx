@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         paddingTop: '2%',
-        paddingLeft: '2%',
+        paddingLeft: '3%',
     },
 
     ButtonPanelContainer: {
