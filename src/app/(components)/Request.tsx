@@ -18,6 +18,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
     let internalStyle = (compact ? compactStyles : defaultStyles)
     let basicStyle = StyleSheet.create({ 
         default: {
+            fontFamily: globalFont.chosenFont,
             width: width, 
             height: height, 
             backgroundColor: 'white', 
@@ -52,7 +53,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
                     }
 
                     <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestNumber)}>
-                        {(!compact ? <Text style={internalStyle.basicTitle}>Request Number:</Text> : <></>)}
+                        {(!compact ? <Text style={internalStyle.basicTitle} >Request Number:</Text> : <></>)}
                         <CustomText text={reqNumber.toString()} nol={0} font={fontGetter()} style={[internalStyle.basicContent, (compact ? {color: global.baseGrey100} : {})]} />
                     </View>
 

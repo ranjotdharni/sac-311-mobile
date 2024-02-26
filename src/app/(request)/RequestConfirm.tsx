@@ -5,6 +5,8 @@ import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { global } from "../../customs";
 import { globalFont } from "../../customs";
+import { fontGetter } from "../../customs";
+
 
 export default function RequestConfirm() {
     const nav = useNavigation()
@@ -192,6 +194,7 @@ const styles = StyleSheet.create({
     },
     rectangleText: {
         fontSize: 18,
+        fontFamily: globalFont.chosenFont,
         color: '#000000',
     },
     editButtonContainer: {

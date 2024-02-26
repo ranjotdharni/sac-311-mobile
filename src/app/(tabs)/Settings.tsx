@@ -6,6 +6,15 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { Switch } from "react-native-gesture-handler";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import { globalFont } from '../../customs';
+import { fontGetter } from '../../customs';
+import { fontSetter } from '../../customs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { useEffect } from 'react';
+import { globalColorTheme } from '../../customs';
+import { colorThemeGetter } from '../../customs';
+import { colorThemeSetter } from '../../customs';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -48,6 +57,42 @@ function General() {
     const toggleNotifs = () => setNotif(previousState => !previousState);
     const toggleDarkMode = () => setDarkMode(previousState => !previousState);
 
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isAccessibleMode, setIsAccessibleMode] = useState(false);
+
+    useEffect(() => {
+        const setAccessibleMode = async (): Promise<void> => {
+            const result = JSON.parse(
+                (await AsyncStorage.getItem('accessibilityToken')) || 'false',
+            ) as boolean;
+
+            setIsAccessibleMode(result);
+        };
+
+        setAccessibleMode();
+        fontSetter(fontGetter());
+
+    }, []);
+
+
+
+    useEffect(() => {
+        const setDarkMode = async (): Promise<void> => {
+            const result = JSON.parse(
+                (await AsyncStorage.getItem('darkToken')) || 'false',
+            ) as boolean;
+
+            setIsDarkMode(result);
+        };
+
+        setDarkMode();
+        colorThemeSetter(colorThemeGetter());
+        
+    }, []);
+
+
+
+
     return (
         <View style={{paddingTop:"5%"}}>
              <View style={styles.IconContainer}>
@@ -59,13 +104,51 @@ function General() {
             </View>
             <Text style={styles.DescriptionText}>Notify me when a request I submit receives an update</Text>
             <View style={styles.IconContainer}>
-                <MaterialIcons name="bedtime" size={Dimensions.get('screen').width * 0.065} color={'#c9b15b'}/>
+                <MaterialIcons name="bedtime" size={Dimensions.get('screen').width * 0.065} color={globalColorTheme.color}/>
                 <View style={styles.NotificationContainer}>
                     <Text style={styles.ButtonText}>Dark Mode</Text>
-                    <Switch onValueChange={toggleDarkMode} value = {dark} trackColor={{true: '#9a9ce6'}} thumbColor={dark? 'default': '#2b20a8' }/>
+                    <Switch
+                        onValueChange={(darkResult) => {
+                            AsyncStorage.setItem(
+                                "darkToken",
+                                JSON.stringify(darkResult),
+                            );
+                            colorThemeSetter(darkResult ? 'lightTheme' : 'darkTheme');
+                            colorThemeGetter()
+
+                            setIsDarkMode(darkResult);
+                            
+                        }}
+                        value={isDarkMode}
+                        trackColor={{true: '#9a9ce6'}}
+                        thumbColor={isDarkMode? 'default': '#2b20a8' }
+                        />
                 </View>
             </View>
             <Text style={styles.DescriptionText}>Enable a darker theme to reduce brightness and eye strain</Text>
+
+            <View style={styles.IconContainer}>
+                <MaterialIcons name="font-download" size={Dimensions.get('screen').width * 0.065} color={'#c9b15b'}/>
+                <View style={styles.NotificationContainer}>
+                    <Text style={styles.ButtonText}>Accessibility Font</Text>
+                    <Switch
+                        onValueChange={(result) => {
+                            AsyncStorage.setItem(
+                                "accessibilityToken",
+                                JSON.stringify(result),
+                            );
+                            fontSetter(result ? 'opendyslexic' : 'Helvetica');
+                            setIsAccessibleMode(result);
+                            
+                        }}
+                        value={isAccessibleMode}
+                        trackColor={{true: '#9a9ce6'}}
+                        thumbColor={isAccessibleMode? 'default': '#2b20a8' }
+                        />
+                </View>
+            </View>
+            <Text style={styles.DescriptionText}>Switch all text to use the 'OpenDyslexic' typeface.</Text>
+
             <View style={{alignItems:"center", padding:'4%', justifyContent:"space-evenly"}}>
                 <Pressable style={styles.logButton}>
                   <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: 'bold'}}>Log Out</Text> 
@@ -98,6 +181,7 @@ export default function Settings()
 const styles = StyleSheet.create({
     Settings:{
         fontSize:40,
+        fontFamily: globalFont.chosenFont,
         paddingTop:"4%", 
         paddingLeft:"6%",
         marginRight:"25%", 
@@ -111,12 +195,14 @@ const styles = StyleSheet.create({
 
     ButtonText:{
         fontSize: 19,
+        fontFamily: globalFont.chosenFont,
         paddingLeft: '5%',
         fontWeight: '500'
     },
 
     DescriptionText:{
         fontSize: 13,
+        fontFamily: globalFont.chosenFont,
         paddingLeft: '5%',
         paddingBottom: '3%',
         fontWeight: '300'
