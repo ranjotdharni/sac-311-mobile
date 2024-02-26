@@ -1,17 +1,53 @@
 import { useLocalSearchParams } from "expo-router";
 import { useNavigation } from '@react-navigation/native';
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Image, Alert } from "react-native";
+import React, { useState, useEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker';
 import { global } from "../../customs";
-import React from 'react';
 import { globalFont } from "../../customs";
-import { fontGetter } from "../../customs";
 
 export default function RequestConfirm() {
     const nav = useNavigation()
     const { reqType, reqDesc } = useLocalSearchParams()
 
+    const [image, setImage] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        requestMediaLibraryPermission();
+    }, []);
+
+    const requestMediaLibraryPermission = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (status !== 'granted') {
+            setError('Permission Denied: Sorry, we need camera roll permission to upload images.');
+        }
+    };
+
     const navigateToExplore2 = () => {
         (nav.navigate as (screen: string) => void)('Explore2');
+    };
+
+    const pickImage = async () => {
+        try {
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            
+            if (status !== 'granted') {
+                setError('Permission Denied: Sorry, we need camera roll permission to upload images.');
+            } else {
+                const result = await ImagePicker.launchImageLibraryAsync();
+                
+                if (result && 'uri' in result && typeof result.uri === 'string') {
+                    setImage(result.uri);
+                    setError(null);
+                } else {
+                    setError('No image selected');
+                }
+            }
+        } catch (error) {
+            setError('Error picking image: ' + (error as Error).message);
+        }
     };
 
     return (
@@ -22,13 +58,14 @@ export default function RequestConfirm() {
                         <Text style={[styles.basicText, { color: '#BEA315' }]}>Service</Text>
                         <View style={[styles.rectangle, styles.shadow, styles.editButtonContainer]}>
                             <Text style={[styles.basicText, styles.rectangleText]}>
-                                {(reqType || '(the selected service)')}
+                                {reqType || '(the selected service)'}
                             </Text>
                             <TouchableOpacity style={styles.editButton}>
                                 <Text style={styles.editButtonText}>Edit</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
+
                     <View style={styles.textContainer}>
                         <Text style={[styles.basicText, { color: '#BEA315' }]}>Location</Text>
                         <TouchableOpacity onPress={navigateToExplore2}>
@@ -42,28 +79,49 @@ export default function RequestConfirm() {
                             </View>
                         </TouchableOpacity>
                     </View>
+
                     <View style={styles.textContainer}>
                         <Text style={[styles.basicText, { color: '#BEA315' }]}>Details</Text>
                         <View style={[styles.rectangle, styles.shadow]}>
                             <Text style={[styles.basicText, styles.rectangleText]}>
-                                {(reqDesc || '(the submitted details)')}
+                                {reqDesc || '(the submitted details)'}
                             </Text>
                         </View>
                     </View>
+
                     <View style={styles.textContainer}>
-                        <Text style={[styles.basicText, { color: '#BEA315' }]}>Attachments</Text>
+                        <Text style={[styles.basicText, { color: '#BEA315' }]}>Add Files</Text>
                         <View style={[styles.attachmentRectangle, styles.shadow]}>
                             <Text style={[styles.basicText, styles.rectangleText]}>
-                                (the attached file)
+                                (Your files)
                             </Text>
                             <TouchableOpacity style={styles.attachmentButton}>
-                                <Text style={styles.attachmentButtonText}>Browse</Text>
+                                <Text style={styles.attachmentButtonText}>Upload Files</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
+
+                    <View style={styles.textContainer}>
+                        <Text style={[styles.basicText, { color: '#BEA315' }]}>Add Photos</Text>
+                        <View style={[styles.rectangle, styles.shadow, styles.editButtonContainer]}>
+                            <TouchableOpacity style={styles.editButton} onPress={pickImage}>
+                                <Text style={styles.editButtonText}>Upload Photos</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    {image && (
+                        <View style={styles.imageContainer}>
+                            <Image source={{ uri: image }} style={styles.image} />
+                        </View>
+                    )}
+
+                    {error && (
+                        <Text style={styles.errorText}>{error}</Text>
+                    )}
                 </View>
 
-                <TouchableOpacity onPress={() => { nav.goBack() }} style={styles.returnWrapper}>
+                <TouchableOpacity onPress={() => nav.goBack()} style={styles.returnWrapper}>
                     <Text style={[styles.returnText]}>Submit Request</Text>
                 </TouchableOpacity>
             </View>
@@ -73,89 +131,54 @@ export default function RequestConfirm() {
 
 const styles = StyleSheet.create({
     returnWrapper: {
-        alignItems:'center',
+        alignItems: 'center',
         width: '60%',
-        borderRadius:10,
+        borderRadius: 10,
         backgroundColor: global.baseBlue100,
         shadowColor: '#000',
-        shadowOffset:{
-            width:-2,
-            height:2,
+        shadowOffset: {
+            width: -2,
+            height: 2,
         },
-        shadowOpacity:0.25,
-        shadowRadius:4,
-        elevation:5,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
-    pageWrapper:{
+    pageWrapper: {
         width: '100%',
         height: '100%',
         backgroundColor: global.baseBackground100,
     },
-    innerPageWrapper:{
-        height:'83%',
-        alignItems:'center',
-        flexDirection:'column',
-        justifyContent:'space-between',
+    innerPageWrapper: {
+        paddingTop: '10%',
+        height: '83%',
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     returnText: {
         color: 'white',
         fontSize: 25,
         fontFamily: globalFont.chosenFont,
-        padding:'3%',
+        padding: '3%',
     },
     basicText: {
         fontSize: 22,
         lineHeight: 25,
         color: '#BEA315',
     },
-    barText: {
-        fontSize: 25,
-        marginLeft:'5%',
-        fontFamily: globalFont.chosenFont,
-        color:global.baseBackground100
-    },
-    infoWrapper:{
-        paddingTop:'5%',
-        width:'90%',
-    },
-    resizeIcon:{
-        width:30,
-        height:30,
-    },
-    exitWrapper:{
-        backgroundColor: global.baseBlue100,
-        width:'100%',
-        shadowColor: '#000',
-        shadowOffset:{
-            width:-2,
-            height:2,
-        },
-        shadowOpacity:0.25,
-        shadowRadius:4,
-        elevation:5,
-        height:'12%',
-    },
-    rowWrapper:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-    },
-    innerExitWrapper:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        marginRight:'6%',
-        marginTop:'13%',
+    infoWrapper: {
+        paddingTop: '5%',
+        width: '90%',
     },
     rectangle: {
-        borderRadius: 15, // Increase the borderRadius value for more rounded corners
+        borderRadius: 15,
         padding: 20,
         marginTop: 5,
         backgroundColor: 'white',
     },
     textContainer: {
-        marginBottom: 40, // Adjust the marginBottom to increase or decrease spacing
-    },
-    boldText: {
-        fontWeight: 'bold',
+        marginBottom: 40,
     },
     shadow: {
         shadowColor: '#000',
@@ -168,7 +191,7 @@ const styles = StyleSheet.create({
         elevation: 10,
     },
     rectangleText: {
-        fontSize: 18, // Set a specific font size for the text inside the rectangles
+        fontSize: 18,
         color: '#000000',
     },
     editButtonContainer: {
@@ -190,7 +213,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     attachmentRectangle: {
-        borderRadius: 15, // Increase the borderRadius value for more rounded corners
+        borderRadius: 15,
         padding: 15,
         marginTop: 5,
         backgroundColor: 'white',
@@ -203,12 +226,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderRadius: 15,
     },
-
     attachmentButtonText: {
         color: 'white',
         fontSize: 15,
         fontFamily: globalFont.chosenFont,
         fontWeight: 'bold',
     },
-
-})
+    imageContainer: {
+        borderRadius: 15,
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    image: {
+        width: 200,
+        height: 200,
+        resizeMode: 'cover',
+        borderRadius: 15,
+    },
+    errorText: {
+        color: 'red',
+        marginTop: 10,
+    },
+});
