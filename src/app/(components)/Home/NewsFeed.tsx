@@ -4,11 +4,15 @@ import { dummyDataNews } from "../../../customs";
 import { global } from "../../../customs";
 import { globalFont } from '../../../customs';
 import Carousel from "../Carousel";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from '@react-navigation/native';
 
 //  To-Do   //
 // Carousel Slider - completed on 11/6/2023
 
 export default function NewsFeed() {
+
+    const navigation = useNavigation();
 
     function callback(data: any) {
         return data.map( (item: any): any => {
@@ -18,7 +22,9 @@ export default function NewsFeed() {
 
     return (
         <View style={styles.NewsFeedWrapper}>
-            <Text style={styles.NewsFeedTitle}>Local News</Text>
+            <TouchableOpacity onPress={() => {(navigation.navigate as (screen: string) => void)('News')}}>
+                <Text style={styles.NewsFeedTitle}>Local News</Text>
+            </TouchableOpacity>
             <Carousel bubbles={{radius: 5, spacing: 0.08, color: global.baseGrey100, activeColor: global.baseBlue100, activeRadius: 6}} nestData={dummyDataNews} nestCallback={callback} itemCount={dummyDataNews.length} endPadding={'5%'} scrollOffset={Dimensions.get('screen').width * 0.95} minScroll={100} />
         </View>
     )
