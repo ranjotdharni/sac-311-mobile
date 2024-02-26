@@ -1,5 +1,5 @@
 import { View, StyleSheet, Dimensions } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";   //By default, this component uses Google Maps as provider
+import MapView, { Details, PROVIDER_GOOGLE, Region } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
 import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl } from "../../customs";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -41,6 +41,12 @@ function Explore()
     const [results, showResults] = useState<boolean>(false)
     const [requestFetch, triggerRequestFetch] = useState<responseType>()
     const [padPan, setPadPan] = useState(padHiddenHeight)
+    const [region, setRegion] = useState<Region>({
+        latitude: 38.574713,
+        longitude: -121.491489,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+    })
 
     function hidePad() {
         //setActiveMarker('')
@@ -71,17 +77,6 @@ function Explore()
         }
     }
 
-    function getInitialState() {
-        return (
-            {
-                latitude: 38.574713,
-                longitude: -121.491489,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-            }
-        )
-    }
-
     //WIP for fetching and parsing the JSON data, uncommenting this makes Expo Go crash every minute or so
     //const [requests, setRequests] = useState([]);
     //fetch('https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/SalesForce311_View/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
@@ -95,7 +90,7 @@ function Explore()
         showResults(false)
         setPadDistrict(obj.attributes.CouncilDistrictNumber)
         setPadAddress(obj.attributes.Address)
-        mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.005, longitude: obj.geometry.x, latitudeDelta: getInitialState().latitudeDelta, longitudeDelta: getInitialState().longitudeDelta})
+        mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.005, longitude: obj.geometry.x, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta})
         showPad()
     }   //notice: latitude is geometry.y and longitude is geometry.x
 
@@ -144,10 +139,36 @@ function Explore()
         setRequests([obj, ...requests])
     }
 
+    const onRegionChange = _.debounce(async (region: Region, details: Details) => {
+        // default markers are requests w/ valid addresses and created within in the last 7 days
+        const params: [string, string][] = [
+            ['orderByFields', 'Address'],
+            ['geometryType', 'esriGeometryPoint'],
+            ['geometry', `${region.longitude},${region.latitude}`],
+            ['distance', '2000']
+        ]
+        const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, 75, params)
+    
+        await fetch(query).then((middle) => {
+            return middle.json()
+        }).then((res) => {
+            setMarkers(res.features)
+        }).catch(err => {
+            return
+            //console.log(err.message)
+        })
+    }, 1000)
+
     useEffect(() => {
         async function grabInitialProps() {
             // default markers are requests w/ valid addresses and created within in the last 7 days
-            const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(7))}'`, 1500, [['orderByFields', 'Address']])
+            const params: [string, string][] = [
+                ['orderByFields', 'Address'],
+                ['geometryType', 'esriGeometryPoint'],
+                ['geometry', `${region.longitude},${region.latitude}`],
+                ['distance', '1000']
+            ]
+            const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(7))}'`, 100, params)
         
             await fetch(query).then((middle) => {
                 return middle.json()
@@ -215,7 +236,7 @@ function Explore()
 
     const memoizedAddressData = useMemo(() => data.map((addr, idx) => {
         return (
-            <TouchableOpacity key={idx} onPress={() => handlePress(addr) } style={[styles.resultShadow, shadowUniversal.default]}>
+            <TouchableOpacity key={idx} onPress={ () => handlePress(addr) } style={[styles.resultShadow, shadowUniversal.default]}>
                 <CustomText text={addr.attributes.Address} style={styles.result} nol={0} font={fontGetter()} />
             </TouchableOpacity>
         )
@@ -255,7 +276,7 @@ function Explore()
                         />
                     }
                 </Animated.View>
-                <MapView ref={mapRef} provider={PROVIDER_GOOGLE} region={getInitialState()} style={{width: '100%', height: '100%', position:'absolute'}}>
+                <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} region={region} style={{width: '100%', height: '100%', position:'absolute'}}>
                     {
                         memoizedMarkerRender
                     }
