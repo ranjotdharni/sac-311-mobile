@@ -1,29 +1,34 @@
-import MapView, { Marker, MarkerAnimated } from "react-native-maps";
-import { Image } from "expo-image";
+import { Marker } from "react-native-maps";
 import { responseType } from "../../customs";
 import { memo, useEffect, useRef, useState } from "react";
-import { Animated, View } from "react-native";
-import { Easing, useAnimatedStyle, useSharedValue, withDecay, withTiming } from "react-native-reanimated";
+import { Animated } from "react-native";
+import { Easing } from "react-native-reanimated";
 
-function CustomMarker({ markerData, image, passUp } : { markerData: responseType, image: string, passUp: (obj: responseType) => void }) {
+function CustomMarker({ markerData, image, fadeInDelay, iconScale, passUp } : { markerData: responseType, image: string, fadeInDelay: number, iconScale: number, passUp: (obj: responseType) => void }) {
     let opacity = useRef(new Animated.Value(0)).current
-    const [width, setWidth] = useState(25)
-    const [height, setHeight] = useState(25)
+    const [trigger, setTrigger] = useState(false)
     useEffect(() => {
         Animated.timing(opacity, {
             toValue: 1,
-            duration: 500,
-            easing: Easing.ease,
+            duration: 250,
+            easing: Easing.linear,
             useNativeDriver: true,
-            delay: Math.floor(Math.random() * (3000 + 1))
+            delay: fadeInDelay
         }).start()
-    })
+        setTimeout(() => {
+            setTrigger(true)
+        }, 100)
+    }, [])
     
     return (
         markerData.geometry === undefined ?
         <></> :
-        <Marker.Animated style={{opacity: opacity, width: width, height: height}} tracksViewChanges={false} coordinate={{latitude: markerData.geometry.y, longitude: markerData.geometry.x}} onPress={() => { passUp(markerData) }}>
-            <Animated.Image style={{width: '100%', height: '100%'}} source={{uri: image}} />
+        <Marker.Animated opacity={opacity} key={markerData.attributes.ReferenceNumber + "MarkerTop"} style={{width: iconScale, height: iconScale}} tracksViewChanges={true} coordinate={{latitude: markerData.geometry.y, longitude: markerData.geometry.x}} onPress={() => { passUp(markerData) }}>
+            {
+            trigger ?
+            <Animated.Image key={markerData.attributes.ReferenceNumber + "MarkerTopInset"} style={{width: '100%', height: '100%'}} source={{uri: image}} /> :
+            <Animated.View></Animated.View>
+            }
         </Marker.Animated>
     )
 }

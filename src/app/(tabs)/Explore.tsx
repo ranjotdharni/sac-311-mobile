@@ -145,7 +145,8 @@ function Explore()
             ['orderByFields', 'Address'],
             ['geometryType', 'esriGeometryPoint'],
             ['geometry', `${region.longitude},${region.latitude}`],
-            ['distance', '2000']
+            ['distance', '2000'],
+            ['returnDistinctValues', 'true']
         ]
         const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, 75, params)
     
@@ -202,16 +203,20 @@ function Explore()
 
     }, [requestFetch])
 
-    const memoizedMarkerRender = useMemo(() => markers.map((mark) => {
-        return (
-            <CustomMarker 
-                key={mark.attributes.ReferenceNumber + markerKeySuffix} 
-                markerData={mark} 
-                image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
-                passUp={activateMarker}
-            />
-        )
-    }), [markers])
+    const memoizedMarkerRender = useMemo(() => {
+        return markers.map((mark, index) => {
+            return (
+                <CustomMarker 
+                    key={mark.attributes.ReferenceNumber + markerKeySuffix} 
+                    markerData={mark} 
+                    image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
+                    iconScale={25}
+                    fadeInDelay={index * 50}
+                    passUp={activateMarker}
+                />
+            )
+        })
+    }, [markers])
 
     /*const memoizedRequestsRender = useCallback(({item} : {item: any}) => 
         <Request
@@ -276,11 +281,13 @@ function Explore()
                         />
                     }
                 </Animated.View>
+                <Animated.View style={{width: '100%', height: '100%'}}>
                 <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} region={region} style={{width: '100%', height: '100%', position:'absolute'}}>
                     {
                         memoizedMarkerRender
                     }
                 </MapView>
+                </Animated.View>
                 <SearchBar value={addressQuery} style={styles.searchBar} onSubmit={() => { showResults(false) }} passUp={setQuery} onClear={() => { setAddressQuery('') }} placeholder={'Search Address'} />
                 {
                     (
