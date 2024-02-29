@@ -137,7 +137,7 @@ function General() {
                                 "accessibilityToken",
                                 JSON.stringify(result),
                             );
-                            fontSetter(result ? 'opendyslexic' : 'Helvetica');
+                            fontSetter(result ? 'opendyslexic' : 'jbm');
                             setIsAccessibleMode(result);
                             
                         }}

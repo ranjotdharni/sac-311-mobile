@@ -332,7 +332,7 @@ export const global = {
 // this value is designed to be read by every entity that displays text
 // the user may change the font of the entire app, by making a selection in the settings page
 
-let chosenFont: string = 'Helvetica';
+let chosenFont: string = 'jbm';
 
 export const globalFont= {
     chosenFont : chosenFont
