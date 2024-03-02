@@ -25,9 +25,9 @@ function CustomMarker({ markerData, image, fadeInDelay, iconScale, passUp } : { 
         <></> :
         <Marker.Animated opacity={opacity} key={markerData.attributes.ReferenceNumber + "MarkerTop"} style={{width: iconScale, height: iconScale}} tracksViewChanges={true} coordinate={{latitude: markerData.geometry.y, longitude: markerData.geometry.x}} onPress={() => { passUp(markerData) }}>
             {
-            trigger ?
-            <Animated.Image key={markerData.attributes.ReferenceNumber + "MarkerTopInset"} style={{width: '100%', height: '100%'}} source={{uri: image}} /> :
-            <Animated.View></Animated.View>
+                trigger ?
+                <Animated.Image key={markerData.attributes.ReferenceNumber + "MarkerTopInset"} style={{width: '100%', height: '100%'}} source={{uri: image}} /> :
+                <Animated.View></Animated.View>
             }
         </Marker.Animated>
     )
