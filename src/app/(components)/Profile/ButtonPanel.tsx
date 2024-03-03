@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import CustomText from '../CustomText';
 import { fontGetter } from '../../../customs';
 import { fontSetter } from '../../../customs';
+import { globalFont } from '../../../customs';
 
 interface ButtonProps {
   text: string;
@@ -36,7 +37,6 @@ export default function ButtonPanel({ onPressLoginSignup }: { onPressLoginSignup
     <View style={styles.ButtonPanelWrapper}>
       <Button text="Login or Signup" buttonColor="white" textColor="grey" onPress={onPressLoginSignup} />
       <ButtonDumb text="Submit New Request" buttonColor="#2F2DA3" textColor="white" />
-      <Button text ="Change to accessibility font" buttonColor="white" textColor="grey" onPress={() => fontSetter('opendyslexic')} />
     </View>
   );
 }
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     },     
 
     ButtonText: {
-        fontSize: Dimensions.get('screen').width * 0.045
+        fontSize: Dimensions.get('screen').width * 0.045,
+        fontFamily: globalFont.chosenFont
     },
 })

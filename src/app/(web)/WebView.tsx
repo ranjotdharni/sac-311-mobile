@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { WebView } from "react-native-webview";
+import { globalFont } from '../../customs';
 
 //========================================//
 //                USAGE                   //
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
 
     DismissButtonText: {
         fontSize: Dimensions.get('screen').width * 0.045,
+        fontFamily: globalFont.chosenFont,
         color: '#2B60E9',
     },
 

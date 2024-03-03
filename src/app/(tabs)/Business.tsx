@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar, View, Text, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { globalFont } from "../../customs";
 
 export default function Business() {
     const navigation = useNavigation();
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         alignItems: 'center',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: '#6F6F6F',
         height: '100%',
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         alignItems: 'center',
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: '#BEA315',
         height: '100%',
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
         padding: 50,
     },
     sharedText: {
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 27,
         color: '#2F2DA3',
         marginBottom: 10,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center', // Center text vertically
     },
     radioButtonText: {
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 16,
         color: '#333',
         textAlign: 'center', // Center text horizontally
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     addButtonLabel: {
-        fontFamily: 'JBM',
+        fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: '#6F6F6F',
     },

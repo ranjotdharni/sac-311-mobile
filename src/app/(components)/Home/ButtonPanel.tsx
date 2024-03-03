@@ -44,9 +44,10 @@ const styles = StyleSheet.create({
         color: global.baseBlue100,
         alignSelf: 'flex-start',
         fontSize: 25,
+        fontFamily: globalFont.chosenFont,
         fontWeight: 'bold',
         paddingTop: '2%',
-        paddingLeft: '2%',
+        paddingLeft: '3%',
     },
 
     ButtonPanelContainer: {
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
 
     ButtonText: {
         color: '#2B60E9',
-        fontSize: Dimensions.get('screen').width * 0.045
+        fontSize: Dimensions.get('screen').width * 0.045,
+        fontFamily: globalFont.chosenFont
     },
 })

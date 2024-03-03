@@ -3,6 +3,7 @@ import { shadowUniversal, global } from "../../customs";
 import CustomText from "./CustomText";
 import { router } from "expo-router";
 import { fontGetter } from "../../customs";
+import { globalFont } from '../../customs';
 
 const borderOffset = 20 //Locally (within component) applied border radius
 
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     FeedBoxTitle: {
         fontSize: Dimensions.get('screen').width * 0.045,
         fontWeight: 'bold',
+        fontFamily: globalFont.chosenFont,
         width: '90%',
         height: 'auto',
         marginLeft: '5%',
@@ -67,6 +69,7 @@ const styles = StyleSheet.create({
         marginTop: '2.5%',
         color: global.baseBlue100,
         fontSize: Dimensions.get('screen').width * 0.028,
+        fontFamily: globalFont.chosenFont,
     },
 
     Link: {

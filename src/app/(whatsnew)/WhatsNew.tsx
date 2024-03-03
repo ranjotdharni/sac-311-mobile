@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     },
     topText: {
         fontSize: 20,
+        fontFamily: globalFont.chosenFont,
         color: global.baseBackground100,
         marginRight: '41%',
     },

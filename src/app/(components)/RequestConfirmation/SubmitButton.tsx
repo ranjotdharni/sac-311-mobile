@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import CustomText from '../CustomText';
 import { fontGetter } from '../../../customs';
+import { globalFont } from '../../../customs';
 
 interface ButtonProps {
   text: string;
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
     },     
 
     ButtonText: {
-        fontSize: Dimensions.get('screen').width * 0.045
+        fontSize: Dimensions.get('screen').width * 0.045,
+        fontFamily: globalFont.chosenFont
     },
 })

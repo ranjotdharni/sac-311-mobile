@@ -6,6 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import { memo, useCallback } from "react";
 import { fontGetter } from "../../customs";
+import { globalFont } from '../../customs';
 
 
 const borderCuttoff: number = 15 //border radius of component, this will be applied to multiple wrapper components so change it universally here
@@ -17,6 +18,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
     let internalStyle = (compact ? compactStyles : defaultStyles)
     let basicStyle = StyleSheet.create({ 
         default: {
+            fontFamily: globalFont.chosenFont,
             width: width, 
             height: height, 
             backgroundColor: 'white', 
@@ -51,7 +53,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
                     }
 
                     <View style={(!compact ? internalStyle.basicWrapper : internalStyle.requestNumber)}>
-                        {(!compact ? <Text style={internalStyle.basicTitle}>Request Number:</Text> : <></>)}
+                        {(!compact ? <Text style={internalStyle.basicTitle} >Request Number:</Text> : <></>)}
                         <CustomText text={reqNumber.toString()} nol={0} font={fontGetter()} style={[internalStyle.basicContent, (compact ? {color: global.baseGrey100} : {})]} />
                     </View>
 
@@ -128,6 +130,7 @@ const defaultStyles = StyleSheet.create({
 
     requestCategory: {
         fontSize: 25,
+        fontFamily: globalFont.chosenFont,
         width: 'auto',
         height: 'auto',
         color: 'white',
@@ -153,10 +156,12 @@ const defaultStyles = StyleSheet.create({
 
     basicTitle: {
         fontSize: 15,
+        fontFamily: globalFont.chosenFont,
     },
 
     basicContent: {
         fontSize: 15,
+        fontFamily: globalFont.chosenFont,
     },
 
     highlightType: {
@@ -201,6 +206,7 @@ const compactStyles = StyleSheet.create({
         top: '5%',
         left: '2.5%',
         fontSize: 25,
+        fontFamily: globalFont.chosenFont,
         color: global.baseBlue100,
     },
 

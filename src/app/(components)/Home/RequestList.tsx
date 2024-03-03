@@ -25,8 +25,6 @@ export default function RequestList()
 
     return (
         <View style={styles.listWrapper}>
-            <Text style={styles.listTitle}>Your Requests</Text>
-
             {
                 testData.map(item => {
                     return <Request key={item.attributes.ReferenceNumber} data={item} width='90%' height={Dimensions.get('screen').height * 0.2} compact={false} />

@@ -1,16 +1,17 @@
-import { useNavigation } from "expo-router";
+import { useNavigation, useLocalSearchParams  } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { global } from "../../customs";
 import { globalFont } from "../../customs";
 
 export default function FAQFullView(){
     const nav = useNavigation()
+    const params = useLocalSearchParams<{type: string,  answer: string, question: string} >();
     return (
         <View style={styles.pageWrapper}>
             {/*Top Bar*/}
             <View style={styles.exitWrapper}>
                 <View style={styles.innerExitWrapper}>
-                    <Text style={styles.barText}>FAQ</Text>
+                    <Text style={styles.barText}>{params.type}</Text>
                     <TouchableOpacity onPress={() => { nav.goBack() }}>
                         <Image style={styles.resizeIcon} source={require('../../assets/png/exit_x.png')} />
                     </TouchableOpacity>
@@ -20,15 +21,13 @@ export default function FAQFullView(){
                 <View style={styles.infoWrapper}>
                     {/*Question here*/}
                     <View style={styles.questionWrapper}>
-                        <Text style={styles.questionText}>(not connected to database yet){"\n"}{"\n"}</Text>
-                        <Text style={styles.questionText}>Question</Text>
+                        <Text style={styles.questionText}>{params.question}</Text>
                     </View>
                     {/*Horizontal rule*/}
                     <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth,}}/>
                     {/*Answer here*/}
                     <View style={styles.answerWrapper}>
-                        <Text style={styles.answerText}>Answer</Text>
-                        <Text style={styles.answerText}></Text>
+                        <Text style={styles.answerText}>{params.answer}</Text>
                     </View>
                 </View>
             </View>
@@ -83,9 +82,11 @@ const styles = StyleSheet.create({
     },
     questionText:{
         fontSize: 30,
+        fontFamily: globalFont.chosenFont,
     },
     answerText:{
         fontSize: 20,
+        fontFamily: globalFont.chosenFont,
     },
     innerExitWrapper:{
         flexDirection:'row',
