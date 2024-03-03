@@ -140,7 +140,7 @@ function Explore()
         const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, inclusiveRandom(75, 100), params)
     
         let set = new Set<string>()
-        function filterFunction(item: responseType) {
+        function filterFunction(item: responseType) {   // Filters out duplicate addresses, needed to prevent two markers in same location blinking on top of one another
             const s1: number = set.size; 
             set.add(item.attributes.Address); 
             const s2: number = set.size; 
@@ -202,8 +202,9 @@ function Explore()
                     key={mark.attributes.ReferenceNumber + markerKeySuffix} 
                     markerData={mark} 
                     image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
-                    iconScale={25}
+                    iconScale={45}
                     fadeInDelay={index * 50}
+                    backgroundColor={global.baseBlue100}
                     passUp={activateMarker}
                 />
             )
@@ -317,6 +318,7 @@ const styles = StyleSheet.create({
 
     searchBar: {
         width: '95%',
+        height: 40,
         position: 'absolute',
         zIndex: 2,
         top: '5%',
@@ -330,7 +332,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: '40%',
         position: 'absolute',
-        top: '13.5%',
+        top: '12%',
         left: '5%',
         borderRadius: 15,
         zIndex: 5,

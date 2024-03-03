@@ -328,7 +328,7 @@ export const global = {
     baseGold300: 'rgba(190, 163, 21, 0.33)',
 
     baseGrey100: '#6F6F6F',
-    baseGrey200: 'rgba(112, 112, 112, 0.7)',
+    baseGrey200: 'rgba(112, 112, 112, 0.7)'
 }
 
 
