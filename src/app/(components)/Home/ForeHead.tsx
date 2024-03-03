@@ -23,9 +23,6 @@ export default function ForeHead() {
                     <Image style={styles.Logo} source={require('../../../assets/png/icon.png')} />
                 </View>
 
-                <TouchableOpacity style={styles.SearchButton}>
-                    <MaterialIcons name="search" size={Dimensions.get('screen').width * 0.085} color={global.baseBackground100} />
-                </TouchableOpacity>
                 <TouchableOpacity style={styles.SettingsButton} onPress={() => {router.replace('/(tabs)/Settings')}}>
                     <MaterialIcons name="settings" size={Dimensions.get('screen').width * 0.085} color={global.baseBackground100} />
                 </TouchableOpacity>

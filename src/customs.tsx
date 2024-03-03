@@ -167,6 +167,12 @@ export const dummyDataNews = [
 //       Custom Functions Section       //
 //                                      //
 
+export function inclusiveRandom(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export function generateSudoId(digits: number)
 {
     return Math.floor(Math.random() * Math.pow(10, Math.max(1, digits)))
@@ -234,7 +240,7 @@ export function generateEndpointUrl(whereClause: string | undefined, resultCount
     const defaultWhereClause: string = 'where=' + encodeQueryParamter('OBJECTID IS NOT NULL') + (whereClause !== undefined ? encodeQueryParamter(` AND ${whereClause}`) : '')
 
     // Set the required response fields, specify geometry required, specify spatial reference, specify json response format
-    const defaultParameters: string = '&outFields=ReferenceNumber%2C+CategoryLevel1%2C+CategoryLevel2%2C+CategoryName%2C+CouncilDistrictNumber%2C+DateCreated%2C+DateUpdated%2C+DateClosed%2C+CrossStreet%2C+ZIP%2C+SFTicketID%2C+Address%2C+Data_Source%2C+PublicStatus%2C+Neighborhood%2C+SourceLevel1&returnGeometry=true&outSR=4326&f=pjson'
+    const defaultParameters: string = '&outFields=ReferenceNumber%2C+CategoryLevel1%2C+CategoryLevel2%2C+CategoryName%2C+CouncilDistrictNumber%2C+DateCreated%2C+DateUpdated%2C+DateClosed%2C+CrossStreet%2C+ZIP%2C+SFTicketID%2C+Address%2C+Data_Source%2C+PublicStatus%2C+Neighborhood%2C+SourceLevel1&returnGeometry=true&outSR=4326&inSR=4326&f=pjson'
 
     // initialize query string
     let queryString = endpointOrigin + defaultWhereClause
@@ -322,7 +328,7 @@ export const global = {
     baseGold300: 'rgba(190, 163, 21, 0.33)',
 
     baseGrey100: '#6F6F6F',
-    baseGrey200: 'rgba(112, 112, 112, 0.7)',
+    baseGrey200: 'rgba(112, 112, 112, 0.7)'
 }
 
 

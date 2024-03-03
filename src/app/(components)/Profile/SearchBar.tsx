@@ -1,7 +1,6 @@
-import { FontAwesome } from '@expo/vector-icons';
-import React, { memo, useCallback, useState } from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
+import React, { memo } from 'react';
 import { View, TextInput, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { global } from '../../../customs';
 import { globalFont } from "../../../customs";
 
@@ -28,7 +27,7 @@ function SearchBar({ placeholder, value, passUp, onSubmit, onClear, style } : se
                     placeholderTextColor="#D3D3D3"
                 />
                 <TouchableOpacity onPress={onClear} style={styles.clearButton}>
-                    <FontAwesome name='remove' size={20} color={global.baseGrey200} />
+                    <MaterialIcons name='clear' size={20} color={global.baseGrey200} />
                 </TouchableOpacity>
             </View>
         </View>        
