@@ -1,12 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text, ScrollView } from 'react-native';
-import CustomText from '../(components)/CustomText';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, Text, ScrollView } from 'react-native';
 import { global, shadowUniversal } from "../../customs";
-//import SearchBar from '../(components)/RequestType/SearchBar';
 import SearchBar from '../(components)/Profile/SearchBar';
-import CreateButton from '../(components)/RequestConfirmation/SubmitButton';
 import { useNavigation } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { requestTypes } from '../../addresses';
 import { globalFont } from '../../customs';
 
@@ -14,9 +11,13 @@ export default function Type()
 {
     const nav = useNavigation()
     const router = useRouter()
-    const navigateToRequestConfirm = (arg0: string, arg1: string) => {
-        router.push({pathname: '/RequestConfirm', params: {reqType: arg0, reqDesc: arg1}});
+    const { reqType, reqDesc, reqLoc } = useLocalSearchParams<{reqType: string, reqDesc: string, reqLoc: string}>()
+
+    const forwardRequest = (arg0: string, arg1: string) => {
+        router.push({pathname: '/Location', params: {reqType: arg0, reqDesc: arg1, reqLoc: (reqLoc || '')}})
     }
+    // {pathname: '/Location', params: {reqType: arg0, reqDesc: arg1, reqLoc: (p.reqLoc || '')}}
+
     return (
         <View style={styles.mainWrapper}>
             <View style={styles.exitWrapper}>
@@ -36,7 +37,7 @@ export default function Type()
                                 <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
                                 {
                                     obj.subTypes.map((sub) => {
-                                        return <TouchableOpacity onPress={() => {navigateToRequestConfirm(sub.subType, sub.description)}} key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
+                                        return <TouchableOpacity onPress={() => {forwardRequest(sub.subType, sub.description)}} key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
                                             <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
                                             <Text style={styles.subTypeDescription}>{sub.description}</Text>
                                         </TouchableOpacity>

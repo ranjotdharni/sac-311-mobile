@@ -13,9 +13,10 @@ import { FlashList } from "@shopify/flash-list"
 import _ from 'lodash'
 import { fontGetter } from "../../customs";
 import { globalFont } from '../../customs';
+import { useRouter } from "expo-router";
 
 //const padKeySuffix: string = '-padRequests'
-const markerKeySuffix: string = '-markers'
+const markerKeySuffix: string = '-markerPrimary'
 //const searchKeySuffix: string = '-scrollAddresses'
 
 const padHiddenHeight = Dimensions.get('screen').height
@@ -37,10 +38,9 @@ const activeZoom = {
 
 function Explore()
 {
+    const router = useRouter()
     const controller = new AbortController()
-
     const mapRef = useRef<MapView>(null)
-
     const padPanAnim = useRef(new Animated.Value(padHiddenHeight)).current
     const previewPanAnim = useRef(new Animated.Value(previewVisibleHeight)).current
 
@@ -64,6 +64,10 @@ function Explore()
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     })
+
+    const forwardLocation = () => {
+        router.push({pathname: '/(request)/Type', params: {reqLoc: padAddress}})
+    }
 
     function hidePad() {
         setPreviewPan(previewVisibleHeight)
@@ -271,12 +275,12 @@ function Explore()
 
                             <View style={styles.padRightPartition}>
                                 <CustomText text={padDistrict} nol={0} font={fontGetter()} style={styles.padDistrict} />
-                                <TouchableOpacity style={styles.newRequestButton}>
+                                <TouchableOpacity onPress={forwardLocation} style={styles.newRequestButton}>
                                     <CustomText text='New Request' nol={0} font={fontGetter()} style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
                                 </TouchableOpacity>
                             </View>
 
-                            <Pressable style={styles.closeBar} onPress={hidePad}><MaterialIcons  name='arrow-drop-down' size={20} color={global.baseBackground100} /></Pressable>
+                            <Pressable style={styles.closeBar} onPress={hidePad}><MaterialIcons name='arrow-drop-down' size={20} color={global.baseBackground100} /></Pressable>
                         </View>
                     </PanGestureHandler>
                     {

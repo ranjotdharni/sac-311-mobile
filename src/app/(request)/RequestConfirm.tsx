@@ -1,16 +1,17 @@
 import { useLocalSearchParams } from "expo-router";
 import { useNavigation } from '@react-navigation/native';
-import { Text, TouchableOpacity, View, StyleSheet, Image, Alert } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Image, Alert, ScrollView } from "react-native";
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { global } from "../../customs";
 import { globalFont } from "../../customs";
 import { fontGetter } from "../../customs";
+import CustomText from "../(components)/CustomText";
 
 
 export default function RequestConfirm() {
     const nav = useNavigation()
-    const { reqType, reqDesc } = useLocalSearchParams()
+    const { reqType, reqDesc, reqLoc } = useLocalSearchParams()
 
     const [image, setImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -54,14 +55,24 @@ export default function RequestConfirm() {
 
     return (
         <View style={styles.pageWrapper}>
-            <View style={styles.innerPageWrapper}>
+            <View style={styles.exitWrapper}>
+                    <View style={styles.innerExitWrapper}>
+                        <CustomText style={styles.barText} text='Confirm Request' nol={0} font='jbm' />
+                        <TouchableOpacity onPress={() => { nav.goBack() }}> 
+                            <Image style={styles.resizeIcon} source={require('../../assets/png/exit_x.png')} />
+                        </TouchableOpacity>
+                    </View>
+            </View>
+            <ScrollView style={styles.innerPageWrapper} contentContainerStyle={{alignItems: 'center', justifyContent: 'space-between'}}>
                 <View style={styles.infoWrapper}>
                     <View style={styles.textContainer}>
                         <Text style={[styles.basicText, { color: '#BEA315' }]}>Service</Text>
                         <View style={[styles.rectangle, styles.shadow, styles.editButtonContainer]}>
-                            <Text style={[styles.basicText, styles.rectangleText]}>
-                                {reqType || '(the selected service)'}
-                            </Text>
+                            <View style={{width: '70%'}}>
+                                <Text style={[styles.basicText, styles.rectangleText]}>
+                                    {reqType || '(the selected service)'}
+                                </Text>
+                            </View>
                             <TouchableOpacity style={styles.editButton}>
                                 <Text style={styles.editButtonText}>Edit</Text>
                             </TouchableOpacity>
@@ -69,12 +80,14 @@ export default function RequestConfirm() {
                     </View>
 
                     <View style={styles.textContainer}>
-                        <Text style={[styles.basicText, { color: '#BEA315' }]}>Location</Text>
+                            <Text style={[styles.basicText, { color: '#BEA315' }]}>Location</Text>                        
                         <TouchableOpacity onPress={navigateToExplore2}>
                             <View style={[styles.rectangle, styles.shadow, styles.editButtonContainer]}>
-                                <Text style={[styles.basicText, styles.rectangleText]}>
-                                    (Select Location)
-                                </Text>
+                                <View style={{width: '70%'}}>
+                                    <Text style={[styles.basicText, styles.rectangleText]}>
+                                        {(reqLoc || 'Select Location')}
+                                    </Text>
+                                </View>
                                 <TouchableOpacity style={styles.editButton}>
                                     <Text style={styles.editButtonText}>Edit</Text>
                                 </TouchableOpacity>
@@ -126,12 +139,45 @@ export default function RequestConfirm() {
                 <TouchableOpacity onPress={() => nav.goBack()} style={styles.returnWrapper}>
                     <Text style={[styles.returnText]}>Submit Request</Text>
                 </TouchableOpacity>
-            </View>
+
+                <View style={styles.pagePad}></View>
+            </ScrollView>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    exitWrapper:{
+        backgroundColor: global.baseBlue100,
+        width:'100%',
+        shadowColor: '#000',
+        shadowOffset:{
+            width:-2,
+            height:2,
+        },
+        shadowOpacity:0.25,
+        shadowRadius:4,
+        elevation:5,
+        height:'10%',
+    },
+    innerExitWrapper:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginRight:'6%',
+        marginTop:'13%',
+    },
+    barText: {
+        fontSize: 25,
+        marginTop: '-6%',
+        marginLeft:'5%',
+        fontFamily: globalFont.chosenFont,
+        color: global.baseBackground100,
+    },
+    resizeIcon:{
+        width:30,
+        height:30,
+        marginTop: '-75%',
+    },
     returnWrapper: {
         alignItems: 'center',
         width: '60%',
@@ -152,11 +198,11 @@ const styles = StyleSheet.create({
         backgroundColor: global.baseBackground100,
     },
     innerPageWrapper: {
-        paddingTop: '10%',
         height: '83%',
-        alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+    },
+    pagePad: {
+        height: 30
     },
     returnText: {
         color: 'white',
@@ -193,9 +239,9 @@ const styles = StyleSheet.create({
         elevation: 10,
     },
     rectangleText: {
-        fontSize: 18,
+        fontSize: 15,
         fontFamily: globalFont.chosenFont,
-        color: '#000000',
+        color: global.baseGrey100,
     },
     editButtonContainer: {
         flexDirection: 'row',
