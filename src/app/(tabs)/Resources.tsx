@@ -55,14 +55,11 @@ export default function Resources() {
                     <View style={styles.tabNamesWrapperSelected}>
                         <Text style={styles.barText}>Services</Text>
                     </View>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceArticles') }}>
-                        <Text style={styles.barText}>Articles</Text>
+                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceAnswers') }}>
+                        <Text style={styles.barText}>Answers</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceAbout') }}>
                         <Text style={styles.barText}>About</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceFAQ') }}>
-                        <Text style={styles.barText}>FAQ</Text>
                     </TouchableOpacity>
                 </View>
             </View>
