@@ -13,9 +13,10 @@ import { FlashList } from "@shopify/flash-list"
 import _ from 'lodash'
 import { fontGetter } from "../../customs";
 import { globalFont } from '../../customs';
+import { useRouter } from "expo-router";
 
 //const padKeySuffix: string = '-padRequests'
-const markerKeySuffix: string = '-markers'
+const markerKeySuffix: string = '-markerPrimary'
 //const searchKeySuffix: string = '-scrollAddresses'
 
 const padHiddenHeight = Dimensions.get('screen').height
@@ -26,12 +27,20 @@ const previewVisibleHeight = Dimensions.get('screen').height * 0.85
 const requestItemWidth = 0.75 // as a decimal percentage of screen width, used in multiple places synchronously so stored here for maintainability 
 //const padAnimationTiming = 1000
 
+const reloadStop = {
+    "latitudeDelta": 0.03216870535133154, 
+    "longitudeDelta": 0.019018203020110036
+}
+const activeZoom = {
+    "latitudeDelta": 0.008829555726720173, 
+    "longitudeDelta": 0.005219578742995168
+}
+
 function Explore()
 {
+    const router = useRouter()
     const controller = new AbortController()
-
     const mapRef = useRef<MapView>(null)
-
     const padPanAnim = useRef(new Animated.Value(padHiddenHeight)).current
     const previewPanAnim = useRef(new Animated.Value(previewVisibleHeight)).current
 
@@ -55,6 +64,10 @@ function Explore()
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     })
+
+    const forwardLocation = () => {
+        router.push({pathname: '/(request)/Type', params: {reqLoc: padAddress}})
+    }
 
     function hidePad() {
         setPreviewPan(previewVisibleHeight)
@@ -83,7 +96,7 @@ function Explore()
         showResults(false)
         setPadDistrict(obj.attributes.CouncilDistrictNumber)
         setPadAddress(obj.attributes.Address)
-        mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.005, longitude: obj.geometry.x, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta})
+        mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.001, longitude: obj.geometry.x, latitudeDelta: activeZoom.latitudeDelta, longitudeDelta: activeZoom.longitudeDelta})
         showPad()
     }   //notice: latitude is geometry.y and longitude is geometry.x
 
@@ -128,13 +141,18 @@ function Explore()
         setRequests([obj, ...requests])
     }
 
-    const onRegionChange = _.debounce(async (region: Region, details: Details) => {
+    const onRegionChange = _.debounce(async (Cregion: Region, details: Details) => {
+        setRegion(Cregion)
+        if (region.latitudeDelta < reloadStop.latitudeDelta && region.longitudeDelta < reloadStop.longitudeDelta) {
+            return
+        }
+
         setPreviewLoader(true)
         // default markers are requests w/ valid addresses and created within in the last 7 days
         const params: [string, string][] = [
             ['orderByFields', 'Address'],
             ['geometryType', 'esriGeometryPoint'],
-            ['geometry', `${region.longitude},${region.latitude}`],
+            ['geometry', `${Cregion.longitude},${Cregion.latitude}`],
             ['distance', '2000'],
             ['returnDistinctValues', 'true']
         ]
@@ -257,12 +275,12 @@ function Explore()
 
                             <View style={styles.padRightPartition}>
                                 <CustomText text={padDistrict} nol={0} font={fontGetter()} style={styles.padDistrict} />
-                                <TouchableOpacity style={styles.newRequestButton}>
+                                <TouchableOpacity onPress={forwardLocation} style={styles.newRequestButton}>
                                     <CustomText text='New Request' nol={0} font={fontGetter()} style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
                                 </TouchableOpacity>
                             </View>
 
-                            <Pressable style={styles.closeBar} onPress={hidePad}><MaterialIcons  name='arrow-drop-down' size={20} color={global.baseBackground100} /></Pressable>
+                            <Pressable style={styles.closeBar} onPress={hidePad}><MaterialIcons name='arrow-drop-down' size={20} color={global.baseBackground100} /></Pressable>
                         </View>
                     </PanGestureHandler>
                     {
@@ -277,7 +295,7 @@ function Explore()
                     }
                 </Animated.View>
                 <Animated.View style={{width: '100%', height: '100%'}}>
-                <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} region={region} style={{width: '100%', height: '100%', position:'absolute'}}>
+                <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
                     {
                         memoizedMarkerRender
                     }

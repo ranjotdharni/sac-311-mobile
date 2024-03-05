@@ -28,7 +28,7 @@ function CustomMarker({ markerData, image, fadeInDelay, iconScale, backgroundCol
                 trigger 
                 ?
                 <Animated.View key={markerData.attributes.ReferenceNumber + "MarkerTopWrapper"} style={styles.markerTopWrapper}>
-                    <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayBack"} style={[styles.markerTopOverlayBack, { backgroundColor: backgroundColor, borderRadius: iconScale / 3 }]}></Animated.View>
+                    <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayBack"} style={[styles.markerTopOverlayBack, { backgroundColor:backgroundColor, borderRadius: iconScale / 3 }]}></Animated.View>
                     <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayPin"} style={[styles.markerTopOverlayPin, {backgroundColor: backgroundColor, borderRadius: iconScale / 2}]}></Animated.View>
                     <Animated.Image key={markerData.attributes.ReferenceNumber + "MarkerTopInset"} style={styles.markerTopInset} source={{uri: image}} />
                 </Animated.View> 
