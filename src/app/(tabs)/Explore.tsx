@@ -47,8 +47,9 @@ function Explore()
 
     const [addressQuery, setAddressQuery] = useState<string>('')
     const [markers, setMarkers] = useState<Array<responseType>>([])
-    const [padDistrict, setPadDistrict] = useState<string>('')
-    const [padAddress, setPadAddress] = useState<string>('')
+    const [padObject, setPadObject] = useState<responseType>()
+    //const [padDistrict, setPadDistrict] = useState<string>('')
+    //const [padAddress, setPadAddress] = useState<string>('')
     const [loader, setLoader] = useState<boolean>(false)
     const [previewLoader, setPreviewLoader] = useState<boolean>(false)
     const [addressesLoading, setAddressesLoading] = useState<boolean>(false)
@@ -66,7 +67,7 @@ function Explore()
     })
 
     const forwardLocation = () => {
-        router.push({pathname: '/(request)/Type', params: {reqLoc: padAddress}})
+        router.push({pathname: '/(request)/Type', params: {reqLoc: padObject!.attributes.Address}})
     }
 
     function hidePad() {
@@ -94,8 +95,7 @@ function Explore()
 
     function initializePad(obj: responseType) { //will wipe current active marker!!!!!!!!!!!!!!
         showResults(false)
-        setPadDistrict(obj.attributes.CouncilDistrictNumber)
-        setPadAddress(obj.attributes.Address)
+        setPadObject(obj)
         mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.001, longitude: obj.geometry.x, latitudeDelta: activeZoom.latitudeDelta, longitudeDelta: activeZoom.longitudeDelta})
         showPad()
     }   //notice: latitude is geometry.y and longitude is geometry.x
@@ -266,7 +266,7 @@ function Explore()
                     <PanGestureHandler onEnded={detectSwipeEnd} onGestureEvent={watchSwipe}>
                         <View style={styles.padTopBar}>                            
                             <View style={styles.padLeftPartition}>
-                                <CustomText nol={3} text={padAddress} font={fontGetter()} style={styles.padAddress} />
+                                <CustomText nol={3} text={(padObject?.attributes.Address || '')} font={fontGetter()} style={styles.padAddress} />
                                 <View style={{flexDirection: 'row', marginBottom: '1%'}}>
                                     <MaterialIcons name='delete-outline' size={30} color={global.baseGrey200} />
                                     <CustomText text='Thursday' nol={0} font={fontGetter()} style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
@@ -274,7 +274,7 @@ function Explore()
                             </View>
 
                             <View style={styles.padRightPartition}>
-                                <CustomText text={padDistrict} nol={0} font={fontGetter()} style={styles.padDistrict} />
+                                <CustomText text={(padObject?.attributes.CouncilDistrictNumber || '')} nol={0} font={fontGetter()} style={styles.padDistrict} />
                                 <TouchableOpacity onPress={forwardLocation} style={styles.newRequestButton}>
                                     <CustomText text='New Request' nol={0} font={fontGetter()} style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
                                 </TouchableOpacity>

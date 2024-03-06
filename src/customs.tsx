@@ -3,18 +3,31 @@
 //                              //
 
 import { StyleSheet } from 'react-native'
+import { requestTypes } from './addresses'
+
+
+//                              //
+//             Variables        //
+//                              //
+
+//export let salesforceTestSignature: 'SalesForceTestCase'
+
 
 //                              //
 //      Static Types Section    //
 //                              //
 
+export interface salesforceTestSignature {
+    salesforceTestSignature: 'SalesForceTestCase'
+}
+
 export interface responseType {
     attributes: {
-        ReferenceNumber : string, 
-        CategoryLevel1 : string, 
-        CategoryLevel2 : string, 
-        CategoryName : string, 
-        CouncilDistrictNumber : string, 
+        ReferenceNumber : string, //
+        CategoryLevel1 : string, //
+        CategoryLevel2 : string, //
+        CategoryName : string, //
+        CouncilDistrictNumber : string, //
         DateCreated : number, 
         DateUpdated : number, 
         DateClosed : number, 
@@ -32,6 +45,19 @@ export interface responseType {
         y: number  //latitude
     }
 }
+
+export interface ParamTypes {
+    Subject: salesforceTestSignature,
+    Service_Type__c: string, // CategoryLevel1
+    Sub_Service_Type__c: string, // CategoryLevel2
+    Council_District__c: string, // CouncilDistrictNumber
+    GIS_Street_Address__c: string, // CrossStreet
+    GIS_Zip_Code__c: string, // ZIP
+    Address__c: string, // Address
+    GIS_System_Info__c: string, // "<Data_Source>  <SourceLevel1>"
+    GIS_Neighborhood_Name__c: string // Neighborhood
+}
+
 
 //                              //
 //      Dummy Data Section      //
@@ -284,6 +310,39 @@ export function dateAtDaysAgo(daysAgo: number): Date {
     dateNow.setDate(dateNow.getDate() - daysAgo)
     return dateNow
 }
+
+export function categoryLevelToType(categoryLevel: string): string {
+    for (let i = 0; i < requestTypes.length; i++) {
+        if (requestTypes[i].type === categoryLevel) {
+            return requestTypes[i].id
+        }
+
+        for (let j = 0; j < requestTypes[i].subTypes.length; j++) {
+            if (requestTypes[i].subTypes[j].subType === categoryLevel) {
+                return requestTypes[i].subTypes[j].id
+            }
+        }
+    }
+
+    return ''
+}
+
+export function typeToCategoryLevel(typeID: string) {
+    for (let i = 0; i < requestTypes.length; i++) {
+        if (requestTypes[i].id === typeID) {
+            return requestTypes[i].type
+        }
+
+        for (let j = 0; j < requestTypes[i].subTypes.length; j++) {
+            if (requestTypes[i].subTypes[j].id === typeID) {
+                return requestTypes[i].subTypes[j].subType
+            }
+        }
+    }
+
+    return ''
+}
+
 
 //                                      //
 //         Custom Styles Section        //
