@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text, ScrollView } from 'react-native';
-import { ParamType, categoryLevelToType, global, salesforceDevelopmentSignature, shadowUniversal } from "../../customs";
+import { ParamType, categoryLevelToType, global, requestTypes, salesforceDevelopmentSignature, shadowUniversal } from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useNavigation } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { requestTypes } from '../../addresses';
 import { globalFont } from '../../customs';
 
 export default function Type()

@@ -90,7 +90,6 @@ export default function RequestConfirm() {
             }).then((middle) => {
                 return middle.json()
             }).then((res) => {
-                console.log(res)
                 if (res.success !== true) {
                     setError(true)
                 }
