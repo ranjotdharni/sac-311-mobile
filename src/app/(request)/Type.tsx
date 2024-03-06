@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text, ScrollView } from 'react-native';
-import { global, shadowUniversal } from "../../customs";
+import { ParamType, categoryLevelToType, global, salesforceDevelopmentSignature, shadowUniversal } from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useNavigation } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -11,10 +11,56 @@ export default function Type()
 {
     const nav = useNavigation()
     const router = useRouter()
-    const { reqType, reqDesc, reqLoc } = useLocalSearchParams<{reqType: string, reqDesc: string, reqLoc: string}>()
+    const {
+        Subject,
+        Service_Type__c, // CategoryLevel1
+        Sub_Service_Type__c, // CategoryLevel2
+        Council_District__c, // CouncilDistrictNumber
+        GIS_Street_Address__c, // CrossStreet
+        GIS_Zip_Code__c, // ZIP
+        Address__c, // Address
+        GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+        GIS_Neighborhood_Name__c, // Neighborhood
+        description,
+        Address_Geolocation__Latitude__s,
+        Address_Geolocation__Longitude__s,
+        returnRoute
+    } = (
+        useLocalSearchParams().Subject === undefined ?
+                {
+            Subject: salesforceDevelopmentSignature,
+            Service_Type__c: '', // CategoryLevel1
+            Sub_Service_Type__c: '', // CategoryLevel2
+            Council_District__c: '', // CouncilDistrictNumber
+            GIS_Street_Address__c: '', // CrossStreet
+            GIS_Zip_Code__c: '', // ZIP
+            Address__c: '', // Address
+            GIS_System_Info__c: '', // "<Data_Source>  <SourceLevel1>"
+            GIS_Neighborhood_Name__c: '', // Neighborhood
+            description: '',
+            Address_Geolocation__Latitude__s: 0,
+            Address_Geolocation__Longitude__s: 0,
+            returnRoute: useLocalSearchParams().returnRoute
+        } : 
+        useLocalSearchParams()
+    )
 
-    const forwardRequest = (arg0: string, arg1: string) => {
-        router.push({pathname: '/Location', params: {reqType: arg0, reqDesc: arg1, reqLoc: (reqLoc || '')}})
+    const forwardRequest = (type: string, subtype: string, desc: string) => {
+        router.push({pathname: '/Location', params: {
+            Subject,
+            Service_Type__c: categoryLevelToType(type), // CategoryLevel1
+            Sub_Service_Type__c: categoryLevelToType(subtype), // CategoryLevel2
+            Council_District__c, // CouncilDistrictNumber
+            GIS_Street_Address__c, // CrossStreet
+            GIS_Zip_Code__c, // ZIP
+            Address__c, // Address
+            GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+            GIS_Neighborhood_Name__c, // Neighborhood
+            description: desc,
+            Address_Geolocation__Latitude__s,
+            Address_Geolocation__Longitude__s,
+            returnRoute
+        }})
     }
     // {pathname: '/Location', params: {reqType: arg0, reqDesc: arg1, reqLoc: (p.reqLoc || '')}}
 
@@ -37,7 +83,7 @@ export default function Type()
                                 <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
                                 {
                                     obj.subTypes.map((sub) => {
-                                        return <TouchableOpacity onPress={() => {forwardRequest(sub.subType, sub.description)}} key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
+                                        return <TouchableOpacity onPress={() => {forwardRequest(obj.type, sub.subType, sub.description)}} key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
                                             <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
                                             <Text style={styles.subTypeDescription}>{sub.description}</Text>
                                         </TouchableOpacity>

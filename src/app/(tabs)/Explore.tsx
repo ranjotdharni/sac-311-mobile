@@ -1,7 +1,7 @@
 import { View, StyleSheet, Dimensions, Pressable, Animated } from "react-native";
 import MapView, { Details, PROVIDER_GOOGLE, Region } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom } from "../../customs";
+import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom, responseObjectToParameter, ParamType } from "../../customs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
@@ -67,7 +67,11 @@ function Explore()
     })
 
     const forwardLocation = () => {
-        router.push({pathname: '/(request)/Type', params: {reqLoc: padObject!.attributes.Address}})
+        const paramObj = responseObjectToParameter(padObject!)
+        paramObj.Service_Type__c = ''
+        paramObj.Sub_Service_Type__c = ''
+        paramObj.returnRoute = 'Explore'
+        router.push({pathname: '/(request)/Type', params: paramObj})
     }
 
     function hidePad() {

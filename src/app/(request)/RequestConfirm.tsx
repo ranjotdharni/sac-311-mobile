@@ -1,24 +1,46 @@
 import { useLocalSearchParams } from "expo-router";
 import { useNavigation } from '@react-navigation/native';
-import { Text, TouchableOpacity, View, StyleSheet, Image, Alert, ScrollView } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Image, Alert, ScrollView, TextInput } from "react-native";
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { global } from "../../customs";
+import { ParamType, global, grabImmediateRoute, typeToCategoryLevel } from "../../customs";
 import { globalFont } from "../../customs";
 import { fontGetter } from "../../customs";
 import CustomText from "../(components)/CustomText";
+import { Loader } from "../(components)/Loader";
 
 
 export default function RequestConfirm() {
     const nav = useNavigation()
-    const { reqType, reqDesc, reqLoc } = useLocalSearchParams()
 
+    const {
+        Subject,
+        Service_Type__c, // CategoryLevel1
+        Sub_Service_Type__c, // CategoryLevel2
+        Council_District__c, // CouncilDistrictNumber
+        GIS_Street_Address__c, // CrossStreet
+        GIS_Zip_Code__c, // ZIP
+        Address__c, // Address
+        GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+        GIS_Neighborhood_Name__c, // Neighborhood
+        description,
+        Address_Geolocation__Latitude__s,
+        Address_Geolocation__Longitude__s,
+        returnRoute
+    } = useLocalSearchParams()
+
+    const [submit, setSubmit] = useState<boolean>(false)
+    const [details, setDetails] = useState<string>(description as string)
     const [image, setImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         requestMediaLibraryPermission();
-    }, []);
+    }, [])
+
+    useEffect(() => {
+        nav.setOptions({ gestureEnabled: !submit })
+    }, [submit])
 
     const requestMediaLibraryPermission = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -53,12 +75,61 @@ export default function RequestConfirm() {
         }
     };
 
+    const SubmitView = ({ requestParams } : { requestParams: ParamType}) => {
+        const [loading, setLoading] = useState<boolean>(true)
+        const [error, setError] = useState<boolean>(false)
+        
+        async function createRequest(paramObj: ParamType) {
+            await fetch(process.env.EXPO_PUBLIC_SANDBOX_URL + '/sobjects/Case', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': process.env.EXPO_PUBLIC_ACCESS_TOKEN as string
+                },
+                body: JSON.stringify(paramObj)
+            }).then((middle) => {
+                return middle.json()
+            }).then((res) => {
+                console.log(res)
+                if (res.success !== true) {
+                    setError(true)
+                }
+            }).catch(err => {
+                setError(true)
+                console.log(err)
+            }).finally(() => {
+                setLoading(false)
+            })
+        }
+
+        useEffect(() => {
+            createRequest(requestParams)
+        }, [])
+
+        return (
+            <View style={{width: '100%', height: '100%', backgroundColor: global.baseBackground100}}>
+                {
+                    (
+                        loading ? 
+                        <Loader /> :
+                        <>
+                            <CustomText text={(error ? 'Request Error' : 'Request Submitted')} nol={0} font='jbm' style={{fontSize: 30, color: error ? 'red' : global.baseGold100, alignSelf: 'center', marginTop: 200}} />
+                            <TouchableOpacity style={{backgroundColor: global.baseBlue100, alignSelf: 'center', width: 'auto', paddingHorizontal: 10, borderRadius: 15, marginTop: 15}} onPress={(submit ? () => (nav.navigate as (screen: string) => void)(returnRoute as string) : nav.goBack)}> 
+                                <CustomText text='Go Back'  nol={0} font='jbm' style={{fontSize: 20, color: global.baseBackground100, alignSelf: 'center'}} />
+                            </TouchableOpacity>
+                        </>
+                    )
+                }
+            </View>
+        )
+    }
+
     return (
         <View style={styles.pageWrapper}>
             <View style={styles.exitWrapper}>
                     <View style={styles.innerExitWrapper}>
-                        <CustomText style={styles.barText} text='Confirm Request' nol={0} font='jbm' />
-                        <TouchableOpacity onPress={() => { nav.goBack() }}> 
+                        <CustomText style={styles.barText} text={typeToCategoryLevel(Service_Type__c as string)} nol={0} font='jbm' />
+                        <TouchableOpacity onPress={(submit ? () => (nav.navigate as (screen: string) => void)(returnRoute as string) : nav.goBack)}> 
                             <Image style={styles.resizeIcon} source={require('../../assets/png/exit_x.png')} />
                         </TouchableOpacity>
                     </View>
@@ -70,7 +141,7 @@ export default function RequestConfirm() {
                         <View style={[styles.rectangle, styles.shadow, styles.editButtonContainer]}>
                             <View style={{width: '70%'}}>
                                 <Text style={[styles.basicText, styles.rectangleText]}>
-                                    {reqType || '(the selected service)'}
+                                    {typeToCategoryLevel(Sub_Service_Type__c as string)}
                                 </Text>
                             </View>
                             <TouchableOpacity style={styles.editButton}>
@@ -85,7 +156,7 @@ export default function RequestConfirm() {
                             <View style={[styles.rectangle, styles.shadow, styles.editButtonContainer]}>
                                 <View style={{width: '70%'}}>
                                     <Text style={[styles.basicText, styles.rectangleText]}>
-                                        {(reqLoc || 'Select Location')}
+                                        {(Address__c || 'Select Location')}
                                     </Text>
                                 </View>
                                 <TouchableOpacity style={styles.editButton}>
@@ -98,9 +169,7 @@ export default function RequestConfirm() {
                     <View style={styles.textContainer}>
                         <Text style={[styles.basicText, { color: '#BEA315' }]}>Details</Text>
                         <View style={[styles.rectangle, styles.shadow]}>
-                            <Text style={[styles.basicText, styles.rectangleText]}>
-                                {reqDesc || '(the submitted details)'}
-                            </Text>
+                            <TextInput value={details} multiline onChangeText={setDetails} style={[styles.basicText, styles.rectangleText]}></TextInput>
                         </View>
                     </View>
 
@@ -136,12 +205,28 @@ export default function RequestConfirm() {
                     )}
                 </View>
 
-                <TouchableOpacity onPress={() => nav.goBack()} style={styles.returnWrapper}>
+                <TouchableOpacity onPress={() => {setSubmit(true)}} style={styles.returnWrapper}>
                     <Text style={[styles.returnText]}>Submit Request</Text>
                 </TouchableOpacity>
 
                 <View style={styles.pagePad}></View>
             </ScrollView>
+            {
+                (submit ? <SubmitView requestParams={{
+                    Subject,
+                    Service_Type__c, // CategoryLevel1
+                    Sub_Service_Type__c, // CategoryLevel2
+                    Council_District__c, // CouncilDistrictNumber
+                    GIS_Street_Address__c, // CrossStreet
+                    GIS_Zip_Code__c, // ZIP
+                    Address__c, // Address
+                    GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+                    GIS_Neighborhood_Name__c, // Neighborhood
+                    description: details,
+                    Address_Geolocation__Latitude__s,
+                    Address_Geolocation__Longitude__s
+                } as ParamType} /> : <></>)
+            }
         </View>
     );
 }

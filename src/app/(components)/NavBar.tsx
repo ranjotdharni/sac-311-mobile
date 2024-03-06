@@ -1,9 +1,9 @@
-import { Link } from "expo-router";
+import { Link, usePathname } from "expo-router";
 import { View, StyleSheet, Animated, Easing, Dimensions } from "react-native";
 import NavItem from "./NavItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
-import { global } from "../../customs";
+import { global, grabImmediateRoute, salesforceDevelopmentSignature } from "../../customs";
 import { useNavigation } from "@react-navigation/native"
 
 const screenWidth: number = Dimensions.get('screen').width
@@ -62,7 +62,21 @@ export default function NavBar(this: any)
                 <NavItem navigation={navigation} id={1} active={isActive} passUp={swapTab} title='Explore' iconName='map' url='/(tabs)/Explore' />
 
                 <View style={styles.NavCenterButton}>
-                    <Link href='/(request)/Type' style={styles.NavCenterLink} />
+                    <Link href={{pathname: '/(request)/Type', params: {
+                                                                Subject: salesforceDevelopmentSignature,
+                                                                Service_Type__c: '', // CategoryLevel1
+                                                                Sub_Service_Type__c: '', // CategoryLevel2
+                                                                Council_District__c: '', // CouncilDistrictNumber
+                                                                GIS_Street_Address__c: '', // CrossStreet
+                                                                GIS_Zip_Code__c: '', // ZIP
+                                                                Address__c: '', // Address
+                                                                GIS_System_Info__c: '311 Phone', // "<Data_Source>  <SourceLevel1>"
+                                                                GIS_Neighborhood_Name__c: '', // Neighborhood
+                                                                description: '',                                                                
+                                                                Address_Geolocation__Latitude__s: 0,
+                                                                Address_Geolocation__Longitude__s: 0,
+                                                                returnRoute: usePathname().replace('/', '')
+                                                            }}} style={styles.NavCenterLink} />
                     <MaterialIcons color='#ffffff' name='add' size={35} />
                 </View>
 

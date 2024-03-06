@@ -10,16 +10,12 @@ import { requestTypes } from './addresses'
 //             Variables        //
 //                              //
 
-//export let salesforceTestSignature: 'SalesForceTestCase'
+export const salesforceDevelopmentSignature: string = '311MigrationDev' // IF YOU CHANGE THIS, CHANGE 'ParamType' BELOW AS WELL!!!!!!!!!!!!!!!!!!!
 
 
 //                              //
 //      Static Types Section    //
 //                              //
-
-export interface salesforceTestSignature {
-    salesforceTestSignature: 'SalesForceTestCase'
-}
 
 export interface responseType {
     attributes: {
@@ -46,8 +42,8 @@ export interface responseType {
     }
 }
 
-export interface ParamTypes {
-    Subject: salesforceTestSignature,
+export interface ParamType {
+    Subject: '311MigrationDev',
     Service_Type__c: string, // CategoryLevel1
     Sub_Service_Type__c: string, // CategoryLevel2
     Council_District__c: string, // CouncilDistrictNumber
@@ -55,7 +51,10 @@ export interface ParamTypes {
     GIS_Zip_Code__c: string, // ZIP
     Address__c: string, // Address
     GIS_System_Info__c: string, // "<Data_Source>  <SourceLevel1>"
-    GIS_Neighborhood_Name__c: string // Neighborhood
+    GIS_Neighborhood_Name__c: string, // Neighborhood
+    description: string,
+    Address_Geolocation__Latitude__s: string,
+    Address_Geolocation__Longitude__s: string
 }
 
 
@@ -309,6 +308,41 @@ export function dateAtDaysAgo(daysAgo: number): Date {
     const dateNow: Date = new Date()
     dateNow.setDate(dateNow.getDate() - daysAgo)
     return dateNow
+}
+
+export function responseObjectToParameter(obj: responseType) {
+    return {
+        Subject: salesforceDevelopmentSignature,
+        Service_Type__c: categoryLevelToType(obj.attributes.CategoryLevel1), // CategoryLevel1
+        Sub_Service_Type__c: categoryLevelToType(obj.attributes.CategoryLevel2), // CategoryLevel2
+        Council_District__c: obj.attributes.CouncilDistrictNumber, // CouncilDistrictNumber
+        GIS_Street_Address__c: obj.attributes.CrossStreet, // CrossStreet
+        GIS_Zip_Code__c: obj.attributes.ZIP, // ZIP
+        Address__c: obj.attributes.Address, // Address
+        GIS_System_Info__c: `${obj.attributes.Data_Source} ${obj.attributes.SourceLevel1}`, // "<Data_Source>  <SourceLevel1>"
+        GIS_Neighborhood_Name__c: obj.attributes.Neighborhood, // Neighborhood
+        Address_Geolocation__Latitude__s: obj.geometry.y,
+        Address_Geolocation__Longitude__s: obj.geometry.x,
+        description: '',
+        returnRoute: ''
+    }
+}
+
+export function grabImmediateRoute(route: string): string {
+    let result: string = ""
+
+    if (route[route.length - 1] === '/') {
+        return result
+    }
+
+    for (let i = route.length - 1; i > -1; i--) {
+        if (route[i] === '/') {
+        result = route.substring(i + 1)
+        break;
+        }
+    }
+
+    return result
 }
 
 export function categoryLevelToType(categoryLevel: string): string {
