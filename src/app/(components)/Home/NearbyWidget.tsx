@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { globalFont } from "../../../customs";
 import RequestList from "./RequestList";
 import YourRequests from "./YourRequests";
+import Geolocation from "../../(tabs)/Geolocation";
 
 /* TODO
     - 
@@ -73,7 +74,7 @@ export const TabsComponent: React.FC = () => {
             {/* Content based on selected tab */}
             <View style={styles.contentContainer}>
                 {selectedTab === 'Near You' ? (
-                    <RequestList />/* REPLACE WITH GEOLOCATION SERVICES */
+                    <Geolocation />/* REPLACE WITH GEOLOCATION SERVICES */
                 ) : (
                     <View>
                         <YourRequests />
