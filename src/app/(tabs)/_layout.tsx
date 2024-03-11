@@ -20,6 +20,9 @@ export default function Layout()
                     <Stack.Screen name="FAQFullView" options={{ headerShown: false }} />
                     <Stack.Screen name="Business" options = {{ headerShown: false }} />
                     <Stack.Screen name="Settings" options={{ headerShown: false }} />
+                    <Stack.Screen name="ResidentTab" options={{ headerShown: false }} />
+                    <Stack.Screen name="VisitorTab" options={{ headerShown: false }} />
+                    <Stack.Screen name="BusinessTab" options={{ headerShown: false }} />
                     <Stack.Screen name="News" options={{headerShown: false }} />
                 </Stack>
             <NavBar />
