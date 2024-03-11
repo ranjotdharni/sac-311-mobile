@@ -23,16 +23,15 @@ export default function Geoloc() {
         setLocation(currentLocation);
         //print to console
         if (currentLocation) {
+          //Bug testing console logs
+         /* 
           console.log('Latitude:', currentLocation.coords.latitude);
           console.log('Longitude:', currentLocation.coords.longitude);
-
-
-          
           getClosestRequests(currentLocation.coords.latitude, currentLocation.coords.longitude, 10).then((entries) => {
             console.log('Closest requests: ', entries);
           }).catch((error)=>{
             console.error('Error: ', error);
-          })
+          })*/
           const closestRequestsData = await getClosestRequests(currentLocation.coords.latitude, currentLocation.coords.longitude, 10);
 
           setClosestRequests(closestRequestsData);
