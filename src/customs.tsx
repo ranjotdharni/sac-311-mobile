@@ -370,37 +370,54 @@ export function fontGetter(){
 
 let chosenColorTheme: any = 'lightMode';
 
-
 export const globalColorTheme= {
     chosenColorTheme : chosenColorTheme,
-    backgroundColor : '#808080',
-    color : '#ffffff',
-    theme : 'globalTheme'
-
+    backgroundColor : '#ffffff',
+    backgroundColor2 : '#ffffff',
+    color : '#000000',
+    theme : 'lightTheme',
+    fontSize: 19,
+    fontFamily: globalFont.chosenFont,
+    paddingLeft: '5%',
+    fontWeight: '500'
 }
 
 export function colorThemeSetter(newTheme:string){
     globalColorTheme.chosenColorTheme = newTheme;
     if (newTheme == 'lightTheme'){
-        chosenColorTheme.backgroundColor = '#000000';
-        chosenColorTheme.color = '#ffffff';
         globalColorTheme.theme = 'lightTheme';
-        globalColorTheme.backgroundColor = '#000000';
-        globalColorTheme.color = '#ffffff';
+        globalColorTheme.backgroundColor = '#ffffff';   //background = white
+        globalColorTheme.backgroundColor2 = '#ffffff';   //alternate background = white
+        globalColorTheme.color = '#000000';             //textcolor = black
     }
     
     else if (newTheme == 'darkTheme'){
-        chosenColorTheme.backgroundColor = '#ffffff';
-        chosenColorTheme.color = '#000000';
         globalColorTheme.theme = 'darkTheme';
-        globalColorTheme.backgroundColor = '#ffffff';
-        globalColorTheme.color = '#000000';
+        globalColorTheme.backgroundColor = '#3B3B3B';   //background = dark-gray
+        globalColorTheme.backgroundColor2 = '#878787';   //alternate background = light-gray
+        globalColorTheme.color = '#E7EAED';             //textcolor = off-white
+        
     }
 
 }
 
-export function colorThemeGetter(){
-    return globalColorTheme.color;
+
+
+
+
+
+
+
+export function colorThemeGetter(property:string){
+    if (property == 'color'){
+        return globalColorTheme.color;
+    }
+    if (property == 'theme'){
+        return globalColorTheme.theme;
+    }
+    if (property == 'backgroundColor'){
+        return globalColorTheme.backgroundColor;
+    }
     
 
 }
