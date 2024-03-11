@@ -2,40 +2,40 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView, TextInput, Image } from 'react-native';
 import { global, shadowUniversal } from "../../customs";
 import { useRouter } from 'expo-router';
-import { articleTypes } from '../../addresses';
+import { answerTypes } from '../../addresses';
 import { FontAwesome } from '@expo/vector-icons';
 import { globalFont } from '../../customs';
 
-export default function Resources() {
+export default function ResourceAnswers() {
     const router = useRouter();
     const [searchValue, setSearchValue] = useState('');
     const [filterValue, setFilterValue] = useState('None');
 
     // Function to filter articleTypes based on searchValue
-    const filteredArticleTypes = articleTypes.map(obj => {
-        // Filter subtypes based on search value
-        const filteredSubTypes = obj.subTypes.filter(sub => {
-            const combinedText = `${sub.subType.toLowerCase()} ${sub.description.toLowerCase()}`;
+    const filteredArticleTypes = answerTypes.map(obj => {
+        // Filter questions based on search value
+        const filteredQuestions = obj.questions.filter(q => {
+            const combinedText = `${q.question.toLowerCase()} ${q.description.toLowerCase()} ${q.answer.toLowerCase()}`;
             return combinedText.includes(searchValue.toLowerCase());
         });
-        //empty subtype value to be used as null
-        const emptySubtype = obj.subTypes.filter(sub => {
+        //empty question value to be used as null
+        const emptyQuestion = obj.questions.filter(q => {
             const nullTxt = ``;
             return nullTxt.includes("empty");
         });
-        // If no filter chosen, only use the subtype search term
+        // If no filter chosen, only use the question search term
         if (filterValue == 'None'){
             return {
                 ...obj,
-                subTypes: filteredSubTypes,
-                type: obj.type
+                questions: filteredQuestions,
+                type: obj.type,
             };
         }
-        //if a filter is chosen, then only search through the subtypes of the filtered type
+        //if a filter is chosen, then only search through the questions of the filtered type
         else if (filterValue == obj.type.valueOf()){
             return {
                 ...obj,
-                subTypes: filteredSubTypes,
+                questions: filteredQuestions,
                 type: filterValue
             };
         }
@@ -43,10 +43,10 @@ export default function Resources() {
         else
             return {
                 ...obj,
-                subTypes: emptySubtype,
+                questions: emptyQuestion,
                 type: ''
             };
-    }).filter(obj => obj.subTypes.length > 0);
+    }).filter(obj => obj.questions.length > 0);
     return (
         <View style={styles.mainWrapper}>
             <View style={styles.exitWrapper}>
@@ -55,13 +55,10 @@ export default function Resources() {
                         <Text style={styles.barText}>Services</Text>
                     </TouchableOpacity>
                     <View style={styles.tabNamesWrapperSelected}>
-                        <Text style={styles.barText}>Articles</Text>
+                        <Text style={styles.barText}>Answers</Text>
                     </View>
                     <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/ResourceAbout')}}>
                         <Text style={styles.barText}>About</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/ResourceFAQ')}}>
-                        <Text style={styles.barText}>FAQ</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -84,7 +81,7 @@ export default function Resources() {
                     <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
                         <Text style={styles.filterText}>Clear Filter</Text>
                     </TouchableOpacity>
-                    {articleTypes.map((obj) => {
+                    {answerTypes.map((obj) => {
                         return (
                             <TouchableOpacity key={obj.id} style={styles.filterWrapper} onPress={() => setFilterValue(obj.type)}>
                                 <Text style={styles.filterText}>{obj.type}</Text>
@@ -99,13 +96,27 @@ export default function Resources() {
                     return (
                         <View style={styles.typeWrapper} key={obj.id}>
                             <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
-                            {obj.subTypes.map((sub) => {
-                                return (
-                                    <TouchableOpacity key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
-                                        <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
-                                        <Text style={styles.subTypeDescription}>{sub.description}</Text>
-                                    </TouchableOpacity>
-                                );
+                            {obj.questions.map((q) => {
+                                //If the question is an FAQ, link to FAQ answer
+                                if(obj.type =='FAQ'){
+                                    return (
+                                        <TouchableOpacity key={q.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: obj.type, answer: q.description, question: q.question}})}}>
+                                            <View style={styles.FAQTitleWrapper}>
+                                                <Text style={styles.FAQTitle}>{q.question}</Text>
+                                            </View>
+                                            <Text style={styles.questionDescription}>Tap to see details.</Text>
+                                        </TouchableOpacity>
+                                    );
+                                }
+                                //If the question is not an FAQ, link to the answer article:
+                                else{
+                                    return (
+                                        <TouchableOpacity key={q.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: obj.type, answer: q.answer, question: q.question}})}}>
+                                            <View style={styles.questionTitleWrapper}><Text style={styles.questionTitle}>{q.question}</Text></View>
+                                            <Text style={styles.questionDescription}>{q.description}</Text>
+                                        </TouchableOpacity>
+                                    );
+                                }
                             })}
                         </View>
                     );
@@ -216,7 +227,7 @@ const styles = StyleSheet.create({
         fontFamily: globalFont.chosenFont,
         marginLeft: '2%',
     },
-    subTypeWrapper: {
+    questionWrapper: {
         width: '96%',
         marginTop: 15,
         borderRadius: 15,
@@ -224,19 +235,31 @@ const styles = StyleSheet.create({
         padding: 10,
         marginLeft: '2%'
     },
-    subTypeTitleWrapper: {
+    questionTitleWrapper: {
         width: '100%',
-        backgroundColor: global.baseGold100,
+        backgroundColor: global.baseBlue100,
         borderRadius: 15,
         padding: 2,
     },
-    subTypeTitle: {
-        marginLeft: '2.5%',
+    questionTitle: {
+        margin: '2%',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
         color: global.baseBackground100
     },
-    subTypeDescription: {
+    FAQTitleWrapper: {
+        width: '100%',
+        backgroundColor: global.baseBlue100,
+        borderRadius: 15,
+        padding: 2,
+    },
+    FAQTitle: {
+        margin: '2%',
+        fontFamily: globalFont.chosenFont,
+        fontSize: 18,
+        color: global.baseBackground100
+    },
+    questionDescription: {
         marginTop: '3%',
         marginLeft: '3%',
         fontFamily: globalFont.chosenFont,

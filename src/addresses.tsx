@@ -627,1109 +627,1355 @@ export const requestTypes = [
         ]
     }
 ]
-export const articleTypes = [
+export const answerTypes = [
     {
         id: generateSudoId(8),
         type: 'Animal Control',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: '​​​​​​​Can I receive a citation for failing to license my pet?',
-                description: '​​​​​​​Owners of unlicensed pets may receive citations and incur up to a $300 fee.'
+                question: '​​​​​​​Can I receive a citation for failing to license my pet?',
+                description: '​​​​​​​Owners of unlicensed pets may receive citations and incur up to a $300 fee.',
+                answer: 'When it is time for Sacramento pet owners to renew their pet’s license, we will send an initial courtesy letter reminding them to license. If they have not renewed their license within 30 days, a second letter will be sent stating that non-compliance will result in a correctable citation. Should non-compliance continue, the pet owner will receive a correctable $300 citation (pursuant to SCC 9.44.490/430), which will be waived if a license is obtained within 30 days of receiving the citation. Failure to license within the stated grace period will result in a permanent citation in the full amount of $300. \n\nThe goal of the program is not to penalize City residents, but to provide a more consistent educational and explanatory process that will increase compliance',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Does Front Street accept donations?​​​​​​',
-                description: 'Your support helps provide quality care for more than 11,000 animals that come to our shelter each year'
+                question: 'Does Front Street accept donations?​​​​​​',
+                description: 'Your support helps provide quality care for more than 11,000 animals that come to our shelter each year',
+                answer: 'The Front Street shelter relies on donations to provide many of it’s programs, services, and life-saving outcomes. You can make a monetary donation or donate physical items by following the instructions on the shelter’s “Donate” page of their website: https://www.cityofsacramento.org/Community-Development/Animal-Care/Donate',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Is there a fee for claiming a lost pet at Front Street?​',
-                description: 'When an animal has been impounded at the Front Street Shelter, a fee may be imposed before the animal is released to its owner.'
+                question: '​​​​​Is there a fee for claiming a lost pet at Front Street?​',
+                description: 'When an animal has been impounded at the Front Street Shelter, a fee may be imposed before the animal is released to its owner.',
+                answer: 'When an animal has been impounded at the Front Street Shelter, a fee may be imposed before the animal is released to its owner. The shelter\'s goal is to get pets back home, please go to the shelter and speak to them about reclaiming your pet and discuss any associated fees. Animal redemption fees are only discussed in person.',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Where can I find free pet food?​',
-                description: 'Through the Front Street Animal Shelter\'s Titanic\'s Pantry, free dog and cat food is offered to Sacramento residents in need.'
+                question: '​​​​​Where can I find free pet food?​',
+                description: 'Through the Front Street Animal Shelter\'s Titanic\'s Pantry, free dog and cat food is offered to Sacramento residents in need.',
+                answer: 'There are several free dog and cat food resources in Sacramento. These can be found at https://www.cityofsacramento.org/Community-Development/Animal-Care/General-Information/Pet-Food-Pantry \n\nFood distributed at Titanic\'s Pantry is donated, so the type of food offered varies daily, and food may not always be available. ',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Where can I take feral cats to be spayed or neutered?​',
-                description: 'The Sacramento SPCA offers free feral cat spay/neuter surgeries every Sunday'
+                question: '​​​​​Where can I take feral cats to be spayed or neutered?​',
+                description: 'The Sacramento SPCA offers free feral cat spay/neuter surgeries every Sunday',
+                answer: 'There are several organizations that offer spay/neuter for feral cats. A list of these resources can be found on the “Services” tab of the shelter’s website or at https://www.cityofsacramento.org/Community-Development/Animal-Care/General-Information/Feral-Cats',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What are pet licenses and how can I obtain or renew one?​​​​​​',
-                description: 'The Front Street Animal Shelter issues pet licenses for residents who reside within the Sacramento city limits.'
+                question: 'What are pet licenses and how can I obtain or renew one?​​​​​​',
+                description: 'The Front Street Animal Shelter issues pet licenses for residents who reside within the Sacramento city limits.',
+                answer: 'The Front Street Animal Shelter issues pet licenses for residents within the Sacramento city limits. If you reside in the county limits of Sacramento, please license your pet with the Bradshaw Animal Shelter. \n\nLicenses are required by state law. \n\nThe Front Street Animal Shelter has partnered with DocuPet to provide an enhanced pet licensing experience for City of Sacramento residents. Dog and cat licenses can now be purchased and renewed at CityofSacramento.DocuPet.com. This new, easy-to-use online licensing service provides a quick and easy process to license your pet in the City of Sacramento.\n\nIf you are having difficulty purchasing a license, please contact Docupet Customer Service first. They can be reached at 877-239-6072 or info@docupet.com. If they are not able to resolve your concern, please call back and we will connect you with a shelter customer service rep.\n\nWhen your license is due, you will receive notifications by mail and email. Discounts are available for spayed/neutered animals and for seniors.\n\nInformation on fees and discounts, as well as other information about licensing can be found at https://www.cityofsacramento.org/Community-Development/Animal-Care/Pet-Licenses',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I volunteer at Front Street?​​​​​​',
-                description: 'The Front Street Animal Shelter is always interested in volunteers who want to help our animals find their new forever homes'
+                question: 'How can I volunteer at Front Street?​​​​​​',
+                description: 'The Front Street Animal Shelter is always interested in volunteers who want to help our animals find their new forever homes',
+                answer: 'The Front Street Animal Shelter is always interested in volunteers who want to help our animals find their new forever homes. We couldn\'t do it without our committed volunteers! You can be involved in a variety of ways, helping with morning cleaning, the pet food pantry, training the dogs, socializing the cats, fostering animals, special projects, fundraisers &events, and much more!\n\nMore information on volunteer opportunities for teens and adults, senior projects and community service projects, along with our online application and orientation videos, can be found at https://www.cityofsacramento.org/Community-Development/Animal-Care/Volunteer',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What can I do about stray cats?​​​​​​',
-                description: 'The City of Sacramento considers cats to be free-roaming animals, regardless of whether they are owned or feral.'
+                question: 'What can I do about stray cats?​​​​​​',
+                description: 'The City of Sacramento considers cats to be free-roaming animals, regardless of whether they are owned or feral.',
+                answer: 'The City of Sacramento considers cats to be free-roaming animals, regardless of whether they are owned or feral. Unlike dogs, cats may roam freely throughout the City, are not required to be on a leash, and do not need to be confined on the owner\'s property.\n\nThe City will only respond to issues involving cats when the animal is sick or injured.\n\nIf you have feral cats in your neighborhood, please visit https://www.coalition4cats.org/ for information on living with feral cats.\n\nThe City discourages the trapping of healthy cats unless strictly for the purpose of spaying or neutering. The relocation of cats is a violation of state law.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I surrender a pet at Front Street?​​​​​​',
-                description: 'The City of Sacramento Animal Care Services does not accept owned animal surrenders.'
+                question: 'Can I surrender a pet at Front Street?​​​​​​',
+                description: 'The City of Sacramento Animal Care Services does not accept owned animal surrenders.',
+                answer: 'The City of Sacramento Animal Care Services does not accept owned animal surrenders.\n\nTo surrender an owned animal, please call the Sacramento SPCA at 916-383-7387. An appointment is needed.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can you help me find a lost pet?​​​​​​',
-                description: 'If your pet has been lost, we encourage you to text STRAY to 555888 to get a free pet-finding guide with video tutorials & links to our shelter\'s lost pets every 3 days.'
+                question: 'Can you help me find a lost pet?​​​​​​',
+                description: 'If your pet has been lost, we encourage you to text STRAY to 555888 to get a free pet-finding guide with video tutorials & links to our shelter\'s lost pets every 3 days.',
+                answer: 'If your pet has been lost, we encourage you to text LOST to 833-511-0426 to get video tutorials, links to pages to post your lost pet, and a link to the shelter’s new animals every 3 days. You can also go to https://www.cityofsacramento.org/Community-Development/Animal-Care/Lost-and-Found.\n\nOur online listing of stray animals is updated every hour. The online listing only displays LIVE animals that were either picked up by one of our animal control officers or brought to the shelter by concerned citizens. Deceased animals are NOT shown on the website, but their descriptions and location found are listed in a binder at the shelters front office. \n\nAnimals dropped off to the shelter will be held for a minimum of 3 days in order to give an owner the opportunity to look for his/her lost pet. The hold is extended if an animal has a microchip or if an animal is wearing a license tag, a rabies tag, and/or a personalized tag. If we receive information that the owner has been incarcerated or hospitalized, we will extend the hold in those situations as well. Once the holding period has ended, an animal may be placed for adoption, transferred to another shelter or rescue group, or be placed in the shelter\'s foster care system. An animal may be euthanized immediately if the animal is suffering from a serious medical condition or injury and/or is not responding to treatment. Also, if an animal does not pass the behavior evaluation, the animal may be euthanized.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I find free or low cost spay or neuter services?​​​​​​',
-                description: 'If you live in the City of Sacramento and meet income guidelines, we may be able to assist you in getting your animal spayed or neutered.'
+                question: 'Where can I find free or low cost spay or neuter services?​​​​​​',
+                description: 'If you live in the City of Sacramento and meet income guidelines, we may be able to assist you in getting your animal spayed or neutered.',
+                answer: 'Several programs exist to provide low cost spay and neuter. A current list of programs can be found on the shelter\'s website https://www.cityofsacramento.org/Community-Development/Animal-Care/General-Information',
             },
             {
                 id: generateSudoId(8),
-                subType: 'I found a pet. What should I do?​​​​​​',
-                description: 'If you have found a lost pet, we encourage you to fill out a found animal report.  '
+                question: 'I found a pet. What should I do?​​​​​​',
+                description: 'If you have found a lost pet, we encourage you to fill out a found animal report.  ',
+                answer: 'If you have found a lost pet, it is very helpful to the shelter if you can hold onto them until the owner is found, or for at least a couple days before bringing them to the shelter. Tips for finding an owner can be found at cityofsacramento.org/found\n\nIf you\'ve found a stray animal and are interested in keeping it if its owner isn\'t found, the City of Sacramento advises that you keep the animal in your care. If after 90 days of diligently looking for the owner, one is not found, you will legally become the animal\'s owner.\n\nIf you dropped off a found animal at the shelter, and now would like to adopt it, you will need to go through the adoption process once the animal becomes available.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I foster animals for Front Street?​​​​​​',
-                description: 'Foster homes provide an alternative to the shelter’s kennel environment for animals in need of time, attention, care, socializing and recovery.'
+                question: 'Can I foster animals for Front Street?​​​​​​',
+                description: 'Foster homes provide an alternative to the shelter’s kennel environment for animals in need of time, attention, care, socializing and recovery.',
+                answer: 'Yes, you can sign up to foster at this link Become a foster volunteer today!. You will need to take an online class before you can foster. More information about fostering:\n\nFoster homes provide an alternative to the shelter’s kennel environment for animals in need of time, attention, care, socializing, and recovery. Foster families provide special attention and time that shelter staff cannot.\n\nMany dogs & cats cannot go directly into the shelter’s adoption program due to health, behavioral issues, or age. Young kittens & puppies need foster care until they are 8 weeks old, at which time they can be legally adopted. Sick or injured animals need foster care until they are well enough for adoption. In some cases, a foster home is needed to help an animal transition from the stress of having been abandoned at a shelter.\n\nWhat does a Foster Family do?\n\n-Provide a safe, clean, caring environment\n-Provide food, water, litter, toys, playtime, & lots of love (the shelter provides supplies to foster families, as needed!)\n-Provide exercise & socialization as appropriate; as well as monitor medical and/or behavioral issues\n-Transport to/from any necessary vet appointments or offsite adoption events.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I microchip my pet?​​​​​​',
-                description: 'For owned animals, microchipping is available at the Free Vaccination and Microchip Clinic.'
+                question: 'Where can I microchip my pet?​​​​​​',
+                description: 'For owned animals, microchipping is available at the Free Vaccination and Microchip Clinic.',
+                answer: 'For owned animals, microchipping is available at a private veterinarian or the Free Vaccination and Microchip Clinic.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How many pets can one home have?​​​​​​',
-                description: 'Each household within the city limits of Sacramento can have no more than 3 dogs and 7 cats.'
+                question: 'How many pets can one home have?​​​​​​',
+                description: 'Each household within the city limits of Sacramento can have no more than 3 dogs and 7 cats.',
+                answer: 'Each household within the city limits of Sacramento can have no more than 3 dogs and 7 cats. A dog is counted towards that limit if the dog is over the age of 4 months, while a cat is counted towards that limit if the cat is over the age of 2 months (see Sacramento City Code 9.44.370). Service animals do not count towards these totals.\n\nIn addition, it is permissible for a resident within the city limits of Sacramento to own a potbelly pig. A potbelly pig cannot be more than 22 inches high at the shoulder or weigh more than 150 pounds. Also, any male potbelly pig over the age of 4 months must be neutered (see Sacramento City Code 9.44.320). The number of potbelly pigs allowed is no more than 3, however, this limit is connected to the limit of dogs. In other words, a resident is not allowed more than a combination of 3 dogs and potbelly pigs.\n\nTo report a home exceeding the allowed limits, please submit a request.',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Does Front Street provide euthanasia services?​',
-                description: 'Due to the shelter\'s limited capacity, we are not able to provide euthanasia services for owned animals.'
+                question: '​​​​​Does Front Street provide euthanasia services?​',
+                description: 'Due to the shelter\'s limited capacity, we are not able to provide euthanasia services for owned animals.',
+                answer: 'Due to the shelter\'s limited capacity, we are not able to provide euthanasia services for owned animals.\n\nFor assistance with this service, please contact the Sacramento SPCA at 916-504-2851. You will have to make an appointment with them directly. If the SPCA isn\'t an option, contact your local vet to assist.',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​What is Front Street Shelter\'s Tax ID number?​',
-                description: 'Front Street\'s Shelter Tax ID number is 94-6000410. '
+                question: '​​​​​What is Front Street Shelter\'s Tax ID number?​',
+                description: 'Front Street\'s Shelter Tax ID number is 94-6000410. ',
+                answer: 'Front Street\'s Shelter Tax ID number is 94-6000410. \n\nFront Street\'s primary non-profit group, Friends of Front Street Shelter, is a 501(c)(3). Their  EIN number is 68-0477042.',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​What can be done about aggressive animals?​',
-                description: 'The City of Sacramento Animal Control Department will respond to reports of loose animals that are actively threatening the health of a human or animal.'
+                question: '​​​​​What can be done about aggressive animals?​',
+                description: 'The City of Sacramento Animal Control Department will respond to reports of loose animals that are actively threatening the health of a human or animal.',
+                answer: 'The City of Sacramento Animal Control Department will respond to reports of loose animals that are actively threatening the health of a human or animal.\n\nTo report an aggressive animal, please call us at 311 or 916.808.5011 so that we can respond immediately.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What can be done about excessive barking?​​​​​​',
-                description: 'When a complaint is received, the City of Sacramento Animal Care Services will notify dog owners via mail that his/her dog is creating a nuisance.'
+                question: 'What can be done about excessive barking?​​​​​​',
+                description: 'When a complaint is received, the City of Sacramento Animal Care Services will notify dog owners via mail that his/her dog is creating a nuisance.',
+                answer: 'Animals make noise - dogs bark, cats meow, and roosters crow. Some people are "sound-sensitive" and have little tolerance for such noises, while others are very tolerant and may not even notice. Most people don\'t complain until the noise becomes unbearable or constant. Then, they want a quick resolution to the problem.\n\nWhen a complaint is received, the City of Sacramento Animal Care Services will notify dog owners via mail that his/her dog is creating a nuisance. The dog owner will also receive educational material to help facilitate behavior modification as well as alternative suggestions for improvement.\n\nWhile we try to educate the dog owner with possible solutions, it is unrealistic to think the problem can be rectified immediately. There are certainly some distractions that could be considered acceptable, such as cats, wildlife, trespassers, and playing. Even though there may be acceptable forms of barking, they will not necessarily be considered as an acceptable excuse for excessive or annoying barking. Please recognize that behavior modification is not an overnight occurrence and that changing behavior will take time and patience.\n\nWe recommend that you speak with the dog owner about the problem and explain that the barking is disturbing. Many owners believe that if there are no complaints, then the neighbors are comfortable with the situation. Often, however, the owners are not home during the episodes and are completely unaware of the problem.\n\nIf speaking to an owner is not an option, or has not been successful a complaint may be filed with the 311 Call Center. To file a request, you will need to provide the following:\n\n-The exact address where the dog lives\n-Your first and last name, as well as your mailing address. Barking dog complaints will not be accepted anonymously.\n\nAfter filing a complaint, the following will take place:\n\nNotices will be mailed to the dog owner. The complainant’s personal information is not provided to the dog owner.\nThe dog owner is given 30 days to correct the situation. If after 30 days from your initial complaint, the problem is not modified to a reasonable level, contact 311 again. A second letter will be mailed to the dog owner advising them that failure to comply may result in an administrative citation (SCC 9.44.220c). \n\nThe Barking Abatement Unit will determine a resolution based on the information provided by all parties. If the dog owner receives and appeals an administrative citation, you will be required to testify at the appeal hearing.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'My neighbor\'s dog is always loose, what can I do?​​​​​​',
-                description: 'While dogs may run freely on their own property (or within a designated "Dog Park" area), they must be on a leash all other times'
+                question: 'My neighbor\'s dog is always loose, what can I do?​​​​​​',
+                description: 'While dogs may run freely on their own property (or within a designated "Dog Park" area), they must be on a leash all other times',
+                answer: 'While dogs may run freely on their own property (or within a designated "Dog Park" area), they must be on a leash all other times. Animal Control will address complaints of owned animals who are allowed to run loose outside of their property.\n\nTo report an unleashed dog, please submit a request. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What can be done about aggressive wildlife?​​​​​​',
-                description: 'The City of Sacramento Animal Control Department will respond to complaints of a wild animal that is actively threatening the well-being of a human or animal.'
+                question: 'What can be done about aggressive wildlife?​​​​​​',
+                description: 'The City of Sacramento Animal Control Department will respond to complaints of a wild animal that is actively threatening the well-being of a human or animal.',
+                answer: 'The City of Sacramento Animal Control Department will respond to complaints of a wild animal that is actively threatening the well-being of a human or animal. Wildlife can be defined as a non-domesticated animal such as squirrels, snakes, bats, raccoons, etc.\n\nTo report aggressive wildlife, please call us at 311 or 916.808.5011 so that we can respond immediately. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who can help a stray animal that appears to be sick or injured?​​​​​​',
-                description: 'The City of Sacramento Animal Control Department will respond to complaints of a stray animal that is showing signs of illness or has a visible injury.'
+                question: 'Who can help a stray animal that appears to be sick or injured?​​​​​​',
+                description: 'The City of Sacramento Animal Control Department will respond to complaints of a stray animal that is showing signs of illness or has a visible injury.',
+                answer: 'The City of Sacramento Animal Control Department will respond to complaints of a stray animal that is showing signs of illness or has a visible injury. A stray is defined as a domestic animal (i.e. cat, dog) whose owner is unknown.\n\nTo report a stray animal that appears to be sick or injured, please submit a request. ',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​I was bitten by an animal. What should I do?​',
-                description: 'The City of Sacramento Animal Control Department will investigate any complaint of an animal bite.'
+                question: '​​​​​I was bitten by an animal. What should I do?​',
+                description: 'The City of Sacramento Animal Control Department will investigate any complaint of an animal bite.',
+                answer: 'The City of Sacramento Animal Control Department will investigate any complaint of an animal bite.\n\nA bite is defined as an injury (scratch or bite) inflicted by a dog or cat that has broken the skin of a person. Animal Care Officers will respond to reports of animal bites that occur within the City of Sacramento or involve an animal that lives within the City of Sacramento.\n\nTo report a bite, please submit a request. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What can be done about nuisance wildlife?​​​​​​',
-                description: 'The City does not have an active control or eradication program for native wildlife.'
+                question: 'What can be done about nuisance wildlife?​​​​​​',
+                description: 'The City does not have an active control or eradication program for native wildlife.',
+                answer: 'The City does not have an active control or eradication program for native wildlife. In most cases, the best solution is to accept those wild creatures are residents of Sacramento also and develop ways to coexist with them.\n\nIf wildlife (including skunks, raccoons, squirrels, etc.) have become a nuisance, you can make your property less attractive by removing potential food sources such as outdoor pet food, koi ponds, and fallen tree fruit. You can also ensure that potential den areas, such as crawl spaces are not accessible. We encourage you to speak with your neighbors about taking similar precautions.  \n\nThe Front Street Shelter discourages residents from trapping wildlife.  If necessary, check local listings for a pest control organization to assist with wildlife removal.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'My pet died. Can Front Street help?​​​​​​',
-                description: 'Deceased pets may be buried on the owner\'s property, taken to a veterinary clinic, pet cemetery, or rendering plant. '
+                question: 'My pet died. Can Front Street help?​​​​​​',
+                description: 'Deceased pets may be buried on the owner\'s property, taken to a veterinary clinic, pet cemetery, or rendering plant. ',
+                answer: 'Deceased pets may be buried on the owner\'s property, taken to a veterinary clinic, pet cemetery, or rendering plant. Some veterinary organizations offer mobile support and may pick up dead animals. Wildlife control companies may also offer on-site services.\n\nIn the City of Sacramento, animals weighing less than 10 pounds may be deposited in City garbage containers.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'My pet was stolen. Can you help?​​​​​​',
-                description: 'Animal Control is unable to assist with concerns regarding a stolen pet.'
+                question: 'My pet was stolen. Can you help?​​​​​​',
+                description: 'Animal Control is unable to assist with concerns regarding a stolen pet.',
+                answer: 'Animal Control is unable to assist with concerns regarding a stolen pet. Pets are considered property and should be reported as stolen to the Police.\n\nTo report a stolen pet please call the non-emergency police line at 916-808-5471 and select option 3 to file the report.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who removes dead animals in the street or sidewalk?​​​​​​',
-                description: 'A Sacramento City Animal Control Officer will respond to requests to remove a dead animal from the public right-of-way.'
+                question: 'Who removes dead animals in the street or sidewalk?​​​​​​',
+                description: 'A Sacramento City Animal Control Officer will respond to requests to remove a dead animal from the public right-of-way.',
+                answer: 'A Sacramento City Animal Control Officer will respond to requests to remove a dead animal from the public right-of-way. The public right of way is defined as the sidewalk, street, or gutter.\n\nIf an animal has died on your property and weighs less than 10 lbs, you may dispose of it in your trash.\n\nTo report a dead animal in the public right of way, please submit a request. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How long can an animal be tethered?​​​​​​',
-                description: 'Within the City of Sacramento limits, it is not permissible to tether an animal (on a leash, attached to a fixed object) for longer than a total of 3 hours in a 24 hour period.'
+                question: 'How long can an animal be tethered?​​​​​​',
+                description: 'Within the City of Sacramento limits, it is not permissible to tether an animal (on a leash, attached to a fixed object) for longer than a total of 3 hours in a 24 hour period.',
+                answer: 'Within the City of Sacramento limits, it is not permissible to tether an animal (on a leash, attached to a fixed object) for longer than a total of 3 hours in a 24 hour period.\n\nExceptions are made for animals tethered to a cable run system.\n\nTo report an animal being tethered excessively, please submit a request. ',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​How can I report suspected animal cruelty?​',
-                description: 'If you witness animal cruelty, please report the incident immediately.'
+                question: '​​​​​How can I report suspected animal cruelty?​',
+                description: 'If you witness animal cruelty, please report the incident immediately.',
+                answer: 'Animal cruelty is the act of physically harming an animal such as kicking, striking, or burning. If you witness animal cruelty, please report the incident immediately.\n\nTo report animal cruelty please call 311 or 916-264-5011. To avoid a delay in response, please do not submit an animal cruelty report online.',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Can rabbits be kept as pets?​',
-                description: 'Rabbits are permitted as pets in Sacramento City.  Rabbits must not be free-roaming - that is, they must remain on their own property.'
+                question: '​​​​​Can rabbits be kept as pets?​',
+                description: 'Rabbits are permitted as pets in Sacramento City.  Rabbits must not be free-roaming - that is, they must remain on their own property.',
+                answer: 'Rabbits are permitted as pets in Sacramento City.  Rabbits must not be free-roaming - that is, they must remain on their own property. Up to three rabbits may be kept per property.\n\nRabbits are permitted only as pets; animals kept for other purposes are considered livestock and are prohibited.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can mini potbelly pigs be kept as pets?​​​​​​',
-                description: 'Miniature (potbelly) pigs are permitted as pets in Sacramento City.'
+                question: 'Can mini potbelly pigs be kept as pets?​​​​​​',
+                description: 'Miniature (potbelly) pigs are permitted as pets in Sacramento City.',
+                answer: 'Miniature (potbelly) pigs are permitted as pets in Sacramento City. Pigs must be licensed within 30 days of becoming residents of Sacramento. All male potbelly pigs must be neutered, licensed, and have rabies shot by four weeks old.  Licenses are obtained through the Front Street Shelter. A pig kept within city limits may not be more than 22" high at the shoulder nor weigh more than 150 pounds. There is a limit of three pigs per property; pigs count toward the same household limit as dogs (combined limit of 3).  All potbelly pigs must wear a collar with its license tag attached.  \n\nOnce a potbelly pig weighs more than 150 lbs and/or stands higher than 22 inches at the shoulder, it is considered a swine and will need to be removed from the property- unless the property is grandfathered for agriculture.\n\nIf you suspect an overgrown pig is being kept as a pet in an improperly zoned area, please submit a case. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I report injured wildlife?​​​​​​',
-                description: 'The City of Sacramento Animal Control Department will respond to complaints of a wild animal that is showing signs of illness or has a visible injury.'
+                question: 'Can I report injured wildlife?​​​​​​',
+                description: 'The City of Sacramento Animal Control Department will respond to complaints of a wild animal that is showing signs of illness or has a visible injury.',
+                answer: 'The City of Sacramento Animal Control Department will respond to complaints of a wild animal that is showing signs of illness or has a visible injury. Wildlife can be defined as a non-domesticated animal such as large cats, squirrels, raccoons, skunks, or large birds of prey. \n\nSmall birds, like pigeons or sparrows, can be dropped off at the Wildlife Care Association in McClellan. \n\nTo report injured wildlife, please call us at 311 or 916-808-5011 so that we can respond immediately.',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Can I report an animal running in traffic?​',
-                description: 'Dogs running loose on major roadways, freeways, or highways are at risk of sustaining injuries or causing traffic accidents.'
+                question: '​​​​​Can I report an animal running in traffic?​',
+                description: 'Dogs running loose on major roadways, freeways, or highways are at risk of sustaining injuries or causing traffic accidents.',
+                answer: 'Dogs running loose on major roadways, freeways, or highways are at risk of sustaining injuries or causing traffic accidents. An Animal Control Officer will respond to these situations in hopes of safely capturing the dog. Because relocation of wildlife is against California state law, Officers will not respond to reports of wildlife in traffic. \n\nTo report a dog in traffic, please call 311 or 916-808-5011 so that we can address this situation immediately. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I keep pet chickens on my property?​​​​​​',
-                description: 'Within the City of Sacramento limits, a resident is allowed to have backyard chickens on their property as long as established conditions are met.'
+                question: 'Can I keep pet chickens on my property?​​​​​​',
+                description: 'Within the City of Sacramento limits, a resident is allowed to have backyard chickens on their property as long as established conditions are met.',
+                answer: 'Within the City of Sacramento limits, a resident is allowed to have backyard chickens on their property as long as the following conditions are met.\n\n-A maximum of three (3) chickens per residential parcel.\n-Roosters are prohibited.\n-Slaughtering is prohibited.\n-Coop may only be kept in the rear yard.\n-Coop may not be closer than 20 feet to the nearest neighboring dwelling.\n-Coop must be well-maintained and clean, and be a minimum of 15 square feet and a maximum of 42 square feet.\n-Coop must have four walls and a roof and be constructed of suitable material. Chickens must always be confined and properly caged in a coop. Chickens are prohibited from being a noise disturbance.\n-Chickens must be provided with adequate food, water, a nesting box, and proper ventilation.\n-Feed must be stored properly to prevent spoilage and to prevent access to other animals and rodents.\n-Feces and feathers must be removed every 24 hours and shall be stored in an airtight container prior to disposal. The use of city-issued garbage containers is acceptable.\n-An annual license and permit are required. There is a  $15 annual coop permit fee and a $10 annual licensing fee per chicken.\n\nTo report backyard chickens not being kept in accordance with the required conditions, please submit a request. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I keep bees on my property?​​​​​​',
-                description: 'Unless the property is zoned “A” or “A-OS”, no more than two beehives per parcel are allowed. '
+                question: 'Can I keep bees on my property?​​​​​​',
+                description: 'Unless the property is zoned “A” or “A-OS”, no more than two beehives per parcel are allowed. ',
+                answer: 'For beekeeping or removal, refer to www.sacbeekeepers.org for resources. There are also beekeeping stores in Sacramento that may be able to offer assistance setting up or managing beehives.\n\nBeekeeping regulations can be found in Section 9.44.330 of the Sacramento City Code.  Unless the property is zoned “A” or “A-OS”, no more than two beehives per parcel are allowed. \n\nBeekeeping Best Practices\n-Beekeeper’s associations generally recommend the following measures to minimize conflicts with neighbors.  The primary goal is to avoid the bee colony’s flight path, which is concentrated within the first ten feet from the colony’s entrance:\n-Hives should be placed in a quiet area and not directly against a neighboring property unless a solid fence or dense plant barrier of six feet or higher forms the property boundary.\n-Where there is no fence or flyway barrier, orient the entrance to the hive away from the entrances and walkways, and toward the most distant property line.\n-Maintain a clear flight path at least ten feet from the hive entrance.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I keep a venomous animal as a pet?​​​​​​',
-                description: 'In the City of Sacramento, a special permit is required to keep a rattlesnake or other venomous animal.'
+                question: 'Can I keep a venomous animal as a pet?​​​​​​',
+                description: 'In the City of Sacramento, a special permit is required to keep a rattlesnake or other venomous animal.',
+                answer: 'In the City of Sacramento, a special permit is required to keep a rattlesnake or other venomous animal. The special permit application must be submitted to Animal Care Services for approval by the Chief Animal Control Officer and must be renewed annually. An officer from Sacramento City Animal Control may inspect the premises at any time to ensure animals are being maintained safely. \n\nTo obtain a permit, please visit Front Street Shelter at 2127 Front Street. The shelter is open daily from 12 PM-5 PM.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can exotic animals be kept as pets?​​​​​​',
-                description: 'Requests to keep exotic animals or wildlife (as described in the City Ordinances) in the city will be reviewed by the Chief Animal Control officer on a case by case basis.'
+                question: 'Can exotic animals be kept as pets?​​​​​​',
+                description: 'Requests to keep exotic animals or wildlife (as described in the City Ordinances) in the city will be reviewed by the Chief Animal Control officer on a case by case basis.',
+                answer: 'Requests to keep exotic animals or wildlife (as described in the City Ordinances) in the city will be reviewed by the Chief Animal Control officer on a case by case basis.\n\nYou may submit a request for consideration by using the Shelter Contact option under Animal Care. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can dogs be off leash at a park?​​​​​​',
-                description: 'The City of Sacramento maintains eleven (11) “Dog Parks”, each with an area where dogs may run freely. At these facilities, dogs may be off a leash only within the designated, fenced area.'
+                question: 'Can dogs be off leash at a park?​​​​​​',
+                description: 'The City of Sacramento maintains eleven (11) “Dog Parks”, each with an area where dogs may run freely. At these facilities, dogs may be off a leash only within the designated, fenced area.',
+                answer: 'The City of Sacramento maintains eleven (11) “Dog Parks”, each with an area where dogs may run freely. At these facilities, dogs may be off a leash only within the designated, fenced area. Outside the fenced area, and in all other City parks, dogs must remain on a leash and under control always. It is a misdemeanor to allow a dog to roam freely in a city park and a citation may be issued.\n\nDog parks are "use at your own risk". The City will not respond to incidents that occur inside a dog park. ',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can an animal be left in a car or other type of vehicle?​​​​​​',
-                description: 'Leaving pets locked in cars is never safe, but when the weather gets warmer, it can be deadly. High temperatures can cause irreparable organ damage and even death.'
+                question: 'Can an animal be left in a car or other type of vehicle?​​​​​​',
+                description: 'Leaving pets locked in cars is never safe, but when the weather gets warmer, it can be deadly. High temperatures can cause irreparable organ damage and even death.',
+                answer: 'Leaving pets locked in cars is never safe, but when the weather gets warmer, it can be deadly. High temperatures can cause irreparable organ damage and even death.\n\nIn the summer months, daytime temperatures can fluctuate significantly, and an animal left in a vehicle can quickly become endangered due to extreme heat. Animal Control Officers will respond to complaints of an animal in a vehicle, when the vehicle\'s parked in direct sunlight and the outdoor temperature exceeds 70° F, or if the animal is exhibiting signs of distress. Officers will also respond when an animal is inside a vehicle in freezing temperatures.\n\nAnimals can remain in a vehicle for an extended period of time, provided the temperature does not create a dangerous situation, and they are being cared for. Sacramento City Code 9.44.290 (b) states animals left in a vehicle in mild weather for long periods of time, must be provided water and food.\n\nTo report an endangered animal in a vehicle, please call 311 or 916-264-5011. Please do not send an email as these requests must be handled as they are happening to prevent injury to the animal.',
             }
         ]  
     },
     {
         id: generateSudoId(8),
         type: 'Building and Planning',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'How can I contact the Building Department?​​​​​​',
-                description: 'Building and Planning: Building department staff is available in person or via email.'
+                question: 'How can I contact the Building Department?​​​​​​',
+                description: 'Building and Planning: Building department staff is available in person or via email.',
+                answer: 'Building department staff is available via email to answer your questions. \n\nThe Community Development Department counter is now open to the public for limited in-person appointments. Please see the link below:\nhttp://www.cityofsacramento.org/Community-Development/Building/Permit-Services/Public-Counter-Hours-and-Contact\n\nYou may email your question to ezpermit@cityofsacramento.org, call the message line 916-808-5318, or we may be able to assist through our online services.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I submit self-certification of a smoke or carbon monoxide detector?​​​​​​',
-                description: 'Building and Planning: If your building permit requires the self-certification of a smoke or carbon monoxide detector, please download this form and follow the submission instructions. '
+                question: 'How can I submit self-certification of a smoke or carbon monoxide detector?​​​​​​',
+                description: 'Building and Planning: If your building permit requires the self-certification of a smoke or carbon monoxide detector, please download this form and follow the submission instructions. ',
+                answer: 'If your building permit requires the self-certification of a smoke or carbon monoxide detector, please download this form and follow the submission instructions.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I obtain signatures for a demolition permit?​​​​​​',
-                description: 'A demolition permit may require several signatures. '
+                question: 'How can I obtain signatures for a demolition permit?​​​​​​',
+                description: 'A demolition permit may require several signatures.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'When is a building permit needed?​​​​​​',
-                description: 'A building permit is required for projects such as new construction, additions, tenant improvements, pools, spas, signs, remodeling, and work on electrical, mechanical, and plumbing systems.'
+                question: 'When is a building permit needed?​​​​​​',
+                description: 'A building permit is required for projects such as new construction, additions, tenant improvements, pools, spas, signs, remodeling, and work on electrical, mechanical, and plumbing systems.',
+                answer: 'A demolition permit may require several signatures. \n\nUtility Sign-Off \nA utility signature is only required for commercial properties.  Residential homes do not require a signature from utilities.\nRequest for demolition permit signs offs are processed by the 311 Call Center on behalf of the Utilities Department. Please call 311 or 916.808.5011 to request an inspection. \n\nSolid Waste\nAll demolition projects, projects covered by CALGreen and building permits fall under the Construction and Demolition (C&D) ordinance which requires that 65 percent of all debris generated during the course of a project must be recycled.\n\nFor information on how to meet this requirement, please visit us here. \n\nUrban Forestry\nRequest for an arborist sign off on a demolition permit can be emailed to urbanforestry@cityofsacramento.org. You may also call 916.808.6257 with any questions.',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I search for and view planning applications and building permit information?​​​​​​',
-                description: 'The AgencyCounter tool can be used to search and view planning applications and building permit information. This replaces the former program, Development Tracker.'
+                question: 'Where can I search for and view planning applications and building permit information?​​​​​​',
+                description: 'The AgencyCounter tool can be used to search and view planning applications and building permit information. This replaces the former program, Development Tracker.',
+                answer: 'The AgencyCounter tool can be used to search and view planning applications and building permit information.\n\nIn addition to viewing building permit history, the tracker allows the community the ability to:\n-Track the planning and building permit activity and history for a specific property or area of the city in easily understood terms.\n-Sign up for auto notification via email when planning or building permit activity occurs at a specified property.\n-Contact the assigned project planner for more information or to submit comments. \n-Download project exhibits and other application materials.\n-Find out city-wide or neighborhood-specific trends through simple maps, graphs, and visualizations.\n-Better understand the planning and development process.\n\nIf the record you\'re seeking can\'t be found on the tracker, please submit a request for records with the City Clerk.',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Business Resources',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'What business resources are available in the Sacramento area?​​​​​​',
-                description: 'Tap to see details.'
+                question: 'What business resources are available in the Sacramento area?​​​​​​',
+                description: 'Tap to see details.',
+                answer: 'California Capital – From their Women’s Business Center, Procurement Technical Assistance Center, business information center, and veterans one-stop shop, to data and mapping services, the CA State loan guarantee program and micro lending programs, CA Capital has a variety of programs and services to support entrepreneurs and business owners at every stage.\n\nSacramento Valley Small Business Development Cetner (SBDC)—follow this link to sign up for free business services through Sacramento’s local SBDC, an organization funded by the government to offer complimentary training and counseling for small businesses. Types of assistance include:\n-Business planning\n-Financial management\n-Marketing\n-Access to capital \n\nU.S. Small Business Administration (SBA) Sacramento District Office—follow this link to sign up for services offered by the SBA, a department within the federal government dedicated to helping small businesses. Services include information on SBA funding opportunities, counseling, federal contracting certifications, and disaster recovery. \n-Online events\n\nCapital Corridor Service Corps of Retired Executives (SCORE)—follow this link to access the resources offered by SCORE, an association of working and retired executives and business owners who donate their time and expertise to serve as volunteer business counselors. Services include:\n-Find a mentor\n-Attend a workshop\n-Access templates and resources\n\nLocal Business Support Organizations — depending on your location, affiliations, and interests, you may be able to benefit from the services offered by these business support organizations.\n-Property and Business Improvement Districts (PBIDs)\n>Del Paso Boulevard Partnership \n>Downtown Sacramento Partnership \n>Florin Road Partnership \n>Franklin Boulevard Business Association \n>Greater Broadway District \n>The Handle District \n>Mack Road Partnership \n>Midtown Business Association \n>Oak Park Business Association \n>Power Inn Alliance \n>The River District \n>Stockton Boulevard Partnership \n>80 Watt District \n-Chambers of Commerce\n>California Chamber of Commerce \n>California Black Chamber of Commerce \n>East Sacramento Chamber of Commerce \n>Natomas Chamber of Commerce \n>North Sacramento Chamber of Commerce \n>Sacramento Area Women’s Chamber of Commerce \n>Sacramento Asian Pacific Chamber of Commerce \n>Sacramento Black Chamber of Commerce \n>Sacramento Hispanic Chamber of Commerce \n>Sacramento Metropolitan Chamber of Commerce \n>Sacramento Rainbow Chamber of Commerce \n>Slavic American Chamber of Commerce \n-Business Centers\n>Northern California Veteran Business Outreach Center\n>Sacramento County Business Environmental Resource Center (BERC)\n>The Sacramento State Center for Small Business\n>The Sacramento State Carlsen Center for Innovation and Entrepreneurship\n>California Mosaic Small Business Center \n\nBanks, Credit Unions, Community Banks, CDFIs – Below is a non-exhausted list of financial institutions to support your business’ launch or growth.\n-CDFIs\n>California Capital\n>Opening Doors\n>Community Vision\n-Credit Unions\n>Self-Help Credit Union\n>Golden 1 Credit Union\n>Safe Credit Union\n-Traditional Banks\n>US Bank\n>Five Star Bank\n>Tri Counties Bank\n-State of California\n>Infrastructure and Economic Development Bank (IBank)',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​What business resources does the City of Sacramento provide?​',
-                description: 'Tap to see details.'
+                question: '​​​​​What business resources does the City of Sacramento provide?​',
+                description: 'Tap to see details.',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Code Enforcement',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'What is the weed abatement program?​​​​​​',
-                description: 'During the last week of February, the City mails out weed abatement notices to vacant lot owners.'
+                question: 'What is the weed abatement program?​​​​​​',
+                description: 'During the last week of February, the City mails out weed abatement notices to vacant lot owners.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can a vehicle be parked on grass, dirt or gravel?​​​​​​',
-                description: 'It is against City code to park a vehicle on an unimproved surface regardless oh whether the vehicle is visible from the street.'
+                question: 'Can a vehicle be parked on grass, dirt or gravel?​​​​​​',
+                description: 'It is against City code to park a vehicle on an unimproved surface regardless oh whether the vehicle is visible from the street.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I contact the Code Liaison Officer?​​​​​​',
-                description: 'If your case has been assigned to the Code Liaison Officer, you may contact the office using the following ways.'
+                question: 'How can I contact the Code Liaison Officer?​​​​​​',
+                description: 'If your case has been assigned to the Code Liaison Officer, you may contact the office using the following ways.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I submit a complaint about a cab or taxi?​​​​​​',
-                description: 'If you experience a concern with a taxi cab while within city limits, you may file a complaint directly with 311.'
+                question: 'How can I submit a complaint about a cab or taxi?​​​​​​',
+                description: 'If you experience a concern with a taxi cab while within city limits, you may file a complaint directly with 311.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'I believe my vehicle was towed, whom should I contact?​​​​​​',
-                description: 'If you believe your vehicle was towed, please contact the Sacramento Police Department.'
+                question: 'I believe my vehicle was towed, whom should I contact?​​​​​​',
+                description: 'If you believe your vehicle was towed, please contact the Sacramento Police Department.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I find code compliance forms, like the demand request form?​​​​​​',
-                description: 'Forms and Publications are available both online as well as at our Permit Service Counter.'
+                question: 'Where can I find code compliance forms, like the demand request form?​​​​​​',
+                description: 'Forms and Publications are available both online as well as at our Permit Service Counter.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What are the residential fencing requirements?​​​​​​',
-                description: 'Fencing around residential properties is not required, except around a pool. '
+                question: 'What are the residential fencing requirements?​​​​​​',
+                description: 'Fencing around residential properties is not required, except around a pool. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What can I do about noisy neighbors?​​​​​​',
-                description: 'Excessive noise caused by the operation of non-mechanical devices, like amplified sound or musical instruments, should be reported to the Sacramento Police Department.'
+                question: 'What can I do about noisy neighbors?​​​​​​',
+                description: 'Excessive noise caused by the operation of non-mechanical devices, like amplified sound or musical instruments, should be reported to the Sacramento Police Department.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Do detached structures, like sheds or carports require a building permit?​​​​​​',
-                description: 'Detached accessory structures, like a shed, carport, or playhouse, are not allowed in a front or side yard without a building permit.'
+                question: 'Do detached structures, like sheds or carports require a building permit?​​​​​​',
+                description: 'Detached accessory structures, like a shed, carport, or playhouse, are not allowed in a front or side yard without a building permit.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Are owners responsible for maintaining weeds and grass on their properties?​',
-                description: 'Lots with a building or other structure must be maintained even if they are not occupied. '
+                question: '​​​​​Are owners responsible for maintaining weeds and grass on their properties?​',
+                description: 'Lots with a building or other structure must be maintained even if they are not occupied. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​A property in my neighborhood is neglected, and storing junk and debris. What can be done?​',
-                description: 'Property owners are legally required to maintain their property to the standards set forth in City Code. Properties that are neglected can be cited as a public nuisance.'
+                question: '​​​​​A property in my neighborhood is neglected, and storing junk and debris. What can be done?​',
+                description: 'Property owners are legally required to maintain their property to the standards set forth in City Code. Properties that are neglected can be cited as a public nuisance.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can an inoperble or junk vehicle be stored on a driveway?​​​​​​',
-                description: 'City code prohibits storing an inoperable or junk vehicle in a driveway or a side yard that is visible from the street.'
+                question: 'Can an inoperble or junk vehicle be stored on a driveway?​​​​​​',
+                description: 'City code prohibits storing an inoperable or junk vehicle in a driveway or a side yard that is visible from the street.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Are street vendors allowed to operate within city limits?​',
-                description: 'California law allows street vendors to operate.'
+                question: '​​​​​Are street vendors allowed to operate within city limits?​',
+                description: 'California law allows street vendors to operate.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Do home-based businesses require a license?​​​​​​',
-                description: 'Businesses located at a residential address within City limits must obtain and maintain a Home Occupation Permit. '
+                question: 'Do home-based businesses require a license?​​​​​​',
+                description: 'Businesses located at a residential address within City limits must obtain and maintain a Home Occupation Permit. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can barbed wire be used on residential fencing?​​​​​​',
-                description: 'Barbed wire, concertina wire, razor wire or similar materials, like embedded nails or broken glass, can cause significant injury and therefore are not permitted on residential property in Sacramento.'
+                question: 'Can barbed wire be used on residential fencing?​​​​​​',
+                description: 'Barbed wire, concertina wire, razor wire or similar materials, like embedded nails or broken glass, can cause significant injury and therefore are not permitted on residential property in Sacramento.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How long can a vehicle be parked on the street? When is it considered abandoned?​​​​​​',
-                description: 'Vehicles cannot be parked on a public street for more than 72 consecutive hours without moving.'
+                question: 'How long can a vehicle be parked on the street? When is it considered abandoned?​​​​​​',
+                description: 'Vehicles cannot be parked on a public street for more than 72 consecutive hours without moving.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How long can a trailer be parked on the street?​​​​​​',
-                description: 'Unattached trailers of any kind can be left on a city street for no more than 4 hours. Trailers attached to a vehicle can remain on a city street for no more than 72 hours.'
+                question: 'How long can a trailer be parked on the street?​​​​​​',
+                description: 'Unattached trailers of any kind can be left on a city street for no more than 4 hours. Trailers attached to a vehicle can remain on a city street for no more than 72 hours.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​What can I do about graffiti in my neighborhood or on my property?​',
-                description: 'The City of Sacramento\'s Community Development Department has a Graffiti Abatement Program designed to keep neighborhoods clean and attractive.'
+                question: '​​​​​What can I do about graffiti in my neighborhood or on my property?​',
+                description: 'The City of Sacramento\'s Community Development Department has a Graffiti Abatement Program designed to keep neighborhoods clean and attractive.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can a commercial property be fenced?​​​​​​',
-                description: 'A permit may be required for fences on or around a commercial property.'
+                question: 'Can a commercial property be fenced?​​​​​​',
+                description: 'A permit may be required for fences on or around a commercial property.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I find the complete list of City code?​​​​​​',
-                description: 'A complete list of Sacramento City Codes can be found online.'
+                question: 'Where can I find the complete list of City code?​​​​​​',
+                description: 'A complete list of Sacramento City Codes can be found online.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are there any restrictions on using leaf blowers?​​​​​​',
-                description: 'Portable gasoline-powered leaf blowers are permitted to be operated in the City during specific time frames. There are no restrictions on the use of electric leaf blowers.'
+                question: 'Are there any restrictions on using leaf blowers?​​​​​​',
+                description: 'Portable gasoline-powered leaf blowers are permitted to be operated in the City during specific time frames. There are no restrictions on the use of electric leaf blowers.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What are the rules regarding personal marijuana cultivation?​​​​​​',
-                description: 'In the City of Sacramento, it is legal to grow up to six marijuana plants for personal use.'
+                question: 'What are the rules regarding personal marijuana cultivation?​​​​​​',
+                description: 'In the City of Sacramento, it is legal to grow up to six marijuana plants for personal use.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Can the City help with mold problems at a rental property?​',
-                description: 'While the City will not test for mold, a housing inspector will inspect for water leaks or causes of excessive moisture'
+                question: '​​​​​Can the City help with mold problems at a rental property?​',
+                description: 'While the City will not test for mold, a housing inspector will inspect for water leaks or causes of excessive moisture',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I check the burn day status?​​​​​​',
-                description: 'The Check Before You Burn program implemented by the Sac Metro Air District provides residents with an easy way to check if burning is allowed. '
+                question: 'Where can I check the burn day status?​​​​​​',
+                description: 'The Check Before You Burn program implemented by the Sac Metro Air District provides residents with an easy way to check if burning is allowed. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I open a cannabis related business, like a dispensary or manufacturing facility?​​​​​​',
-                description: 'The City of Sacramento currently allows dispensaries, cultivation, nonvolatile manufacturing and testing in specific zones within the city, subject to a set of regulations.'
+                question: 'How can I open a cannabis related business, like a dispensary or manufacturing facility?​​​​​​',
+                description: 'The City of Sacramento currently allows dispensaries, cultivation, nonvolatile manufacturing and testing in specific zones within the city, subject to a set of regulations.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I place signs and banners in the public right of way?​​​​​​',
-                description: 'Signs and banners are generally not allowed in the public right-of-way.'
+                question: 'Can I place signs and banners in the public right of way?​​​​​​',
+                description: 'Signs and banners are generally not allowed in the public right-of-way.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Is there a requirement to maintain a vacant property?​​​​​​',
-                description: 'Properties that are vacant and neglected can be cited as a public nuisance.'
+                question: 'Is there a requirement to maintain a vacant property?​​​​​​',
+                description: 'Properties that are vacant and neglected can be cited as a public nuisance.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What can be done about a vacant lot that is not being maintained?​​​​​​',
-                description: 'Vacant lots must be maintained to avoid becoming a fire hazard or neighborhood blight. '
+                question: 'What can be done about a vacant lot that is not being maintained?​​​​​​',
+                description: 'Vacant lots must be maintained to avoid becoming a fire hazard or neighborhood blight. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Is it legal to live in a vehicle?​​​​​​',
-                description: 'It is not a violation of City code to live in a vehicle, such as a car, truck, RV, or camper, as long as the vehicle is moved every 72 hours. '
+                question: 'Is it legal to live in a vehicle?​​​​​​',
+                description: 'It is not a violation of City code to live in a vehicle, such as a car, truck, RV, or camper, as long as the vehicle is moved every 72 hours. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Is a permit required to have live music at a club or venue?​',
-                description: 'Venues that provide ongoing entertainment are required to obtain and maintain a permit.'
+                question: '​​​​​Is a permit required to have live music at a club or venue?​',
+                description: 'Venues that provide ongoing entertainment are required to obtain and maintain a permit.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​How are airport taxi companies selected?​',
-                description: 'The Sacramento International Airport establishes it\'s own taxi cab & towing service contracts which are then administered by the County of Sacramento.'
+                question: '​​​​​How are airport taxi companies selected?​',
+                description: 'The Sacramento International Airport establishes it\'s own taxi cab & towing service contracts which are then administered by the County of Sacramento.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who removes abandoned or stray shopping carts?​​​​​​',
-                description: 'The City will respond to reports of abandoned or stray shopping carts.'
+                question: 'Who removes abandoned or stray shopping carts?​​​​​​',
+                description: 'The City will respond to reports of abandoned or stray shopping carts.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I report an unsafe elevator?​​​​​​',
-                description: 'The Cal OSHA Elevator Unit responds to public reports of unsafe, damaged or malfunctioning elevators in buildings open to the public, including privately owned and governmental office buildings and apartment buildings.'
+                question: 'How can I report an unsafe elevator?​​​​​​',
+                description: 'The Cal OSHA Elevator Unit responds to public reports of unsafe, damaged or malfunctioning elevators in buildings open to the public, including privately owned and governmental office buildings and apartment buildings.',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Drains',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'How do I report a clogged or flooded drain? ​​​​​​',
-                description: 'To report a clogged drain, please call us so a crew can be dispatched as quickly as possible.'
+                question: 'How do I report a clogged or flooded drain? ​​​​​​',
+                description: 'To report a clogged drain, please call us so a crew can be dispatched as quickly as possible.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I pay a City invoice or utility bill?​​​​​​',
-                description: 'You may pay your City Utility bill for water, sewer, drains, and trash by phone, in person, online, or by mail.'
+                question: 'Where can I pay a City invoice or utility bill?​​​​​​',
+                description: 'You may pay your City Utility bill for water, sewer, drains, and trash by phone, in person, online, or by mail.',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Homeless Camp',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'How is the City addressing homeless camps?​​​​​​',
-                description: 'The City of Sacramento is actively engaged in regional efforts to prevent and end homelessness through the support of and participation in local initiatives'
+                question: 'How is the City addressing homeless camps?​​​​​​',
+                description: 'The City of Sacramento is actively engaged in regional efforts to prevent and end homelessness through the support of and participation in local initiatives',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are there any homeless shelters operating within the City?​​​​​​',
-                description: 'The City\'s winter shelter is up and running and bringing services to those most in need from December through March.'
+                question: 'Are there any homeless shelters operating within the City?​​​​​​',
+                description: 'The City\'s winter shelter is up and running and bringing services to those most in need from December through March.',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Parking',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'My vehicle was booted, how can I have it removed?​​​​​​',
-                description: 'Once a boot has been placed, an owner has 72 hours to pay the citations and the $100 boot fee.'
+                question: 'My vehicle was booted, how can I have it removed?​​​​​​',
+                description: 'Once a boot has been placed, an owner has 72 hours to pay the citations and the $100 boot fee.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​What are the entrance and exit times at a City-owned garage when I have a reservation?​',
-                description: 'In a City-owned garage, those with prepaid reservations may enter the lot as early as two hours before the event time and leave by 6 AM on the following day.'
+                question: '​​​​​What are the entrance and exit times at a City-owned garage when I have a reservation?​',
+                description: 'In a City-owned garage, those with prepaid reservations may enter the lot as early as two hours before the event time and leave by 6 AM on the following day.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Is monthly parking available at garages or lots?​​​​​​',
-                description: 'Monthly parking is offered at select garages and lots.'
+                question: 'Is monthly parking available at garages or lots?​​​​​​',
+                description: 'Monthly parking is offered at select garages and lots.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who enforces parking in private lots and gated communities?​​​​​​',
-                description: 'In privately-owned lots not contracted by the City or in gated communities, Officers may only enforce fire lanes or disabled parking spot violations provided there is clear signage posted.  '
+                question: 'Who enforces parking in private lots and gated communities?​​​​​​',
+                description: 'In privately-owned lots not contracted by the City or in gated communities, Officers may only enforce fire lanes or disabled parking spot violations provided there is clear signage posted.  ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'When are parking hours enforced?​​​​​​',
-                description: 'In an effort to manage the supply of on-street parking spaces and promote turnover, the City has established area-specific operating hours at metered and non-metered parking spaces.'
+                question: 'When are parking hours enforced?​​​​​​',
+                description: 'In an effort to manage the supply of on-street parking spaces and promote turnover, the City has established area-specific operating hours at metered and non-metered parking spaces.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I pay a parking IOU?​​​​​​',
-                description: 'If you received an IOU for unpaid parking garage fees, your payment can be made in person at City of Sacramento Revenue Office or via U.S. mail.'
+                question: 'How can I pay a parking IOU?​​​​​​',
+                description: 'If you received an IOU for unpaid parking garage fees, your payment can be made in person at City of Sacramento Revenue Office or via U.S. mail.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​How can I obtain a temporary parking pass for my visitors?​',
-                description: 'If you live in an area with permitted parking and are expecting visitors, there are several ways to help your guests with parking.'
+                question: '​​​​​How can I obtain a temporary parking pass for my visitors?​',
+                description: 'If you live in an area with permitted parking and are expecting visitors, there are several ways to help your guests with parking.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I request a refund for a meter payment?​​​​​​',
-                description: 'If you believe you have been overcharged due to an error at a parking meter or parking machine please complete a Refund Request Form to have your claim reviewed.  '
+                question: 'Can I request a refund for a meter payment?​​​​​​',
+                description: 'If you believe you have been overcharged due to an error at a parking meter or parking machine please complete a Refund Request Form to have your claim reviewed.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I dispute a parking citation?​​​​​​',
-                description: 'If you believe a parking citation has been issued in error, it can be contested within 21 days of issue, via a written letter or online'
+                question: 'How can I dispute a parking citation?​​​​​​',
+                description: 'If you believe a parking citation has been issued in error, it can be contested within 21 days of issue, via a written letter or online',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What can I do if I am parked and blocked in by another vehicle?​​​​​​',
-                description: 'If you are blocked in by another vehicle, we are unable to remove it.'
+                question: 'What can I do if I am parked and blocked in by another vehicle?​​​​​​',
+                description: 'If you are blocked in by another vehicle, we are unable to remove it.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'I lost my monthly parking card. How can I get it replaced?​​​​​​',
-                description: 'If a monthly parking card is lost, a Monthly Garage Access Card Application Agreement Form will need to be submitted to have the card replaced.'
+                question: 'I lost my monthly parking card. How can I get it replaced?​​​​​​',
+                description: 'If a monthly parking card is lost, a Monthly Garage Access Card Application Agreement Form will need to be submitted to have the card replaced.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Are there special parking programs for electric vehicles?​',
-                description: 'Electric vehicles that are owned or leased by individuals or enterprises are eligible for special monthly parking programs in designated City of Sacramento parking facilities.'
+                question: '​​​​​Are there special parking programs for electric vehicles?​',
+                description: 'Electric vehicles that are owned or leased by individuals or enterprises are eligible for special monthly parking programs in designated City of Sacramento parking facilities.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What do the different curb colors mean?​​​​​​',
-                description: 'Curbs are painted with different colors to signify different parking restrictions.'
+                question: 'What do the different curb colors mean?​​​​​​',
+                description: 'Curbs are painted with different colors to signify different parking restrictions.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I extend my parking time?​​​​​​',
-                description: 'If you parked at a meter that uses the Pay-by- Plate feature, it is possible to extend your parking time using the Parkmobile system.'
+                question: 'Can I extend my parking time?​​​​​​',
+                description: 'If you parked at a meter that uses the Pay-by- Plate feature, it is possible to extend your parking time using the Parkmobile system.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I park on the sidewalk?​​​​​​',
-                description: 'Parking a vehicle on the sidewalk obstructs the right of way and can pose a hazard for pedestrians.'
+                question: 'Can I park on the sidewalk?​​​​​​',
+                description: 'Parking a vehicle on the sidewalk obstructs the right of way and can pose a hazard for pedestrians.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I park in the bike lane?​​​​​​',
-                description: 'Parking in bicycle lanes is not allowed as it prohibits cyclists and motorists from safely passing.'
+                question: 'Can I park in the bike lane?​​​​​​',
+                description: 'Parking in bicycle lanes is not allowed as it prohibits cyclists and motorists from safely passing.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I cancel my monthly parking pass?​​​​​​',
-                description: 'To cancel your monthly parking pass, please complete the Monthly Parking Change Order Form.'
+                question: 'How can I cancel my monthly parking pass?​​​​​​',
+                description: 'To cancel your monthly parking pass, please complete the Monthly Parking Change Order Form.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can on-street parking meters or spaces be reserved?​​​​​​',
-                description: 'The City of Sacramento will accept reservations of metered parking spaces, and unmetered parking spaces for construction projects or special events.'
+                question: 'Can on-street parking meters or spaces be reserved?​​​​​​',
+                description: 'The City of Sacramento will accept reservations of metered parking spaces, and unmetered parking spaces for construction projects or special events.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are there any parking discount programs available?​​​​​​',
-                description: 'The City offers a variety of parking discount programs.'
+                question: 'Are there any parking discount programs available?​​​​​​',
+                description: 'The City offers a variety of parking discount programs.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are there any parking discounts for college students?​​​​​​',
-                description: 'Carpool permits are available to Sacramento City College (SCC) students on a first-come, first-served basis. '
+                question: 'Are there any parking discounts for college students?​​​​​​',
+                description: 'Carpool permits are available to Sacramento City College (SCC) students on a first-come, first-served basis. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What are the clearances at City-owned garages?​​​​​​',
-                description: 'Below you will find the clearances for City owned garages.'
+                question: 'What are the clearances at City-owned garages?​​​​​​',
+                description: 'Below you will find the clearances for City owned garages.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What are the parking rules at the Amtrak lot?​​​​​​',
-                description: 'Amtrak Lot 293 is available for unlimited parking.'
+                question: 'What are the parking rules at the Amtrak lot?​​​​​​',
+                description: 'Amtrak Lot 293 is available for unlimited parking.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How long can a vehicle be parked on the street? When is it considered abandoned?​​​​​​',
-                description: 'Vehicles cannot be parked on a public street for more than 72 consecutive hours without moving.'
+                question: 'How long can a vehicle be parked on the street? When is it considered abandoned?​​​​​​',
+                description: 'Vehicles cannot be parked on a public street for more than 72 consecutive hours without moving.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How long can a trailer be parked on the street?​​​​​​',
-                description: 'Unattached trailers of any kind can be left on a city street for no more than 4 hours. Trailers attached to a vehicle can remain on a city street for no more than 72 hours.'
+                question: 'How long can a trailer be parked on the street?​​​​​​',
+                description: 'Unattached trailers of any kind can be left on a city street for no more than 4 hours. Trailers attached to a vehicle can remain on a city street for no more than 72 hours.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I park at a broken meter?​​​​​​',
-                description: 'There are several options you can take when you come across a broken meter.'
+                question: 'Can I park at a broken meter?​​​​​​',
+                description: 'There are several options you can take when you come across a broken meter.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'In addition to obeying time limits, are there any other parking rules I should obey?​​​​​​',
-                description: 'In addition to obeying posted time limits, there are some simple rules to keep in mind when parking to ensure you do not receive a parking citation.  '
+                question: 'In addition to obeying time limits, are there any other parking rules I should obey?​​​​​​',
+                description: 'In addition to obeying posted time limits, there are some simple rules to keep in mind when parking to ensure you do not receive a parking citation.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are commercial vehicles allowed to park on a public street?​​​​​​',
-                description: 'Commercial vehicles may park on a street for up to 72 hours, permitted they do not obstruct the sidewalk, prevent other vehicles from safely passing, or exceed the weight limit when in a residential area. '
+                question: 'Are commercial vehicles allowed to park on a public street?​​​​​​',
+                description: 'Commercial vehicles may park on a street for up to 72 hours, permitted they do not obstruct the sidewalk, prevent other vehicles from safely passing, or exceed the weight limit when in a residential area.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I continue to stay parked on the same block after the meter expires?​​​​​​',
-                description: 'If you have exceeded the allowed time at a parking spot, City Code requires that the vehicle be moved at least two blocks. '
+                question: 'Can I continue to stay parked on the same block after the meter expires?​​​​​​',
+                description: 'If you have exceeded the allowed time at a parking spot, City Code requires that the vehicle be moved at least two blocks.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'I have questions about making a parking reservation, where can I find answers?​​​​​​',
-                description: 'Answers to all of your parking reservation questions can be found online.'
+                question: 'I have questions about making a parking reservation, where can I find answers?​​​​​​',
+                description: 'Answers to all of your parking reservation questions can be found online.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are parked vehicles allowed to block a driveway?​​​​​​',
-                description: 'A parked vehicle may not block a driveway. '
+                question: 'Are parked vehicles allowed to block a driveway?​​​​​​',
+                description: 'A parked vehicle may not block a driveway. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are City-owned garages and lots monitored by a security company?​​​​​​',
-                description: 'All City-owned parking facilities are monitored by 24-hour security staff.'
+                question: 'Are City-owned garages and lots monitored by a security company?​​​​​​',
+                description: 'All City-owned parking facilities are monitored by 24-hour security staff.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are there parking options available to contractors working on properties where parking is limited?​​​​​​',
-                description: 'A resident or business in a metered or time-limited parking area may allow a building contractor to display the resident\'s visitor parking placard to park. '
+                question: 'Are there parking options available to contractors working on properties where parking is limited?​​​​​​',
+                description: 'A resident or business in a metered or time-limited parking area may allow a building contractor to display the resident\'s visitor parking placard to park.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Is parking in an alley allowed?​',
-                description: 'Parking in an alley is only allowed in specific situations.'
+                question: '​​​​​Is parking in an alley allowed?​',
+                description: 'Parking in an alley is only allowed in specific situations.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I obtain security video from a City-owned garage or lot?​​​​​​',
-                description: 'Parking garage and lot security camera recordings may be requested by submitting a public records request with the City Clerk. '
+                question: 'How can I obtain security video from a City-owned garage or lot?​​​​​​',
+                description: 'Parking garage and lot security camera recordings may be requested by submitting a public records request with the City Clerk.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Do City-owned garages have a lost and found?​​​​​​',
-                description: 'Items found in a City-owned garage or lot are turned into the police department.'
+                question: 'Do City-owned garages have a lost and found?​​​​​​',
+                description: 'Items found in a City-owned garage or lot are turned into the police department.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What holidays are included in free meter days?​​​​​​',
-                description: 'The City offers free metered parking on several holidays.'
+                question: 'What holidays are included in free meter days?​​​​​​',
+                description: 'The City offers free metered parking on several holidays.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I report a vehicle that is illegally parked in a disabled parking space?​​​​​​',
-                description: 'Vehicles parked without a placard may be cited by Parking Enforcement Officers. '
+                question: 'How can I report a vehicle that is illegally parked in a disabled parking space?​​​​​​',
+                description: 'Vehicles parked without a placard may be cited by Parking Enforcement Officers. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I block the street to prevent or reserve parking?​​​​​​',
-                description: 'The street is a public right-of-way and cannot be blocked or reserved unless a permit has been issued.'
+                question: 'Can I block the street to prevent or reserve parking?​​​​​​',
+                description: 'The street is a public right-of-way and cannot be blocked or reserved unless a permit has been issued.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who can park in front of a home or business?​​​​​​',
-                description: 'There is no ownership over the street parking available in front of a residence or business.'
+                question: 'Who can park in front of a home or business?​​​​​​',
+                description: 'There is no ownership over the street parking available in front of a residence or business.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I find motorcycle parking?​​​​​​',
-                description: 'Throughout the downtown area, designated motorcycle parking spaces can be found.'
+                question: 'Where can I find motorcycle parking?​​​​​​',
+                description: 'Throughout the downtown area, designated motorcycle parking spaces can be found.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I share my monthly parking pass?​​​​​​',
-                description: 'Monthly access cards are assigned to a single driver and may not be shared.'
+                question: 'Can I share my monthly parking pass?​​​​​​',
+                description: 'Monthly access cards are assigned to a single driver and may not be shared.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​What type of parking meters does the City use?​',
-                description: 'The City of Sacramento utilizes four different types of parking meters.'
+                question: '​​​​​What type of parking meters does the City use?​',
+                description: 'The City of Sacramento utilizes four different types of parking meters.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Does the City provide a press parking pass?​​​​​​',
-                description: 'The City of Sacramento offers a parking "Press Pass" to qualifying members of the media free of charge. '
+                question: 'Does the City provide a press parking pass?​​​​​​',
+                description: 'The City of Sacramento offers a parking "Press Pass" to qualifying members of the media free of charge.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Is it legal to live in a vehicle?​​​​​​',
-                description: 'It is not a violation of City code to live in a vehicle, such as a car, truck, RV, or camper, as long as the vehicle is moved every 72 hours. '
+                question: 'Is it legal to live in a vehicle?​​​​​​',
+                description: 'It is not a violation of City code to live in a vehicle, such as a car, truck, RV, or camper, as long as the vehicle is moved every 72 hours.',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Parks',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'How can I report criminal activity taking place at a park?​​​​​​',
-                description: 'If you observe an emergency or life-threatening event in a City park, please dial 911.'
+                question: 'How can I report criminal activity taking place at a park?​​​​​​',
+                description: 'If you observe an emergency or life-threatening event in a City park, please dial 911.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​I think I lost a personal item at a City park, where can I check to see if it\'s been found?​',
-                description: 'If you believe you lost an item at a City park, please call 916.808.6060 to check to see if it\'s been found.'
+                question: '​​​​​I think I lost a personal item at a City park, where can I check to see if it\'s been found?​',
+                description: 'If you believe you lost an item at a City park, please call 916.808.6060 to check to see if it\'s been found.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'I reserved space at a park and arrived to find someone already there. What can I do?​​​​​​',
-                description: 'If you arrive at your reserved park space and find someone\'s already occupied the space, please 311 or 916.808.5011 so that a Park Ranger can be dispatched to assist.'
+                question: 'I reserved space at a park and arrived to find someone already there. What can I do?​​​​​​',
+                description: 'If you arrive at your reserved park space and find someone\'s already occupied the space, please 311 or 916.808.5011 so that a Park Ranger can be dispatched to assist.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are there power outlets available at City-owned parks?​​​​​​',
-                description: 'Electrical outlets are found in City parks only at some amphitheaters.'
+                question: 'Are there power outlets available at City-owned parks?​​​​​​',
+                description: 'Electrical outlets are found in City parks only at some amphitheaters.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who is responsible for watering City parks?​​​​​​',
-                description: 'City staff is responsible for watering City parks. '
+                question: 'Who is responsible for watering City parks?​​​​​​',
+                description: 'City staff is responsible for watering City parks.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I reserve space at a City park?​​​​​​',
-                description: 'City Parks are a favorite place for picnics, family get-togethers, and office outings. A Certificate of Park Use entitles you to a specific group picnic area in a City Park.'
+                question: 'How can I reserve space at a City park?​​​​​​',
+                description: 'City Parks are a favorite place for picnics, family get-togethers, and office outings. A Certificate of Park Use entitles you to a specific group picnic area in a City Park.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I report concerns with lighting at a City park?​​​​​​',
-                description: 'City staff maintains the lighting features at our parks. '
+                question: 'How can I report concerns with lighting at a City park?​​​​​​',
+                description: 'City staff maintains the lighting features at our parks.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Are motorized vehicles allowed in City parks?​​​​​​',
-                description: 'City of Sacramento maintenance vehicles are the only vehicles permitted inside a City park.'
+                question: 'Are motorized vehicles allowed in City parks?​​​​​​',
+                description: 'City of Sacramento maintenance vehicles are the only vehicles permitted inside a City park.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'My property borders a City park. Who is responsible for maintaining the fence?​​​​​​',
-                description: 'When residential fences are along the property line of a City of Sacramento park, the property owner is solely responsible for the maintenance of the fence. '
+                question: 'My property borders a City park. Who is responsible for maintaining the fence?​​​​​​',
+                description: 'When residential fences are along the property line of a City of Sacramento park, the property owner is solely responsible for the maintenance of the fence.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Do City parks have operating hours?​​​​​​',
-                description: 'Sacramento City parks are open from sunrise to sunset every day of the year.  '
+                question: 'Do City parks have operating hours?​​​​​​',
+                description: 'Sacramento City parks are open from sunrise to sunset every day of the year.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Is drinking or smoking allowed in City parks?​​​​​​',
-                description: 'The consumption of alcoholic beverages or smoking of any kind is prohibited in City parks at all times. '
+                question: 'Is drinking or smoking allowed in City parks?​​​​​​',
+                description: 'The consumption of alcoholic beverages or smoking of any kind is prohibited in City parks at all times.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I obtain a boat launch pass?​​​​​​',
-                description: 'The City offers boat launch passes valid for use at Miller Park and Garcia Bend launch ramps.'
+                question: 'How can I obtain a boat launch pass?​​​​​​',
+                description: 'The City offers boat launch passes valid for use at Miller Park and Garcia Bend launch ramps.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who is responsible for maintaining playground equipment at City parks? ​​​​​​',
-                description: 'Park staff takes pride in maintaining the playground equipment so that it can be safely enjoyed.'
+                question: 'Who is responsible for maintaining playground equipment at City parks? ​​​​​​',
+                description: 'Park staff takes pride in maintaining the playground equipment so that it can be safely enjoyed.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who maintains the restrooms at City parks?​​​​​​',
-                description: 'The Department of Youth, Parks, & Community Enrichment provides maintenance for the City\'s park system, including the public restrooms. '
+                question: 'Who maintains the restrooms at City parks?​​​​​​',
+                description: 'The Department of Youth, Parks, & Community Enrichment provides maintenance for the City\'s park system, including the public restrooms.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who maintains City park grounds?​​​​​​',
-                description: 'The Department of Youth, Parks, & Community Enrichment provides maintenance for the City\'s park system, athletic fields, and bike trails.'
+                question: 'Who maintains City park grounds?​​​​​​',
+                description: 'The Department of Youth, Parks, & Community Enrichment provides maintenance for the City\'s park system, athletic fields, and bike trails.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who is responsible for mowing City parks?​​​​​​',
-                description: 'The City makes regular mowing part of each park\'s scheduled maintenance.'
+                question: 'Who is responsible for mowing City parks?​​​​​​',
+                description: 'The City makes regular mowing part of each park\'s scheduled maintenance.',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Sewer',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Can a missing or damaged manhole/sewer cover be replaced?​',
-                description: 'Occasionally, manhole covers may become displaced, or even removed. This can pose a significant public hazard and should be reported immediately'
+                question: '​​​​​Can a missing or damaged manhole/sewer cover be replaced?​',
+                description: 'Occasionally, manhole covers may become displaced, or even removed. This can pose a significant public hazard and should be reported immediately.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Where can I pay a City invoice or utility bill?​',
-                description: 'You may pay your City Utility bill for water, sewer, drains, and trash by phone, in person, online, or by mail.'
+                question: '​​​​​Where can I pay a City invoice or utility bill?​',
+                description: 'You may pay your City Utility bill for water, sewer, drains, and trash by phone, in person, online, or by mail.',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Solid Waste',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'I\'ve used my free junk appointments, can I pay for a pickup?​​​​​​',
-                description: 'If you have used your free junk pickups, you may schedule a paid bulky waste pickup'
+                question: 'I\'ve used my free junk appointments, can I pay for a pickup?​​​​​​',
+                description: 'If you have used your free junk pickups, you may schedule a paid bulky waste pickup.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'I am missing a garbage, recycle, or organics can. Will the City deliver a replacement?​​​​​​',
-                description: 'The City will replace a missing container free of charge.'
+                question: 'I am missing a garbage, recycle, or organics can. Will the City deliver a replacement?​​​​​​',
+                description: 'The City will replace a missing container free of charge.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'I need assistance getting my trash cans out. Can the City help?​​​​​​',
-                description: 'The City of Sacramento offers help to disabled customers needing assistance in getting their solid waste containers out for service'
+                question: 'I need assistance getting my trash cans out. Can the City help?​​​​​​',
+                description: 'The City of Sacramento offers help to disabled customers needing assistance in getting their solid waste containers out for service.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I schedule a household junk pick-up?​​​​​​',
-                description: 'The City provides two free appointments per calendar year for the removal of acceptable household junk, including yard waste.'
+                question: 'How can I schedule a household junk pick-up?​​​​​​',
+                description: 'The City provides two free appointments per calendar year for the removal of acceptable household junk, including yard waste.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I change the size of my garbage, recycle, or organics can?​​​​​​',
-                description: 'Requests for a change in the size of garbage or recycle cans, regardless of whether it increases or decreases the monthly bill, must be made by the property owner.'
+                question: 'How can I change the size of my garbage, recycle, or organics can?​​​​​​',
+                description: 'Requests for a change in the size of garbage or recycle cans, regardless of whether it increases or decreases the monthly bill, must be made by the property owner.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I dispose of a Christmas tree?​​​​​​',
-                description: 'If you receive yard waste services from the City of Sacramento, you can place Christmas trees in the street for pickup as part of the City\'s Leaf Season service.'
+                question: 'How can I dispose of a Christmas tree?​​​​​​',
+                description: 'If you receive yard waste services from the City of Sacramento, you can place Christmas trees in the street for pickup as part of the City\'s Leaf Season service.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'What is leaf season? When is it?​​​​​​',
-                description: 'From November 1st through January 31st, the City of Sacramento is in Leaf Season.During this time City collects piles of yard waste from the street without an appointment.'
+                question: 'What is leaf season? When is it?​​​​​​',
+                description: 'From November 1st through January 31st, the City of Sacramento is in Leaf Season.During this time City collects piles of yard waste from the street without an appointment.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Will the City replace the wheel on my garbage, organics or recycle container?​​​​​​',
-                description: 'Damaged containers will be repaired at the City\'s expense. '
+                question: 'Will the City replace the wheel on my garbage, organics or recycle container?​​​​​​',
+                description: 'Damaged containers will be repaired at the City\'s expense. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Will the City replace a broken or damaged lid on my garbage, recycle, or organics container?​​​​​​',
-                description: 'If your garbage, recycle, or lawn and garden container have a broken or missing lid, let us know and we\'ll get it taken care of.'
+                question: 'Will the City replace a broken or damaged lid on my garbage, recycle, or organics container?​​​​​​',
+                description: 'If your garbage, recycle, or lawn and garden container have a broken or missing lid, let us know and we\'ll get it taken care of.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'There is a stray can in my neighborhood. Can someone come to remove it?​​​​​​',
-                description: 'If you find a stray container in your neighborhood, please report it so that it can be picked up by the Recycling Solid Waste team.'
+                question: 'There is a stray can in my neighborhood. Can someone come to remove it?​​​​​​',
+                description: 'If you find a stray container in your neighborhood, please report it so that it can be picked up by the Recycling Solid Waste team.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I contract with the City to provide commercial dumpster services?​​​​​​',
-                description: 'The City of Sacramento does not provide commercial collection services.'
+                question: 'Can I contract with the City to provide commercial dumpster services?​​​​​​',
+                description: 'The City of Sacramento does not provide commercial collection services.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I dispose of hazardous waste?​​​​​​',
-                description: 'Products, such as paint cleaners, oil, batteries, and pesticides require special care and should not be thrown into residential waste containers.'
+                question: 'How can I dispose of hazardous waste?​​​​​​',
+                description: 'Products, such as paint cleaners, oil, batteries, and pesticides require special care and should not be thrown into residential waste containers.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can a household junk pick up be scheduled if I live on a private street?​​​​​​',
-                description: 'Household junk pickups are provided to all properties with City garbage service, including those on private streets'
+                question: 'Can a household junk pick up be scheduled if I live on a private street?​​​​​​',
+                description: 'Household junk pickups are provided to all properties with City garbage service, including those on private streets',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I dispose of used motor oil?​​​​​​',
-                description: 'City of Sacramento residents can conveniently recycle used motor oil and motor oil filters without leaving home.'
+                question: 'How can I dispose of used motor oil?​​​​​​',
+                description: 'City of Sacramento residents can conveniently recycle used motor oil and motor oil filters without leaving home.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​How can I schedule a battery and light bulb pickup?​',
-                description: 'The door to door collection of batteries and bulbs was discontinued in August of 2019. '
+                question: '​​​​​How can I schedule a battery and light bulb pickup?​',
+                description: 'The door to door collection of batteries and bulbs was discontinued in August of 2019. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​How can I schedule an EWaste/Electronics Pickup?​',
-                description: 'All residential Solid Waste customers can schedule two appointments for appliance and e-waste collection in a calendar year.'
+                question: '​​​​​How can I schedule an EWaste/Electronics Pickup?​',
+                description: 'All residential Solid Waste customers can schedule two appointments for appliance and e-waste collection in a calendar year.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​When are garbage containers delivered at newly built properties?​',
-                description: 'Utility Billing: After a billing account has been created, a date for container delivery will be set-up.'
+                question: '​​​​​When are garbage containers delivered at newly built properties?​',
+                description: 'Utility Billing: After a billing account has been created, a date for container delivery will be set-up.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​​​How can I request a recycle guide or dump coupon?​​​​​​',
-                description: 'A printed recycle guide that includes a dump coupon is mailed out to every property mid-year.'
+                question: '​​​​​​​How can I request a recycle guide or dump coupon?​​​​​​',
+                description: 'A printed recycle guide that includes a dump coupon is mailed out to every property mid-year.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Should I wash my recyclables before placing them in the bin?​​​​​​',
-                description: 'When recycling approved materials, it is preferred that the items be clean of most residue.'
+                question: 'Should I wash my recyclables before placing them in the bin?​​​​​​',
+                description: 'When recycling approved materials, it is preferred that the items be clean of most residue.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can I change the day or frequency my recycling can is serviced?​​​​​​',
-                description: 'The City recycling service is provided on a fixed every-other-week schedule. There is no ability to change the week your can is serviced. '
+                question: 'Can I change the day or frequency my recycling can is serviced?​​​​​​',
+                description: 'The City recycling service is provided on a fixed every-other-week schedule. There is no ability to change the week your can is serviced. ',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I find my garbage collection days and set-up reminders?​​​​​​',
-                description: 'Our collection calendar allows you to view, download, and print a service calendar specific to your address.'
+                question: 'Where can I find my garbage collection days and set-up reminders?​​​​​​',
+                description: 'Our collection calendar allows you to view, download, and print a service calendar specific to your address.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where should I store my City-issued trash cans?​​​​​​',
-                description: 'Solid Waste containers must be placed in a storage location within, adjacent to, or behind a structure, building, fence, landscaping, or another barrier, which substantially screens the view of the containers from the street or public right-of-way.'
+                question: 'Where should I store my City-issued trash cans?​​​​​​',
+                description: 'Solid Waste containers must be placed in a storage location within, adjacent to, or behind a structure, building, fence, landscaping, or another barrier, which substantially screens the view of the containers from the street or public right-of-way.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Where can I pay a City invoice or utility bill?​',
-                description: 'You may pay your City Utility bill for water, sewer, drains, and trash by phone, in person, online, or by mail.'
+                question: '​​​​​Where can I pay a City invoice or utility bill?​',
+                description: 'You may pay your City Utility bill for water, sewer, drains, and trash by phone, in person, online, or by mail.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How does the City address illegal dumping?​​​​​​',
-                description: 'If you see a pile of debris on a public street, please report it.'
+                question: 'How does the City address illegal dumping?​​​​​​',
+                description: 'If you see a pile of debris on a public street, please report it.',
+                answer: '',
             }           
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Streets',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Can I park in the bike lane?​',
-                description: 'Parking in bicycle lanes is not allowed as it prohibits cyclists and motorists from safely passing.'
+                question: '​​​​​Can I park in the bike lane?​',
+                description: 'Parking in bicycle lanes is not allowed as it prohibits cyclists and motorists from safely passing.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Can I request a bike rack to be installed?​',
-                description: 'Bike racks can be installed on City-owned property or right-of-way locations.'
+                question: '​​​​​Can I request a bike rack to be installed?​',
+                description: 'Bike racks can be installed on City-owned property or right-of-way locations.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who is responsible for the maintenance of curbs and gutters?​​​​​​',
-                description: 'The City of Sacramento is responsible for the maintenance of the public street-side curbs and gutters. Curbs and gutters on private property are the responsibility of the property owner.'
+                question: 'Who is responsible for the maintenance of curbs and gutters?​​​​​​',
+                description: 'The City of Sacramento is responsible for the maintenance of the public street-side curbs and gutters. Curbs and gutters on private property are the responsibility of the property owner.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Do I need a permit to block the sidewalk or street?​',
-                description: 'A permit is required to perform work within the public right-of-way.'
+                question: '​​​​​Do I need a permit to block the sidewalk or street?​',
+                description: 'A permit is required to perform work within the public right-of-way.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​​​Can I request speed bumps to be installed to deter speeding in my neighborhood?​​​​​​',
-                description: 'Unless chronic speeding problems exist on your street, speed lumps are not warranted. Traffic control, such as police enforcement, is usually a better alternative'
+                question: '​​​​​​​Can I request speed bumps to be installed to deter speeding in my neighborhood?​​​​​​',
+                description: 'Unless chronic speeding problems exist on your street, speed lumps are not warranted. Traffic control, such as police enforcement, is usually a better alternative',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I report a damaged or malfunctioning street light?​​​​​​',
-                description: 'If you observe a malfunctioning street light, street light on during the day, or a street light with damage, please report it.'
+                question: 'How can I report a damaged or malfunctioning street light?​​​​​​',
+                description: 'If you observe a malfunctioning street light, street light on during the day, or a street light with damage, please report it.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who is responsible for the maintenance of the sidewalk?​​​​​​',
-                description: 'Sacramento City Code identifies property owners as responsible (including financially) to maintain the sidewalk adjacent to their property in such a way that it does not endanger persons, property, or interfere with public convenience.'
+                question: 'Who is responsible for the maintenance of the sidewalk?​​​​​​',
+                description: 'Sacramento City Code identifies property owners as responsible (including financially) to maintain the sidewalk adjacent to their property in such a way that it does not endanger persons, property, or interfere with public convenience.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I report concerns with missing or damaged street signs?​​​​​​',
-                description: 'The city maintains approximately 100,000 traffic and street name signs.'
+                question: 'How can I report concerns with missing or damaged street signs?​​​​​​',
+                description: 'The city maintains approximately 100,000 traffic and street name signs.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Can garbage cans or leaf piles be placed in the bike lane?​​​​​​',
-                description: 'In many parts of Sacramento, cyclists are required to share the bike lane with leaf piles or garbage containers due to the limited amount of space for both.'
+                question: 'Can garbage cans or leaf piles be placed in the bike lane?​​​​​​',
+                description: 'In many parts of Sacramento, cyclists are required to share the bike lane with leaf piles or garbage containers due to the limited amount of space for both.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​How can I report concerns with a bike trail?​',
-                description: 'The City of Sacramento maintains miles of bike trails. '
+                question: '​​​​​How can I report concerns with a bike trail?​',
+                description: 'The City of Sacramento maintains miles of bike trails.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'How can I report junk or debris in the bike lane?​​​​​​',
-                description: 'Occasionally, junk or debris is dumped in the bikeway making for dangerous conditions for riders. These conditions should be reported so that a City crew can respond and remove the material'
+                question: 'How can I report junk or debris in the bike lane?​​​​​​',
+                description: 'Occasionally, junk or debris is dumped in the bikeway making for dangerous conditions for riders. These conditions should be reported so that a City crew can respond and remove the material.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​What is street resurfacing and when does it take place?​',
-                description: 'The City resurfaces streets to maintain their safety.'
+                question: '​​​​​What is street resurfacing and when does it take place?​',
+                description: 'The City resurfaces streets to maintain their safety.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who maintains City-owned landscaped areas like medians and streetscapes?​​​​​​',
-                description: 'The City of Sacramento is responsible for the maintenance and repair of public landscaping.'
+                question: 'Who maintains City-owned landscaped areas like medians and streetscapes?​​​​​​',
+                description: 'The City of Sacramento is responsible for the maintenance and repair of public landscaping.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Does the City have any bike parking programs?​',
-                description: 'The City of Sacramento offers both free and low-cost options for bicyclists who work, visit or live downtown.'
+                question: '​​​​​Does the City have any bike parking programs?​',
+                description: 'The City of Sacramento offers both free and low-cost options for bicyclists who work, visit or live downtown.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who is responsible for maintaining the street and addressing potholes?​​​​​​',
-                description: 'The City of Sacramento maintains the public streets.'
+                question: 'Who is responsible for maintaining the street and addressing potholes?​​​​​​',
+                description: 'The City of Sacramento maintains the public streets.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​How can I report concerns with a traffic signal?​',
-                description: 'Traffic Signal problems can pose serious public safety hazards and are responded to immediately.  '
+                question: '​​​​​How can I report concerns with a traffic signal?​',
+                description: 'Traffic Signal problems can pose serious public safety hazards and are responded to immediately.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Who maintains street markings?​',
-                description: 'The City maintains street markings of many types.'
+                question: '​​​​​Who maintains street markings?​',
+                description: 'The City maintains street markings of many types.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Can I place a banner on a street pole?​',
-                description: 'Placement of banners on city-owned light poles requires a permit from the City of Sacramento'
+                question: '​​​​​Can I place a banner on a street pole?​',
+                description: 'Placement of banners on city-owned light poles requires a permit from the City of Sacramento',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Urban Foresty',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'Who removes fallen tree limbs in the public right-of-way?​​​​​​',
-                description: 'The City\'s Urban Forestry department is responsible for the maintenance of City-owned street trees and for the removal of trees, or tree limbs, that are blocking the public right-of-way.'
+                question: 'Who removes fallen tree limbs in the public right-of-way?​​​​​​',
+                description: 'The City\'s Urban Forestry department is responsible for the maintenance of City-owned street trees and for the removal of trees, or tree limbs, that are blocking the public right-of-way.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who maintains City trees and how can I request a tree be pruned?​​​​​​',
-                description: 'The City of Sacramento\'s Urban Forestry division provides maintenance to city street trees, trees in the public right-of-way, and trees on City property.'
+                question: 'Who maintains City trees and how can I request a tree be pruned?​​​​​​',
+                description: 'The City of Sacramento\'s Urban Forestry division provides maintenance to city street trees, trees in the public right-of-way, and trees on City property.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Who can remove tree limbs in power lines?​',
-                description: 'The removal of trees in power lines requires specialized methods and training and is therefore performed by SMUD. '
+                question: '​​​​​Who can remove tree limbs in power lines?​',
+                description: 'The removal of trees in power lines requires specialized methods and training and is therefore performed by SMUD. ',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Utility Billing',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'How can I contact the Utility Billing Department?​​​​​​',
-                description: 'There are a variety of ways to contact the Utilities Billing Department.'
+                question: 'How can I contact the Utility Billing Department?​​​​​​',
+                description: 'There are a variety of ways to contact the Utilities Billing Department.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​I have a rental property, who is responsible for the utility payments?​',
-                description: 'Regardless of who occupies a home, the property owner is ultimatley responsible for costs relating to billed City services such as water, sewer, storm drain, and solid waste services.'
+                question: '​​​​​I have a rental property, who is responsible for the utility payments?​',
+                description: 'Regardless of who occupies a home, the property owner is ultimatley responsible for costs relating to billed City services such as water, sewer, storm drain, and solid waste services.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Where can I pay a City invoice or utility bill?​',
-                description: 'You may pay your City Utility bill for water, sewer, drains, and trash by phone, in person, online, or by mail.'
+                question: '​​​​​Where can I pay a City invoice or utility bill?​',
+                description: 'You may pay your City Utility bill for water, sewer, drains, and trash by phone, in person, online, or by mail.',
+                answer: '',
             }
         ]
     },
     {
         id: generateSudoId(8),
         type: 'Water',
-        subTypes: [
+        questions: [
             {
                 id: generateSudoId(8),
-                subType: 'What is the standard City water pressure?​​​​​​',
-                description: 'Standard water pressure in the City of Sacramento is 35-42 psi.'
+                question: 'What is the standard City water pressure?​​​​​​',
+                description: 'Standard water pressure in the City of Sacramento is 35-42 psi.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Does the City address water misuse?​​​​​​',
-                description: 'If you observe water misuse taking place, please report it. Our Water Conservation team will work with the property owner to provide education on water conservation.'
+                question: 'Does the City address water misuse?​​​​​​',
+                description: 'If you observe water misuse taking place, please report it. Our Water Conservation team will work with the property owner to provide education on water conservation.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Why does my drinking water smell during the summer?​',
-                description: 'Every summer, river water levels drop, and outside temperatures rise. These seasonal changes along with the presence of certain nutrients in the water can cause a change in smell and taste of our drinking water'
+                question: '​​​​​Why does my drinking water smell during the summer?​',
+                description: 'Every summer, river water levels drop, and outside temperatures rise. These seasonal changes along with the presence of certain nutrients in the water can cause a change in smell and taste of our drinking water.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Am I able to request the water be turned off or on for repairs?​',
-                description: 'Water can be turned off or on to allow repairs to take place.'
+                question: '​​​​​Am I able to request the water be turned off or on for repairs?​',
+                description: 'Water can be turned off or on to allow repairs to take place.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Who is responsible for watering City parks?​​​​​​',
-                description: 'City staff is responsible for watering City parks. '
+                question: 'Who is responsible for watering City parks?​​​​​​',
+                description: 'City staff is responsible for watering City parks.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​What are the current watering guidelines?​',
-                description: 'While emergency watering restrictions ended in August 2017, the City of Sacramento made long-term water conservation a way of life by adopting a permanent watering schedule of two days-per-week from March through October, and one day-per-week from November through February.'
+                question: '​​​​​What are the current watering guidelines?​',
+                description: 'While emergency watering restrictions ended in August 2017, the City of Sacramento made long-term water conservation a way of life by adopting a permanent watering schedule of two days-per-week from March through October, and one day-per-week from November through February.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​How can I reach the Water Conservation staff?​',
-                description: 'Water Conservation Department staff is available to answer your questions or concerns.'
+                question: '​​​​​How can I reach the Water Conservation staff?​',
+                description: 'Water Conservation Department staff is available to answer your questions or concerns.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Is the City still in the process of upgrading water meters?​​​​​​',
-                description: 'The City\'s water meter replacement project began in May 2017 and is scheduled to continue through 2021.'
+                question: 'Is the City still in the process of upgrading water meters?​​​​​​',
+                description: 'The City\'s water meter replacement project began in May 2017 and is scheduled to continue through 2021.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'I received a notice about the quality of my drinking water. Is it legitimate?​​​​​​',
-                description: 'When water quality issues have been identified, the City will issue water advisory notices in conjunction with the State Water Resource Board.'
+                question: 'I received a notice about the quality of my drinking water. Is it legitimate?​​​​​​',
+                description: 'When water quality issues have been identified, the City will issue water advisory notices in conjunction with the State Water Resource Board.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: '​​​​​Where can I find the latest water quality report?​',
-                description: 'The latest available water quality report is available online.'
+                question: '​​​​​Where can I find the latest water quality report?​',
+                description: 'The latest available water quality report is available online.',
+                answer: '',
             },
             {
                 id: generateSudoId(8),
-                subType: 'Where can I pay a City invoice or utility bill?​​​​​​',
-                description: 'Where can I pay a City invoice or utility bill?'
+                question: 'Where can I pay a City invoice or utility bill?​​​​​​',
+                description: 'Where can I pay a City invoice or utility bill?',
+                answer: '',
             }
         ]
-    }
+    },
+    {
+        id: generateSudoId(8),
+        type: 'FAQ',
+        questions: [
+            {
+                id: generateSudoId(8),
+                question: 'How can I make requests on the map?',
+                description: 'Choose any address on the map, then click "Make A New Request" to make a new request.',
+                answer: '',
+            },
+            {
+                id: generateSudoId(8),
+                question: 'How can I make a request in the app?​​​​​​',
+                description: 'You can make a request by clicking on the blue plus button on the center of the navigation bar.',
+                answer: '',
+            },
+            {
+                id: generateSudoId(8),
+                question: '​​​​What services are offered by 311?​',
+                description: '311 offers a large variety of services, all of which can be found on the Services page, which can be found under the Resources tab.',
+                answer: '',
+            },
+            {
+                id: generateSudoId(8),
+                question: 'How can I find more information about a particular service offered?',
+                description: 'You can find more information by clicking on one of the offered services on the Services page, which can be found under the Resources tab.',
+                answer: '',
+            },
+            {
+                id: generateSudoId(8),
+                question: 'How long will it take for my request to be serviced?',
+                description: 'Request service times vary, but if your request has been submitted, we assure we are working on it. In case of an emergency, please instead call 911.',
+                answer: '',
+            },
+            {
+                id: generateSudoId(8),
+                question: 'Who can I contact if I am having issues making requests?',
+                description: 'If you would like to talk directly to a city employee, please dial 311 to make a request over the phone.',
+                answer: '',
+            },
+        ]
+    },
 ]

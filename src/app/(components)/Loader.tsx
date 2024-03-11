@@ -2,7 +2,12 @@ import { useRef } from "react"
 import { Animated, Easing, StyleSheet } from "react-native"
 import { global } from "../../customs"
 
-export function Loader() {
+interface loaderProps {
+    styling?: any,
+    dashWidth?: number
+}
+
+export function Loader(props: loaderProps) {
     const loaderAnim = useRef(new Animated.Value(0)).current
 
     Animated.loop(
@@ -15,19 +20,21 @@ export function Loader() {
     ).start()
 
     return (
-        <Animated.View style={[styles.loader, {transform: [{ rotate: loaderAnim.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']}) }]}]}></Animated.View>
+        <Animated.View style={[props.styling ? props.styling : styles.default, styles.loader, {borderWidth: props.dashWidth ? props.dashWidth : 3, transform: [{ rotate: loaderAnim.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']}) }]}]}></Animated.View>
     )
 }
 
 const styles = StyleSheet.create({
     loader: {
-        width: '15%',
         aspectRatio: 1 / 1,
         borderRadius: 100,
-        alignSelf: 'center',
-        marginTop: '20%',
         borderColor: global.baseGold100,
-        borderWidth: 3,
         borderStyle: 'dotted',
     },
+
+    default: {
+        width: '15%',
+        alignSelf: 'center',
+        marginTop: '20%',
+    }
 })
