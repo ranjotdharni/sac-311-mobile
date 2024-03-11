@@ -15,7 +15,7 @@ export default function ResourceAnswers() {
     const filteredArticleTypes = answerTypes.map(obj => {
         // Filter questions based on search value
         const filteredQuestions = obj.questions.filter(q => {
-            const combinedText = `${q.question.toLowerCase()} ${q.description.toLowerCase()}`;
+            const combinedText = `${q.question.toLowerCase()} ${q.description.toLowerCase()} ${q.answer.toLowerCase()}`;
             return combinedText.includes(searchValue.toLowerCase());
         });
         //empty question value to be used as null
@@ -110,12 +110,12 @@ export default function ResourceAnswers() {
                                 }
                                 //If the question is not an FAQ, link to the answer article:
                                 else{
-                                return (
-                                    <TouchableOpacity key={q.id} style={[styles.questionWrapper, shadowUniversal.default]}>
-                                        <View style={styles.questionTitleWrapper}><Text style={styles.questionTitle}>{q.question}</Text></View>
-                                        <Text style={styles.questionDescription}>{q.description}</Text>
-                                    </TouchableOpacity>
-                                );
+                                    return (
+                                        <TouchableOpacity key={q.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: obj.type, answer: q.answer, question: q.question}})}}>
+                                            <View style={styles.questionTitleWrapper}><Text style={styles.questionTitle}>{q.question}</Text></View>
+                                            <Text style={styles.questionDescription}>{q.description}</Text>
+                                        </TouchableOpacity>
+                                    );
                                 }
                             })}
                         </View>
@@ -131,7 +131,7 @@ export default function ResourceAnswers() {
 const styles = StyleSheet.create({
     mainWrapper: {
         flex: 1,
-        backgroundColor: global.baseBackground100,
+        backgroundColor: 'white',
     },
     exitWrapper: {
         backgroundColor: global.baseBackground100,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     },
     tabNamesWrapper: {
         width: 'auto',
-        backgroundColor: global.baseWhite100,
+        backgroundColor: global.baseBackground100,
         borderRadius: 15,
         paddingHorizontal: 10,
     },
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         padding: 2,
         fontFamily: globalFont.chosenFont,
-        color: global.baseBlue100,
+        color: global.baseGold100,
     },
     searchContainer: {
         flexDirection: 'row',
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     typeTitleWrapper: {
         width: '100%',
         borderBottomWidth: 1,
-        borderBottomColor: global.baseGold100,
+        borderBottomColor: global.baseBlue100,
     },
     typeTitle: {
         fontSize: 25,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
         width: '96%',
         marginTop: 15,
         borderRadius: 15,
-        backgroundColor: global.baseWhite100,
+        backgroundColor: global.baseBackground100,
         padding: 10,
         marginLeft: '2%'
     },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
         margin: '2%',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: global.baseWhite100
+        color: global.baseBackground100
     },
     FAQTitleWrapper: {
         width: '100%',
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
         margin: '2%',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: global.baseWhite100
+        color: global.baseBackground100
     },
     questionDescription: {
         marginTop: '3%',
@@ -267,16 +267,16 @@ const styles = StyleSheet.create({
         color: global.baseGrey100,
     },
     filterScroll:{
-        backgroundColor: global.baseBackground100,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     allFiltersWrapper:{
         marginTop:'3%',
-        backgroundColor: global.baseBackground100,
+        backgroundColor:'rgba(0, 0, 0, 0)',
         flexDirection: 'row',
         height: '7%',
     },
     filterWrapper:{
-        backgroundColor: global.baseBackground100,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     filterText:{
         fontFamily: globalFont.chosenFont,
