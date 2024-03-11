@@ -6,6 +6,7 @@ import { global } from "../../customs";
 import localData from './patch.json';
 import BulletPointDisplay from './BulletPoints';
 import { globalFont } from '../../customs';
+import { router } from "expo-router";
 
 export type WhatsNewData = {
     header: string;
@@ -27,7 +28,7 @@ export default function WhatsNew(){
 
             <View style={styles.xWrapper}>
                 <View style={styles.inXWrapper}>
-                    <TouchableOpacity onPress={() => { navi.goBack() }}> 
+                    <TouchableOpacity onPress={() => {router.replace('/(tabs)/Home')}}> 
                         <Image style={styles.xIcon} source={require('../../assets/png/exit_x.png')} />
                     </TouchableOpacity>
                     <Text style={styles.topText}>Patch Notes</Text>

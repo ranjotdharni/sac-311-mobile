@@ -20,7 +20,7 @@ const Tab = createMaterialTopTabNavigator();
 
 function CityInfo() {
     return (
-        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+        <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:globalColorTheme.backgroundColor}}>
             <Pressable style={styles.infoButton} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/executive-team"}})}}>
                 <Text style={{color: '#ffffff', textAlign: 'center', fontWeight: 'bold'}}>Government Offices</Text>
             </Pressable>
@@ -38,7 +38,9 @@ function CityInfo() {
 }
 function AppInfo() {
     return (
-        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+        
+        <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:globalColorTheme.backgroundColor}}>
+            
             <Pressable style={styles.infoButton} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://311.cityofsacramento.org/s/about-311"}})}}>
                 <Text style={{color: '#ffffff', textAlign: 'center', fontWeight: 'bold'}}>About 311</Text>
             </Pressable>
@@ -83,39 +85,42 @@ function General() {
             ) as boolean;
 
             setIsDarkMode(result);
-        };
+            }
 
+        const tempvar: any = colorThemeGetter('theme');
+        colorThemeSetter(globalColorTheme.theme);
         setDarkMode();
-        colorThemeSetter(colorThemeGetter());
-        
-    }, []);
+            
+    }, [dark]);
 
 
 
 
     return (
-        <View style={{paddingTop:"5%"}}>
-             <View style={styles.IconContainer}>
+        
+        <View style={{paddingTop:"5%", backgroundColor:globalColorTheme.backgroundColor}}>
+             <View style={{backgroundColor:globalColorTheme.backgroundColor,flexDirection:"row",alignItems:"center",paddingLeft:"5%",justifyContent:'space-between'}}>
                 <MaterialIcons name="notifications" size={Dimensions.get('screen').width * 0.065} color={'#c9b15b'}/>
-                <View style= {styles.NotificationContainer}>
-                    <Text style={styles.ButtonText}>Push Notifications</Text>
+                <View style={{backgroundColor:globalColorTheme.backgroundColor, width:"90%", justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingRight:'3%',}}>
+                    <Text style={{fontSize: 19, fontFamily: globalFont.chosenFont, color:globalColorTheme.color, paddingLeft: '5%', fontWeight: '500'}}>
+                    Push Notifications</Text>
                     <Switch onValueChange={toggleNotifs} value = {notif} trackColor={{true: '#9a9ce6'}} thumbColor={notif? 'default': '#2b20a8' }/>
                 </View>
             </View>
-            <Text style={styles.DescriptionText}>Notify me when a request I submit receives an update</Text>
-            <View style={styles.IconContainer}>
-                <MaterialIcons name="bedtime" size={Dimensions.get('screen').width * 0.065} color={globalColorTheme.color}/>
-                <View style={styles.NotificationContainer}>
-                    <Text style={styles.ButtonText}>Dark Mode</Text>
+            <Text style={{backgroundColor:globalColorTheme.backgroundColor, color:globalColorTheme.color, fontSize: 13, fontFamily: globalFont.chosenFont, paddingLeft: '5%', paddingBottom: '3%', fontWeight: '300'}}>
+                Notify me when a request I submit receives an update</Text>
+            <View style={{backgroundColor:globalColorTheme.backgroundColor,flexDirection:"row",alignItems:"center",paddingLeft:"5%",justifyContent:'space-between'}}>
+                <MaterialIcons name="bedtime" size={Dimensions.get('screen').width * 0.065} color={colorThemeGetter('color')}/>
+                <View style={{backgroundColor:globalColorTheme.backgroundColor, width:"90%", justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingRight:'3%',}}>
+                    <Text style={{fontSize: 19, fontFamily: globalFont.chosenFont, color:globalColorTheme.color, paddingLeft: '5%', fontWeight: '500'}}>
+                    Dark Mode</Text>
                     <Switch
                         onValueChange={(darkResult) => {
                             AsyncStorage.setItem(
                                 "darkToken",
                                 JSON.stringify(darkResult),
                             );
-                            colorThemeSetter(darkResult ? 'lightTheme' : 'darkTheme');
-                            colorThemeGetter()
-
+                            colorThemeSetter(darkResult ? 'darkTheme' : 'lightTheme');
                             setIsDarkMode(darkResult);
                             
                         }}
@@ -125,12 +130,13 @@ function General() {
                         />
                 </View>
             </View>
-            <Text style={styles.DescriptionText}>Enable a darker theme to reduce brightness and eye strain</Text>
-
-            <View style={styles.IconContainer}>
+            <Text style={{backgroundColor:globalColorTheme.backgroundColor, color:globalColorTheme.color, fontSize: 13, fontFamily: globalFont.chosenFont, paddingLeft: '5%', paddingBottom: '3%', fontWeight: '300'}}>
+                Enable a darker theme to reduce brightness and eye strain</Text>
+            <View style={{backgroundColor:globalColorTheme.backgroundColor,flexDirection:"row",alignItems:"center",paddingLeft:"5%",justifyContent:'space-between'}}>
                 <MaterialIcons name="font-download" size={Dimensions.get('screen').width * 0.065} color={'#c9b15b'}/>
-                <View style={styles.NotificationContainer}>
-                    <Text style={styles.ButtonText}>Accessibility Font</Text>
+                <View style={{backgroundColor:globalColorTheme.backgroundColor, width:"90%", justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingRight:'3%',}}>
+                    <Text style={{fontSize: 19, fontFamily: globalFont.chosenFont, color:globalColorTheme.color, paddingLeft: '5%', fontWeight: '500'}}>
+                    Accessibility Font</Text>
                     <Switch
                         onValueChange={(result) => {
                             AsyncStorage.setItem(
@@ -147,9 +153,11 @@ function General() {
                         />
                 </View>
             </View>
-            <Text style={styles.DescriptionText}>Switch all text to use the 'OpenDyslexic' typeface.</Text>
+            
+            <Text style={{backgroundColor:globalColorTheme.backgroundColor, color:globalColorTheme.color, fontSize: 13, fontFamily: globalFont.chosenFont, paddingLeft: '5%', paddingBottom: '3%', fontWeight: '300'}}>
+                Switch all text to use the 'OpenDyslexic' typeface.</Text>
+            <View style={{alignItems:"center", padding:'4%', justifyContent:"space-evenly", backgroundColor:globalColorTheme.backgroundColor}}>
 
-            <View style={{alignItems:"center", padding:'4%', justifyContent:"space-evenly"}}>
                 <Pressable style={styles.logButton}>
                   <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: 'bold'}}>Log Out</Text> 
                 </Pressable>
@@ -164,12 +172,18 @@ function General() {
 export default function Settings()
 {
     return(
-        <View style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').height, paddingBottom:"25%"}}>
-            <View style={{padding:"5%"}}/>
-            <View style={{backgroundColor:"#3f69d4"}}>
+        <View style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').height, paddingBottom:"25%", backgroundColor:globalColorTheme.backgroundColor}}>
+            <View style={{padding:"5%", backgroundColor:globalColorTheme.backgroundColor}}/>
+            <View style={{backgroundColor:"#2b20a8"}}>
                 <Text style={styles.Settings}>Settings</Text>
+                
             </View>
-            <Tab.Navigator>
+           <Tab.Navigator screenOptions={({route}) => ({
+                tabBarStyle: {backgroundColor:globalColorTheme.backgroundColor},
+                tabBarActiveTintColor:globalColorTheme.color,
+                tabBarInactiveTintColor:globalColorTheme.color,
+            })}
+                >
                 <Tab.Screen name="General" component={General} />
                 <Tab.Screen name="City Info" component={CityInfo} />
                 <Tab.Screen name="App Info" component={AppInfo} />
@@ -200,26 +214,7 @@ const styles = StyleSheet.create({
         fontWeight: '500'
     },
 
-    DescriptionText:{
-        fontSize: 13,
-        fontFamily: globalFont.chosenFont,
-        paddingLeft: '5%',
-        paddingBottom: '3%',
-        fontWeight: '300'
-    },
-    NotificationContainer:{
-        width:"90%",
-        justifyContent:'space-between', 
-        flexDirection:"row", 
-        alignItems:'center',
-        paddingRight:'3%',
-    },
-    IconContainer:{
-        flexDirection:"row",
-        alignItems:"center",
-        paddingLeft:"5%",
-        justifyContent:'space-between'
-    },
+
 
     button: {
         paddingTop:'5%',

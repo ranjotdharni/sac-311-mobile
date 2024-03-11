@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     mainWrapper: {
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0)',
+        backgroundColor: global.baseBackground100,
     },
     exitWrapper:{
         backgroundColor: global.baseBackground100,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     },
     tabNamesWrapper: {
         width: 'auto',
-        backgroundColor: global.baseBackground100,
+        backgroundColor: global.baseWhite100,
         borderRadius: 15,
         paddingHorizontal: 10,
     },
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         padding: 2,
         fontFamily: globalFont.chosenFont,
-        color: global.baseGold100,
+        color: global.baseBlue100,
     },
     resizeIcon:{
         width:30,
@@ -99,13 +99,14 @@ const styles = StyleSheet.create({
         alignSelf:'center',
     },
     aboutTitle:{
+        color: global.baseBlue100,
         fontSize: 45,
         fontFamily: globalFont.chosenFont,
         alignSelf:'center',
     },
     aboutWrapper:{
         padding:20,
-        backgroundColor:global.baseBackground100,
+        backgroundColor:global.baseWhite100,
         borderRadius:20,
     },
     aboutTitleWrapper:{

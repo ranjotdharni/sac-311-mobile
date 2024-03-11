@@ -142,6 +142,12 @@ export const dummyDataFAQ = [
     },
 ]
 
+export const newsFeedSites = [
+    {Site: 'ABC10', url: 'https://www.abc10.com/feeds/syndication/rss/news'},
+    {Site: 'Fox40', url: 'https://fox40.com/news/local-news/feed'},
+    {Site: 'KCRA', url: 'https://www.kcra.com/topstories-rss'},
+]
+
 export const dummyDataNews = [
     {
         title: 'Modern Innovations in Forensic Technology Show Promising Results',
@@ -318,14 +324,18 @@ export const shadowUniversal = StyleSheet.create({
 //                                      //
 
 export const global = {
-    baseBackground100: '#ffffff',
+    baseBackground100: '#f5faff',
+    baseBackground200: 'rgba(235, 235, 255, 0.45)',
+    baseBackground300: 'rgba(255, 255, 255, 0.45)',
 
-    baseBlue100: '#2F2DA3',
-    baseBlue200: 'rgba(47, 45, 163, 0.5)',
+    baseWhite100: '#ffffff',
 
-    baseGold100: '#BEA315',
-    baseGold200: 'rgba(190, 163, 21, 0.5)',
-    baseGold300: 'rgba(190, 163, 21, 0.33)',
+    baseBlue100: '#203d61',
+    baseBlue200: 'rgba(32, 61, 97, 0.5)',
+
+    baseGold100: '#fdaa1f',
+    baseGold200: 'rgba(253, 170, 31, 0.5)',
+    baseGold300: 'rgba(253, 170, 31, 0.33)',
 
     baseGrey100: '#6F6F6F',
     baseGrey200: 'rgba(112, 112, 112, 0.7)'
@@ -360,37 +370,54 @@ export function fontGetter(){
 
 let chosenColorTheme: any = 'lightMode';
 
-
 export const globalColorTheme= {
     chosenColorTheme : chosenColorTheme,
-    backgroundColor : '#808080',
-    color : '#ffffff',
-    theme : 'globalTheme'
-
+    backgroundColor : '#ffffff',
+    backgroundColor2 : '#ffffff',
+    color : '#000000',
+    theme : 'lightTheme',
+    fontSize: 19,
+    fontFamily: globalFont.chosenFont,
+    paddingLeft: '5%',
+    fontWeight: '500'
 }
 
 export function colorThemeSetter(newTheme:string){
     globalColorTheme.chosenColorTheme = newTheme;
     if (newTheme == 'lightTheme'){
-        chosenColorTheme.backgroundColor = '#000000';
-        chosenColorTheme.color = '#ffffff';
         globalColorTheme.theme = 'lightTheme';
-        globalColorTheme.backgroundColor = '#000000';
-        globalColorTheme.color = '#ffffff';
+        globalColorTheme.backgroundColor = '#ffffff';   //background = white
+        globalColorTheme.backgroundColor2 = '#ffffff';   //alternate background = white
+        globalColorTheme.color = '#000000';             //textcolor = black
     }
     
     else if (newTheme == 'darkTheme'){
-        chosenColorTheme.backgroundColor = '#ffffff';
-        chosenColorTheme.color = '#000000';
         globalColorTheme.theme = 'darkTheme';
-        globalColorTheme.backgroundColor = '#ffffff';
-        globalColorTheme.color = '#000000';
+        globalColorTheme.backgroundColor = '#3B3B3B';   //background = dark-gray
+        globalColorTheme.backgroundColor2 = '#878787';   //alternate background = light-gray
+        globalColorTheme.color = '#E7EAED';             //textcolor = off-white
+        
     }
 
 }
 
-export function colorThemeGetter(){
-    return globalColorTheme.color;
+
+
+
+
+
+
+
+export function colorThemeGetter(property:string){
+    if (property == 'color'){
+        return globalColorTheme.color;
+    }
+    if (property == 'theme'){
+        return globalColorTheme.theme;
+    }
+    if (property == 'backgroundColor'){
+        return globalColorTheme.backgroundColor;
+    }
     
 
 }

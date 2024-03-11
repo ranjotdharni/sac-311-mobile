@@ -24,7 +24,7 @@ export default function ForeHead() {
                 </View>
 
                 <TouchableOpacity style={styles.SettingsButton} onPress={() => {router.replace('/(tabs)/Settings')}}>
-                    <MaterialIcons name="settings" size={Dimensions.get('screen').width * 0.085} color={global.baseBackground100} />
+                    <MaterialIcons name="settings" size={Dimensions.get('screen').width * 0.085} color={global.baseWhite100} />
                 </TouchableOpacity>
             </View>
         </View>
