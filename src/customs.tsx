@@ -142,6 +142,12 @@ export const dummyDataFAQ = [
     },
 ]
 
+export const newsFeedSites = [
+    {Site: 'ABC10', url: 'https://www.abc10.com/feeds/syndication/rss/news'},
+    {Site: 'Fox40', url: 'https://fox40.com/news/local-news/feed'},
+    {Site: 'KCRA', url: 'https://www.kcra.com/topstories-rss'},
+]
+
 export const dummyDataNews = [
     {
         title: 'Modern Innovations in Forensic Technology Show Promising Results',
@@ -319,6 +325,8 @@ export const shadowUniversal = StyleSheet.create({
 
 export const global = {
     baseBackground100: '#f5faff',
+    baseBackground200: 'rgba(235, 235, 255, 0.45)',
+    baseBackground300: 'rgba(255, 255, 255, 0.45)',
 
     baseWhite100: '#ffffff',
 
