@@ -318,14 +318,16 @@ export const shadowUniversal = StyleSheet.create({
 //                                      //
 
 export const global = {
-    baseBackground100: '#ffffff',
+    baseBackground100: '#f5faff',
 
-    baseBlue100: '#2F2DA3',
-    baseBlue200: 'rgba(47, 45, 163, 0.5)',
+    baseWhite100: '#ffffff',
 
-    baseGold100: '#BEA315',
-    baseGold200: 'rgba(190, 163, 21, 0.5)',
-    baseGold300: 'rgba(190, 163, 21, 0.33)',
+    baseBlue100: '#203d61',
+    baseBlue200: 'rgba(32, 61, 97, 0.5)',
+
+    baseGold100: '#fdaa1f',
+    baseGold200: 'rgba(253, 170, 31, 0.5)',
+    baseGold300: 'rgba(253, 170, 31, 0.33)',
 
     baseGrey100: '#6F6F6F',
     baseGrey200: 'rgba(112, 112, 112, 0.7)'

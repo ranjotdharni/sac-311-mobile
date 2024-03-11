@@ -117,7 +117,7 @@ export default function Resources() {
 const styles = StyleSheet.create({
     mainWrapper: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: global.baseBackground100,
     },
     exitWrapper: {
         backgroundColor: global.baseBackground100,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     },
     tabNamesWrapper: {
         width: 'auto',
-        backgroundColor: global.baseBackground100,
+        backgroundColor: global.baseWhite100,
         borderRadius: 15,
         paddingHorizontal: 10,
     },
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         padding: 2,
         fontFamily: globalFont.chosenFont,
-        color: global.baseGold100,
+        color: global.baseBlue100,
     },
     searchContainer: {
         flexDirection: 'row',
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     typeTitleWrapper: {
         width: '100%',
         borderBottomWidth: 1,
-        borderBottomColor: global.baseBlue100,
+        borderBottomColor: global.baseGold100,
     },
     typeTitle: {
         fontSize: 25,
@@ -217,13 +217,13 @@ const styles = StyleSheet.create({
         width: '96%',
         marginTop: 15,
         borderRadius: 15,
-        backgroundColor: global.baseBackground100,
+        backgroundColor: global.baseWhite100,
         padding: 10,
         marginLeft: '2%'
     },
     subTypeTitleWrapper: {
         width: '100%',
-        backgroundColor: global.baseGold100,
+        backgroundColor: global.baseBlue100,
         borderRadius: 15,
         padding: 2,
     },
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
         marginLeft: '2.5%',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: global.baseBackground100
+        color: global.baseWhite100
     },
     subTypeDescription: {
         marginTop: '3%',
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
         height: '7%',
     },
     filterWrapper:{
-        backgroundColor: 'rgba(0, 0, 0, 0)',
+        backgroundColor: global.baseBackground100,
     },
     filterText:{
         fontFamily: globalFont.chosenFont,

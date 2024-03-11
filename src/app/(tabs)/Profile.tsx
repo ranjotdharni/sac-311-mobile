@@ -4,6 +4,7 @@ import ButtonPanel from '../(components)/Profile/ButtonPanel';
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useNavigation } from '@react-navigation/native';
 import { globalFont } from "../../customs";
+import { global } from "../../customs";
 
 export default function Profile() {
   const navigation = useNavigation();
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30, // Increase this value to make the text bigger
         fontWeight: 'bold',
-        color: '#2F2DA3',
+        color: global.baseBlue100,
         fontFamily: globalFont.chosenFont,
         textAlign: 'center',
         marginTop: 50,
@@ -51,14 +52,14 @@ const styles = StyleSheet.create({
     loginText: {
         fontSize: 20, // adjust this value to change the size of the text
         fontFamily: globalFont.chosenFont, // same font as the title
-        color: '#BEA315', // color code provided by you
+        color: global.baseBlue100, // color code provided by you
         textAlign: 'center', // center align the text
         marginTop: 60,
     },
     createAccountText: {
         fontSize: 20, // adjust this value to change the size of the text
         fontFamily: globalFont.chosenFont, // same font as the title and login text
-        color: '#000000', // black color code
+        color: global.baseBlue100, // black color code
         textAlign: 'center', // center align the text
         marginTop: 15,
     },
