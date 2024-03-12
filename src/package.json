@@ -5,6 +5,7 @@
   "scripts": {
     "start": "expo start",
     "benchmark": "expo start --no-dev --minify",
+    "tunnel": "expo start --tunnel",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",

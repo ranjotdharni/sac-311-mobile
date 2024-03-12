@@ -1,5 +1,5 @@
 import { View, StyleSheet, Dimensions, Image, Animated } from "react-native";
-import { generateEndpointUrl, generateSymbolUrl, responseType, shadowUniversal } from "../../../customs";
+import { dateAtDaysAgo, dateToFormat, generateEndpointUrl, generateSymbolUrl, responseType, shadowUniversal } from "../../../customs";
 import { global } from "../../../customs";
 import { useEffect, useRef, useState } from "react";
 import { globalFont } from "../../../customs";
@@ -30,14 +30,18 @@ export default function RequestList()
     const [testData, setTestData] = useState<Array<responseType>>([])
     const [latlng, setLatlng] = useState<LatLng>({latitude: 0, longitude: 0})
     const [highlight, setHighlight] = useState<number>(0)
-    const [pos, setPos] = useState<number>(0)
+    const [permission, setPermission] = useState<boolean>(false)
+    const [message, setMessage] = useState<string>('Use My Location')
     const [left, setLeft] = useState<boolean>(false)
     const [right, setRight] = useState<boolean>(false)
 
     async function fetchTestData() {
-        const query = generateEndpointUrl(`NOT(Address='')`, 5, [])
         setLoader(true)
-        /*const params: [string, string][] = [
+
+        await useMyLocation()
+        
+        const defaultQuery = generateEndpointUrl(`NOT(Address='')`, 5, [])
+        const params: [string, string][] = [
             ['orderByFields', 'Address'],
             ['geometryType', 'esriGeometryPoint'],
             ['geometry', `${latlng.longitude},${latlng.latitude}`],
@@ -45,12 +49,16 @@ export default function RequestList()
             ['returnDistinctValues', 'true']
         ]
         const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, 5, params)
-        */
 
-        await fetch(query).then((middle) => {
+        await fetch(( permission ? query : defaultQuery)).then((middle) => {
             return middle.json()
         }).then((res) => {
             setTestData(res.features)
+
+            if (res.features.length === 0) {
+                setMessage('No Nearby Requests')
+                setTimeout(() => {setMessage('Use My Location')}, 7000)
+            }
         })
 
         setLoader(false)
@@ -100,6 +108,10 @@ export default function RequestList()
         fetchTestData()
     }, [latlng])
 
+    async function getPermissions() {
+        setPermission((await Location.getForegroundPermissionsAsync()).status === 'granted')
+    }
+
     /*
     useEffect(() => {
         (async () => {
@@ -115,6 +127,24 @@ export default function RequestList()
         })();
     }, []);
     */
+
+    async function useMyLocation() {
+        if (!permission) {
+            let { status } = await Location.requestForegroundPermissionsAsync()
+            if (status !== 'granted') {
+                setPermission(false)
+                setMessage('Use My Location')
+                return
+            }
+            else {
+                setPermission(true)
+                setMessage('Near You')
+            }
+        }
+
+        let location = await Location.getCurrentPositionAsync()
+        setLatlng({latitude: location.coords.latitude, longitude: location.coords.longitude})
+    }
 
     useEffect(() => {
         if (testData.length !== 0) {
@@ -152,6 +182,14 @@ export default function RequestList()
         }
     }, [highlight])
 
+    useEffect(() => {
+        getPermissions()
+
+        if (permission) {
+            useMyLocation()
+        }
+    }, [])
+
     return (
         loader ? 
         <Loader /> :
@@ -186,8 +224,8 @@ export default function RequestList()
                 </Animated.View>
             </View>
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: Dimensions.get('screen').width * 0.9, height: 75}}>
-                <TouchableOpacity style={{marginLeft: 10}}>
-                    <CustomText text="Use My Location" font='jbm' nol={0} style={{fontSize: 17, color: '#2B60E9'}} />
+                <TouchableOpacity onPress={useMyLocation} style={{marginLeft: 10}}>
+                    <CustomText text={message} font='jbm' nol={0} style={{fontSize: 17, color: '#2B60E9'}} />
                 </TouchableOpacity>
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', width: Dimensions.get('screen').width * 0.3}}>
                     <TouchableOpacity onPress={toLeft} style={{borderRadius: 15, backgroundColor: (highlight === 0 ? global.baseGrey200 : global.baseBlue100), width: Dimensions.get('screen').width * 0.125, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
