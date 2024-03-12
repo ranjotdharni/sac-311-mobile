@@ -2,6 +2,7 @@ import { Text, View, StyleSheet, TouchableOpacity, TextInput, ScrollView, Dimens
 import { ParamResponseType, ParameterResponseToResponseObject, global, responseType, salesforceDevelopmentSignature } from "../../../customs";
 import React, { useEffect, useState } from 'react';
 import Request from "../Request";
+import { Loader } from "../Loader";
 
 const YourRequests: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -78,7 +79,7 @@ const YourRequests: React.FC = () => {
             {
                 (
                     data.length === 0 ?
-                    <LoginView /> :
+                    <Loader /> :
                     data.map(item => {
                         return (
                             <Request key={item.attributes.ReferenceNumber} data={item} compact={false} width='100%' height={Dimensions.get('screen').height * 0.2} />

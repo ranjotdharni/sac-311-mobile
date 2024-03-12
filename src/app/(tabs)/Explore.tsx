@@ -142,7 +142,7 @@ function Explore()
 
     function activateMarker(obj: responseType) {
         initializePad(obj)
-        setRequests([obj, ...requests])
+        setRequests([obj, ...requests.filter(r => r.attributes.Address === obj.attributes.Address)])
     }
 
     const onRegionChange = _.debounce(async (Cregion: Region, details: Details) => {

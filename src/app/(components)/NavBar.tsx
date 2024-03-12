@@ -10,7 +10,7 @@ const screenWidth: number = Dimensions.get('screen').width
 const initialOffset: number = screenWidth * 0.025
 const offsetMultiplier: number = 0
 
-export default function NavBar(this: any)
+export default function NavBar(nav: any)
 {
     let offsetLeft = useRef(new Animated.Value((0 * offsetMultiplier) + initialOffset)).current
     //Each NavItem 'id' attribute should be a unique value!!!

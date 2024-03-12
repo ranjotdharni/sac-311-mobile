@@ -1,5 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons"
-import { Href, useNavigation } from "expo-router"
+import { Href, useNavigation, router } from "expo-router"
 import { View, StyleSheet, Pressable } from "react-native"
 import { global } from "../../customs"
 import CustomText from "./CustomText"
@@ -11,6 +11,7 @@ export default function NavItem({ id, title, iconName, active, url, passUp, navi
 {
     const navigateTo = (to: Href<string>) => {
         (navigation.navigate as (screen: Href<string>) => void)(to);
+        //nav.navigate("Explore", { screen: "NavItem" })
     };
     
     return (
