@@ -13,7 +13,7 @@ import { FlashList } from "@shopify/flash-list"
 import _ from 'lodash'
 import { fontGetter } from "../../customs";
 import { globalFont } from '../../customs';
-import { useRouter } from "expo-router";
+import { useRouter, router, useLocalSearchParams } from "expo-router";
 
 //const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markerPrimary'
@@ -38,12 +38,13 @@ const activeZoom = {
 
 function Explore()
 {
+    const { requestData } = useLocalSearchParams()
+
     const router = useRouter()
     const controller = new AbortController()
     const mapRef = useRef<MapView>(null)
     const padPanAnim = useRef(new Animated.Value(padHiddenHeight)).current
     const previewPanAnim = useRef(new Animated.Value(previewVisibleHeight)).current
-
 
     const [addressQuery, setAddressQuery] = useState<string>('')
     const [markers, setMarkers] = useState<Array<responseType>>([])
@@ -180,7 +181,13 @@ function Explore()
         await fetch(query).then((middle) => {
             return middle.json()
         }).then((res) => {
-            setMarkers(res.features.filter(filterFunction))
+            let marks: responseType[] = res.features.filter(filterFunction)
+            if (padObject !== undefined && marks.filter(m => m.attributes.ReferenceNumber === padObject.attributes.ReferenceNumber).length === 0) {
+                setMarkers([padObject, ...marks])
+            }
+            else {
+                setMarkers(marks)
+            }
         }).catch(err => {
             return
         })
@@ -224,6 +231,21 @@ function Explore()
         grabRequests()
 
     }, [requestFetch])
+
+    useEffect(() => {
+        if (requestData !== undefined) {
+            setTimeout(() => {
+                let initObj: responseType = JSON.parse(requestData as string)
+                initializePad(initObj)
+                if (requests.filter(r => r.attributes.ReferenceNumber === initObj.attributes.ReferenceNumber).length === 0) {
+                    setRequests([initObj, ...requests])
+                }
+                if (markers.filter(m => m.attributes.ReferenceNumber === initObj.attributes.ReferenceNumber).length === 0) {
+                    setMarkers([initObj, ...markers])
+                }
+            }, 1500)
+        }
+    }, [requestData])
 
     const memoizedMarkerRender = useMemo(() => {
         return markers.map((mark, index) => {

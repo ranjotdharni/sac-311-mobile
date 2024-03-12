@@ -165,7 +165,7 @@ export default function RequestFullView() {
                             <CustomText text={data.attributes.Address} nol={0} font='jbm' style={{fontSize: 20, maxWidth: 250, color: global.baseBackground100}} />
                         </View>
 
-                        <TouchableOpacity style={{left: 10, top: 5, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end'}}>
+                        <TouchableOpacity onPress={() => router.push({pathname: '/(tabs)/Explore', params: {requestData: JSON.stringify(data)}})} style={{left: 10, top: 5, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end'}}>
                             <CustomText text="View in Map" font='jbm' nol={0} style={{fontSize: 17, color: '#2B60E9'}} />
                             <MaterialIcons name="chevron-right" color='#2B60E9' size={20} />
                         </TouchableOpacity>

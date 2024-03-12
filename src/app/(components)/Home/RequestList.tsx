@@ -89,7 +89,7 @@ export default function RequestList()
     const nearbyMarkers = (
         testData.map((mark, index) => {
             return (
-                <Marker id={mark.attributes.ReferenceNumber + "MarkerId"} key={mark.attributes.ReferenceNumber  + "MarkerEmbeddedKey"} coordinate={{latitude: mark.geometry.y, longitude: mark.geometry.x}}>
+                <Marker onPress={() => setHighlight(index)} id={mark.attributes.ReferenceNumber + "MarkerId"} key={mark.attributes.ReferenceNumber  + "MarkerEmbeddedKey"} coordinate={{latitude: mark.geometry.y, longitude: mark.geometry.x}}>
                     <Image style={[styles.mapMarker, {width: index === highlight ? 30 : 15}]} source={{uri: generateSymbolUrl(mark.attributes.CategoryLevel1)}} />
                 </Marker>
             )
@@ -100,6 +100,7 @@ export default function RequestList()
         fetchTestData()
     }, [latlng])
 
+    /*
     useEffect(() => {
         (async () => {
 
@@ -113,6 +114,7 @@ export default function RequestList()
           setLatlng({latitude: location.coords.latitude, longitude: location.coords.longitude})
         })();
     }, []);
+    */
 
     useEffect(() => {
         if (testData.length !== 0) {
@@ -154,7 +156,7 @@ export default function RequestList()
         loader ? 
         <Loader /> :
         <View style={styles.listWrapper}> 
-            <MapView ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9}]}>
+            <MapView zoomEnabled={false} scrollEnabled={false} rotateEnabled={false} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9}]}>
                 {
                     nearbyMarkers
                 }
