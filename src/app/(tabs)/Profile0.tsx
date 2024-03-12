@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TextInput, Pressable} from "react-native";
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { globalFont } from "../../customs";
+import { global } from "../../customs";
 
 
 export default function Profile0()
@@ -122,7 +123,7 @@ export default function Profile0()
             </View>
 
             <View style={styles.rowContainer}>
-                <Pressable style={{...styles.button, backgroundColor: '#9B9B9B'}} onPress={cancelPress}>
+                <Pressable style={{...styles.button, backgroundColor: global.baseGold100}} onPress={cancelPress}>
                     <Text style={{color: '#ffffff', textAlign: 'center'}}>Cancel</Text>
                 </Pressable>
                 <Pressable style={{...styles.button, backgroundColor: '#1b3763'}} onPress={createPress}>

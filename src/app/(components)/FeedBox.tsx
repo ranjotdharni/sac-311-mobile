@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
     },
 
     FeedBoxWrapper: {
-        width: Dimensions.get('screen').width * 0.9, //say we call the last number on this line 'x' (see next comment below),...
-        height: '70%',
+        width: Dimensions.get('screen').width * 0.96, //say we call the last number on this line 'x' (see next comment below),...
+        height: '80%',
         position: 'relative',
-        marginLeft: Dimensions.get('screen').width * 0.05,
-        top: '15%', //...then the last number on this line should be equal to (1 - x) / 2!!!!!
+        marginLeft: Dimensions.get('screen').width * 0.02,
+        top: '5%', //...then the last number on this line should be equal to (1 - x) / 2!!!!!
         backgroundColor: 'white',
         borderRadius: borderOffset,
         display: 'flex',
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         height: 'auto',
         marginLeft: '5%',
         alignSelf: 'flex-start',
-        marginTop: '2.5%',
+        marginTop: '1%',
     },
 
     FeedBoxText: {

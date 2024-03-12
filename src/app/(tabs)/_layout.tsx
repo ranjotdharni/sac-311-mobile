@@ -13,14 +13,16 @@ export default function Layout()
                     <Stack.Screen name="Explore" options={{ headerShown: false }} />
                     <Stack.Screen name="Resources" options={{ headerShown: false }} />
                     <Stack.Screen name="ResourceAbout" options={{ headerShown: false }} />
-                    <Stack.Screen name="ResourceArticles" options={{ headerShown: false }} />
-                    <Stack.Screen name="ResourceFAQ" options={{ headerShown: false }} />
+                    <Stack.Screen name="ResourceAnswers" options={{ headerShown: false }} />
                     <Stack.Screen name="Profile" options={{ headerShown: false }} />
                     <Stack.Screen name="Profile3" options={{ headerShown: false }} />
                     <Stack.Screen name="Profile0" options={{ headerShown: false }} />
                     <Stack.Screen name="FAQFullView" options={{ headerShown: false }} />
                     <Stack.Screen name="Business" options = {{ headerShown: false }} />
                     <Stack.Screen name="Settings" options={{ headerShown: false }} />
+                    <Stack.Screen name="ResidentTab" options={{ headerShown: false }} />
+                    <Stack.Screen name="VisitorTab" options={{ headerShown: false }} />
+                    <Stack.Screen name="BusinessTab" options={{ headerShown: false }} />
                     <Stack.Screen name="News" options={{headerShown: false }} />
                 </Stack>
             <NavBar />

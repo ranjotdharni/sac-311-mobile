@@ -2,8 +2,9 @@ import { useNavigation, useLocalSearchParams  } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { global } from "../../customs";
 import { globalFont } from "../../customs";
+import { ScrollView } from "react-native-gesture-handler";
 
-export default function FAQFullView(){
+export default function AnswerFullView(){
     const nav = useNavigation()
     const params = useLocalSearchParams<{type: string,  answer: string, question: string} >();
     return (
@@ -19,16 +20,19 @@ export default function FAQFullView(){
             </View>
             <View style={styles.innerPageWrapper}>
                 <View style={styles.infoWrapper}>
-                    {/*Question here*/}
-                    <View style={styles.questionWrapper}>
-                        <Text style={styles.questionText}>{params.question}</Text>
-                    </View>
-                    {/*Horizontal rule*/}
-                    <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth,}}/>
-                    {/*Answer here*/}
-                    <View style={styles.answerWrapper}>
-                        <Text style={styles.answerText}>{params.answer}</Text>
-                    </View>
+                    <ScrollView>
+                        {/*Question here*/}
+                        <View style={styles.questionWrapper}>
+                            <Text style={styles.questionText}>{params.question}</Text>
+                        </View>
+                        {/*Horizontal rule*/}
+                        <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth,}}/>
+                        {/*Answer here*/}    
+                        <View style={styles.answerWrapper}>
+                            <Text style={styles.answerText}>{params.answer}</Text>
+                        </View>
+                        <View style={styles.bottomMargin}></View>
+                    </ScrollView>
                 </View>
             </View>
         </View>
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
         backgroundColor: global.baseBackground100,
     },
     innerPageWrapper:{
-        height:'83%',
+        height:'86%',
         alignItems:'center',
         flexDirection:'column',
         justifyContent:'space-between',
@@ -94,4 +98,7 @@ const styles = StyleSheet.create({
         marginRight:'6%',
         marginTop:'13%',
     },
+    bottomMargin:{
+        padding:35
+    }
 })
