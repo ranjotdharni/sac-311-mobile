@@ -2,8 +2,13 @@ import { Link, usePathname } from "expo-router";
 import { View, StyleSheet, Animated, Easing, Dimensions } from "react-native";
 import NavItem from "./NavItem";
 import { MaterialIcons } from "@expo/vector-icons";
+<<<<<<< Updated upstream
 import { useEffect, useRef, useState } from "react";
 import { global, grabImmediateRoute, salesforceDevelopmentSignature } from "../../customs";
+=======
+import { useState } from "react";
+import { global } from "../../customs";
+>>>>>>> Stashed changes
 import { useNavigation } from "@react-navigation/native"
 
 const screenWidth: number = Dimensions.get('screen').width
@@ -56,8 +61,11 @@ export default function NavBar(nav: any)
     return (
         <View style={styles.NavContainer}>
             <View style={styles.NavBox}>
+<<<<<<< Updated upstream
                 <Animated.View style={{borderRadius: 10, backgroundColor: global.baseGold100, position: 'absolute', height: '90%', aspectRatio: 1 / 1, transform: [{ translateX: offsetLeft }]}}></Animated.View>
 
+=======
+>>>>>>> Stashed changes
                 <NavItem navigation={navigation} id={0} active={isActive} passUp={swapTab} title='Home' iconName='home' url='/(tabs)/Home' />
                 <NavItem navigation={navigation} id={1} active={isActive} passUp={swapTab} title='Explore' iconName='map' url='/(tabs)/Explore' />
 

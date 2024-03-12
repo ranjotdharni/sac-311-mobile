@@ -1,5 +1,9 @@
 import { MaterialIcons } from "@expo/vector-icons"
+<<<<<<< Updated upstream
 import { Href, useNavigation, router } from "expo-router"
+=======
+import { Href, useNavigation } from "expo-router"
+>>>>>>> Stashed changes
 import { View, StyleSheet, Pressable } from "react-native"
 import { global } from "../../customs"
 import CustomText from "./CustomText"
@@ -11,12 +15,14 @@ export default function NavItem({ id, title, iconName, active, url, passUp, navi
 {
     const navigateTo = (to: Href<string>) => {
         (navigation.navigate as (screen: Href<string>) => void)(to);
+<<<<<<< Updated upstream
         //nav.navigate("Explore", { screen: "NavItem" })
+=======
+>>>>>>> Stashed changes
     };
     
     return (
-        <Pressable style={styles.NavItemWrapper}>
-            <Link href={url} onPressOut={ () => { passUp(id) } } style={{width: '100%', height: '100%', zIndex: 2}} />
+        <Pressable onPress={() => { navigateTo(url); passUp(id) }} style={styles.NavItemWrapper}>
             <View style={styles.NavPress}>
                 <MaterialIcons style={styles.NavIcon} name={iconName} color={(active(id) ? global.baseBackground100 : global.baseGrey100)} size={25} />
                 <CustomText font={fontGetter()} nol={0} text={title!} style={{fontSize: 10, color: (active(id) ? global.baseBackground100 : global.baseGrey100)}} />
@@ -25,7 +31,11 @@ export default function NavItem({ id, title, iconName, active, url, passUp, navi
     )
 }
 
+<<<<<<< Updated upstream
 //artifact: <Pressable onPress={() => { navigateTo(url); passUp(id) }} style={styles.NavItemWrapper}>
+=======
+//artifact: <Link href={url} onPressOut={ () => { passUp(id) } } style={{width: '100%', height: '100%', zIndex: 2}} />
+>>>>>>> Stashed changes
 
 const styles = StyleSheet.create({
     NavItemWrapper : {
