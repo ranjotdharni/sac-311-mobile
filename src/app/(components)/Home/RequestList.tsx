@@ -69,7 +69,7 @@ export default function RequestList()
     function toLeft() {
         if (highlight === 0)
             return
-        
+
         if (highlight > 0) {
             setHighlight(highlight - 1)
             setLeft(true)
@@ -102,13 +102,13 @@ export default function RequestList()
 
     useEffect(() => {
         (async () => {
-          
+
           let { status } = await Location.requestForegroundPermissionsAsync();
           if (status !== 'granted') {
             console.log('Permission to access location was denied');
             return;
           }
-    
+
           let location = await Location.getCurrentPositionAsync({});
           setLatlng({latitude: location.coords.latitude, longitude: location.coords.longitude})
         })();
@@ -153,7 +153,7 @@ export default function RequestList()
     return (
         loader ? 
         <Loader /> :
-        <View style={styles.listWrapper}>
+        <View style={styles.listWrapper}> 
             <MapView ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9}]}>
                 {
                     nearbyMarkers
@@ -218,12 +218,10 @@ const styles = StyleSheet.create({
         overflow: 'visible',
         
     },
-
     listTitleWrapper: {
         width: '100%',
         height: Dimensions.get('screen').height * 0.05,
     },
-
     listTitle: {
         color: 'white',
         alignSelf: 'flex-start',

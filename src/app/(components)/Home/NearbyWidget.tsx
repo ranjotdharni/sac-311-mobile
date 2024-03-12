@@ -74,7 +74,7 @@ export const TabsComponent: React.FC = () => {
             {/* Content based on selected tab */}
             <View style={styles.contentContainer}>
                 {selectedTab === 'Near You' ? (
-                    <Geolocation />/* REPLACE WITH GEOLOCATION SERVICES */
+                    <RequestList />/* REPLACE WITH GEOLOCATION SERVICES */
                 ) : (
                     <View>
                         <YourRequests />

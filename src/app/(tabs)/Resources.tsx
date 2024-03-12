@@ -62,7 +62,6 @@ export default function Resources() {
                     </TouchableOpacity>
                 </View>
             </View>
-<<<<<<< Updated upstream
             <View style={styles.searchContainer}>
                 <Image style={styles.searchIcon} source={require('../../assets/png/search.png')} />
                 <TextInput
@@ -90,10 +89,7 @@ export default function Resources() {
                         );
                     })}
                 </ScrollView>
-            </View>  
-=======
-            <SearchBar value='' style={styles.searchStyle} placeholder='Search For Service Related Resources' />
->>>>>>> Stashed changes
+            </View>
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
                 {filteredRequestTypes.map((obj) => {
