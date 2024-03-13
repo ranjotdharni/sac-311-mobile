@@ -27,7 +27,6 @@ const params: [string, string][] = [
     ['distance', '1000'],
     ['returnDistinctValues', 'true']
 ]
-const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, 5, params)
 
 const initialLatLng: LatLng = {
     latitude: 38.574713,
