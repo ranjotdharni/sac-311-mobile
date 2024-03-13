@@ -33,7 +33,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
     
     return (
         <View style={[basicStyle.default, internalStyle.requestWrapper]} >
-            {(!compact ? <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} font={fontGetter()} nol={0} style={internalStyle.requestCategory} /></View> : <></>)}
+            {(!compact ? <View style={internalStyle.requestCategoryWrapper}><CustomText text={(category.length > 25 ? category.substring(0, 22) + '...' : category)} font={fontGetter()} nol={0} style={internalStyle.requestCategory} /></View> : <></>)}
 
             <View style={defaultStyles.arrowWrapper}>
                 <View style={[internalStyle.internalWrapper, (compact ? {width: width, height: height} : {})]}>

@@ -20,6 +20,19 @@ const initialRegion: Region = {
 
 const markerViewWidth = 0.9 // as percentage of screen width
 const markerItemRadius = 5
+const defaultQuery = generateEndpointUrl(`NOT(Address='')`, 5, [])
+const params: [string, string][] = [
+    ['orderByFields', 'ReferenceNumber'],
+    ['geometryType', 'esriGeometryPoint'],
+    ['distance', '1000'],
+    ['returnDistinctValues', 'true']
+]
+const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, 5, params)
+
+const initialLatLng: LatLng = {
+    latitude: 38.574713,
+    longitude: -121.491489
+}
 
 export default function RequestList()
 {
@@ -28,7 +41,7 @@ export default function RequestList()
 
     const [loader, setLoader] = useState<boolean>(false)
     const [testData, setTestData] = useState<Array<responseType>>([])
-    const [latlng, setLatlng] = useState<LatLng>({latitude: 0, longitude: 0})
+    const [latlng, setLatlng] = useState<LatLng>(initialLatLng)
     const [highlight, setHighlight] = useState<number>(0)
     const [permission, setPermission] = useState<boolean>(false)
     const [message, setMessage] = useState<string>('Use My Location')
@@ -37,35 +50,29 @@ export default function RequestList()
 
     async function fetchTestData() {
         setLoader(true)
+        let temp: responseType[] = []
 
-        await useMyLocation()
-        
-        const defaultQuery = generateEndpointUrl(`NOT(Address='')`, 5, [])
-        const params: [string, string][] = [
-            ['orderByFields', 'Address'],
-            ['geometryType', 'esriGeometryPoint'],
-            ['geometry', `${latlng.longitude},${latlng.latitude}`],
-            ['distance', '1000'],
-            ['returnDistinctValues', 'true']
-        ]
-        const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, 5, params)
-
-        await fetch(( permission ? query : defaultQuery)).then((middle) => {
+        await fetch((generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, 5, [...params, ['geometry', `${latlng.longitude},${latlng.latitude}`]]))).then((middle) => {
             return middle.json()
         }).then((res) => {
-            setTestData(res.features)
-
-            if (res.features.length === 0) {
-                setMessage('No Nearby Requests')
-                setTimeout(() => {setMessage('Use My Location')}, 7000)
-            }
+            temp = [...res.features]
         })
+
+        if (temp.length === 0) {
+            await fetch(defaultQuery).then(middle => middle.json()).then(res => setTestData(res.features))
+            setMessage('No Nearby Requests')
+            setTimeout(() => {setMessage('Use My Location')}, 7000)
+        }
+        else {
+            setTestData(temp)
+            setMessage(latlng === initialLatLng ? 'Use My Location' : 'Nearby Requests')
+        }
 
         setLoader(false)
     }
 
     function toRight() {
-        if (highlight === testData.length - 1)
+        if (testData.length === 0 || highlight === testData.length - 1)
             return
 
         if (highlight < testData.length - 1) {
@@ -75,7 +82,7 @@ export default function RequestList()
     }
 
     function toLeft() {
-        if (highlight === 0)
+        if (testData.length === 0 || highlight === 0)
             return
 
         if (highlight > 0) {
@@ -94,19 +101,12 @@ export default function RequestList()
                     passUp={() => {}}
                 />
 */
-    const nearbyMarkers = (
-        testData.map((mark, index) => {
-            return (
-                <Marker onPress={() => setHighlight(index)} id={mark.attributes.ReferenceNumber + "MarkerId"} key={mark.attributes.ReferenceNumber  + "MarkerEmbeddedKey"} coordinate={{latitude: mark.geometry.y, longitude: mark.geometry.x}}>
-                    <Image style={[styles.mapMarker, {width: index === highlight ? 30 : 15}]} source={{uri: generateSymbolUrl(mark.attributes.CategoryLevel1)}} />
-                </Marker>
-            )
-        })
-    )
 
-    useEffect(() => {
+    /*
+        useEffect(() => {
         fetchTestData()
     }, [latlng])
+    */
 
     async function getPermissions() {
         setPermission((await Location.getForegroundPermissionsAsync()).status === 'granted')
@@ -133,12 +133,10 @@ export default function RequestList()
             let { status } = await Location.requestForegroundPermissionsAsync()
             if (status !== 'granted') {
                 setPermission(false)
-                setMessage('Use My Location')
                 return
             }
             else {
                 setPermission(true)
-                setMessage('Near You')
             }
         }
 
@@ -148,20 +146,22 @@ export default function RequestList()
 
     useEffect(() => {
         if (testData.length !== 0) {
-            mapRef.current?.fitToCoordinates(
-                testData.map((item) => { 
-                    return {latitude: item.geometry.y, longitude: item.geometry.x}
-                }),
-                {
-                    animated: true,
-                    edgePadding: {
-                        top: 50,
-                        bottom: 50,
-                        right: 50,
-                        left: 50
+            setTimeout(() => {
+                mapRef.current?.fitToCoordinates(
+                    testData.map((item) => { 
+                        return {latitude: item.geometry.y, longitude: item.geometry.x}
+                    }),
+                    {
+                        animated: true,
+                        edgePadding: {
+                            top: 50,
+                            bottom: 50,
+                            right: 50,
+                            left: 50
+                        }
                     }
-                }
-            )
+                )
+            }, 1000)
         }
     }, [testData])
 
@@ -188,7 +188,9 @@ export default function RequestList()
         if (permission) {
             useMyLocation()
         }
-    }, [])
+        
+        fetchTestData()
+    }, [router])
 
     return (
         loader ? 
@@ -196,7 +198,13 @@ export default function RequestList()
         <View style={styles.listWrapper}> 
             <MapView zoomEnabled={false} scrollEnabled={false} rotateEnabled={false} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9}]}>
                 {
-                    nearbyMarkers
+                    testData.map((mark, index) => {
+                        return (
+                            <Marker onPress={() => setHighlight(index)} id={mark.attributes.ReferenceNumber + "MarkerId"} key={mark.attributes.ReferenceNumber  + "MarkerEmbeddedKey"} coordinate={{latitude: mark.geometry.y, longitude: mark.geometry.x}}>
+                                <Image style={[styles.mapMarker, {width: index === highlight ? 30 : 15}]} source={{uri: generateSymbolUrl(mark.attributes.CategoryLevel1)}} />
+                            </Marker>
+                        )
+                    })
                 }
             </MapView>
             <View style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').height * 0.05}}>
@@ -224,7 +232,7 @@ export default function RequestList()
                 </Animated.View>
             </View>
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: Dimensions.get('screen').width * 0.9, height: 75}}>
-                <TouchableOpacity onPress={useMyLocation} style={{marginLeft: 10}}>
+                <TouchableOpacity onPress={() => { useMyLocation(); fetchTestData(); }} style={{marginLeft: 10}}>
                     <CustomText text={message} font='jbm' nol={0} style={{fontSize: 17, color: '#2B60E9'}} />
                 </TouchableOpacity>
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', width: Dimensions.get('screen').width * 0.3}}>
