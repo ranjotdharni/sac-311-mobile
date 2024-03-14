@@ -19,19 +19,21 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Allow app to use your location"
-      }
+      },
+      "bundleIdentifier": "com.seanocga.src"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/png/icon.png",
         "backgroundColor": "#f5faff"
       },
-      "permissions":[
+      "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
         "INTERNET",
         "VIBRATE"
-      ]
+      ],
+      "package": "com.seanocga.src"
     },
     "web": {
       "bundler": "metro",
@@ -43,6 +45,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "1b021534-8b49-4afe-b8ae-e569ff418fb1"
+      }
     }
   }
 }

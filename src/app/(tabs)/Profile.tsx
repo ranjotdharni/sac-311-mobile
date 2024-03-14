@@ -1,13 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ButtonPanel from '../(components)/Profile/ButtonPanel';
 import SearchBar from '../(components)/Profile/SearchBar';
 import { globalFont } from '../../customs';
-import * as Notifications from 'expo-notifications'; // Import Notifications
+import * as Notifications from 'expo-notifications';
+import { useEffect } from 'react';
 
 export default function Profile() {
   const navigation = useNavigation();
+
+  useEffect(() => {
+    // This will ask for permission when the component mounts
+    (async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission for notifications was denied');
+        return;
+      }
+
+      // Set up a notification channel on Android
+      if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
+      }
+    })();
+  }, []);
 
   const navigateToProfile2 = () => {
     (navigation.navigate as (screen: string) => void)('Profile2');
@@ -16,14 +38,8 @@ export default function Profile() {
   const handleTestButtonPress = async () => {
     try {
       console.log("Attempting to send push notification...");
-      // Request permission for notifications
-      const { status } = await Notifications.requestPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission denied to send push notification');
-        return;
-      }
       // Get the Expo push token
-      const { data: expoPushToken } = await Notifications.getExpoPushTokenAsync({ projectId: 'YOUR_PROJECT_ID' });
+      const expoPushToken = (await Notifications.getExpoPushTokenAsync()).data;
       // Construct the notification data
       const message = {
         to: expoPushToken,
@@ -32,7 +48,7 @@ export default function Profile() {
         body: 'This is a test notification!',
       };
       // Send the push notification
-      await fetch('https://exp.host/--/api/v2/push/send', {
+      let response = await fetch('https://exp.host/--/api/v2/push/send', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -41,14 +57,19 @@ export default function Profile() {
         },
         body: JSON.stringify(message),
       });
-      console.log("Push notification sent successfully.");
+      let data = await response.json();
+      console.log("Push notification sent successfully:", data);
+  
+      // Check for errors in the response and implement retry logic
+      if (data.data.status === 'error') {
+        console.error("Error sending push notification:", data.data.message);
+      }
     } catch (error) {
       console.error("Error while trying to send push notification:", error);
     }
   };
 
-  console.log("Profile component rendered."); // Add this line to check if the component renders
-
+  console.log("Profile component rendered.");
   return (
     <View style={{ flex: 1 }}>
       <Text style={styles.title}>Service Requests Lookup</Text>
