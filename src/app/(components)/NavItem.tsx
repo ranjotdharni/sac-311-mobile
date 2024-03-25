@@ -9,10 +9,7 @@ import { globalFont } from '../../customs';
 
 export default function NavItem({ id, title, iconName, active, url, passUp, navigation } : { id: number, title: string | undefined, iconName: keyof typeof MaterialIcons.glyphMap, active: (arg1: number) => boolean, url: Href<string>, passUp: (arg1: number) => void, navigation: any })
 {
-    const navigateTo = (to: Href<string>) => {
-        (navigation.navigate as (screen: Href<string>) => void)(to);
-    };
-    
+   
     return (
         <Pressable style={styles.NavItemWrapper}>
             <Link href={url} onPressOut={ () => { passUp(id) } } style={{width: '100%', height: '100%', zIndex: 2}} />
@@ -24,7 +21,7 @@ export default function NavItem({ id, title, iconName, active, url, passUp, navi
     )
 }
 
-//artifact: <Pressable onPress={() => { navigateTo(url); passUp(id) }} style={styles.NavItemWrapper}>
+//artifact: <Link href={url} onPressOut={ () => { passUp(id) } } style={{width: '100%', height: '100%', zIndex: 2}} />
 
 const styles = StyleSheet.create({
     NavItemWrapper : {

@@ -4,20 +4,28 @@
 
 import { StyleSheet } from 'react-native'
 
+
+//                              //
+//             Variables        //
+//                              //
+
+export const salesforceDevelopmentSignature: string = '311MigrationDev' // IF YOU CHANGE THIS, CHANGE 'ParamType' BELOW AS WELL!!!!!!!!!!!!!!!!!!!
+
+
 //                              //
 //      Static Types Section    //
 //                              //
 
 export interface responseType {
     attributes: {
-        ReferenceNumber : string, 
-        CategoryLevel1 : string, 
-        CategoryLevel2 : string, 
-        CategoryName : string, 
-        CouncilDistrictNumber : string, 
-        DateCreated : number, 
-        DateUpdated : number, 
-        DateClosed : number, 
+        ReferenceNumber : string, //
+        CategoryLevel1 : string, //
+        CategoryLevel2 : string, //
+        CategoryName : string, //
+        CouncilDistrictNumber : string, //
+        DateCreated : number | Date, 
+        DateUpdated : number | Date, 
+        DateClosed : number | null | Date, 
         CrossStreet : string, 
         ZIP : string, 
         SFTicketID : string, 
@@ -32,6 +40,43 @@ export interface responseType {
         y: number  //latitude
     }
 }
+
+export interface ParamType {
+    Subject: '311MigrationDev',
+    Service_Type__c: string, // CategoryLevel1
+    Sub_Service_Type__c: string, // CategoryLevel2
+    Council_District__c: string, // CouncilDistrictNumber
+    GIS_Street_Address__c: string, // CrossStreet
+    GIS_Zip_Code__c: string, // ZIP
+    Address__c: string, // Address
+    GIS_System_Info__c: string, // "<Data_Source>  <SourceLevel1>"
+    GIS_Neighborhood_Name__c: string, // Neighborhood
+    description: string,
+    Address_Geolocation__Latitude__s: string,
+    Address_Geolocation__Longitude__s: string
+}
+
+export interface ParamResponseType {
+    Address_Geolocation__Latitude__s: number,
+    Address_Geolocation__Longitude__s: number,
+    Address__c: string,
+    CaseNumber: string,
+    ClosedDate: string | null,
+    Council_District__c: string,
+    CreatedDate: string,
+    Description: string,
+    GIS_Neighborhood_Name__c: string,
+    GIS_Street_Address__c: string,
+    GIS_System_Info__c: string,
+    GIS_Zip_Code__c: string,
+    Id: string,
+    LastModifiedDate: string,
+    Service_Type__c: string,
+    Status: string,
+    Sub_Service_Type__c: string,
+    attributes: Array<Object>
+}
+
 
 //                              //
 //      Dummy Data Section      //
@@ -57,6 +102,539 @@ const symbolReference = [
     {category: 'Shared Rideables', url: 'bc4c127d82817d628a6015ccdf073e63'},
     {category: 'Escalation', url: 'f3a7dd9487d9ca03b00ce5f015b8061c'},
     {category: 'Other', url: 'a7427c700f875c2e789f93802fc4d1fd'},
+]
+
+export const requestTypes = [
+    {
+        id: "a0Om0000003dz9rEAA",
+        type: 'Animal Care',
+        subTypes: [
+            {
+                id: "a0Om0000003dz9wEAA",
+                subType: 'Contact Front Street Shelter',
+                description: 'Questions about adoptions, spay/neuter resources, found animals, licensing and barking.'
+            },
+            {
+                id: "a0Om0000003dzA0EAI",
+                subType: 'Dead Animal',
+                description: 'Report a dead animal in the public right of way.'
+            },
+            {
+                id: "a0Om0000003dzA5EAI",
+                subType: 'General: Animal Control',
+                description: 'General Animal Control Questions'
+            },
+            {
+                id: "a0Om0000003dzA1EAI",
+                subType: 'Pet Complaint or Concerns',
+                description: 'Report concerns with an owned animal.'
+            },
+            {
+                id: "a0Om0000003dzA3EAI",
+                subType: 'Stray or Loose Animal',
+                description: 'Report an injured, sick, or aggressive stray animal.'
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003eSnjEAE",
+        type: 'Building and Planning',
+        subTypes: [
+            {
+                id: "a0Om0000003eSnlEAE",
+                subType: 'General: Building and Planning',
+                description: 'Questions or concerns regarding building, planning, or zoning.'
+            },
+        ]
+    },
+    {
+        id: "a0Om0000005austEAA",
+        type: 'Business Resources',
+        subTypes: [
+            {
+                id: "a0Om0000005eha5EAA",
+                subType: 'Access to Capital',
+                description: 'Connecting businesses to lending partners and grant opportunities.',
+            },
+            {
+                id: "a0Om0000005ehaBEAQ",
+                subType: 'Business Assistance/Professional Services',
+                description: 'Business technical assistance including, but not limited to: accounting, human resources, marketing, operations, site selection, strategic planning, succession planning, e-commerce, legal structure, etc.',
+            },
+            {
+                id: "a0ODh000005jJR2MAM",
+                subType: 'Economic Data',
+                description: 'Assistance obtaining economic data including geographic and commercial real estate information through a variety of data sources such as ESRI and CoStar.',
+            },
+            {
+                id: "a0ODh000005jJQxMAM",
+                subType: 'Environmental Brownfields Assistance',
+                description: 'Financial and technical assistance for brownfields assessment and remediation.',
+            },
+            {
+                id: "a0Om0000005ehaCEAQ",
+                subType: 'Financial Empowerment',
+                description: 'Free one-on-one financial navigation and coaching.',
+            },
+            {
+                id: "a0Om0000005authEAA",
+                subType: 'General: Business Resources',
+                description: 'For general business assistance and resource service requests.',
+            },
+            {
+                id: "a0ODh000005jJQsMAM",
+                subType: 'Navigating City of Sacramento Permits and Regulatory Environment',
+                description: 'Assistance with permits (entertainment, business operations tax certificates, planning and building assistance, etc.), new or existing rules and regulations, etc.',
+            },
+            {
+                id: "a0Om0000005YFcWEAW",
+                subType: 'Workforce Development & Training',
+                description: 'Resources for employers, and job and workforce readiness.',
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003eSnEEAU",
+        type: 'Code Enforcement',
+        subTypes: [
+            {
+                id: "a0Om0000003eSnMEAU",
+                subType: 'Auto Repair',
+                description: 'Report a home-based auto repair business or major auto repair taking place on the street.',
+            },
+            {
+                id: "a0Om0000003eSnNEAU",
+                subType: 'Basketball Hoop in Public Right of Way',
+                description: 'Report a basketball hoop on the street or sidewalk.',
+            },
+            {
+                id: "a0Om0000003eSnJEAU",
+                subType: 'Business Compliance Entertainment',
+                description: 'Report concerns with taxi\'s, entertainment venues like pubs or clubs.',
+            },
+            {
+                id: "a0Om0000005DXeXEAW",
+                subType: 'Business Compliance Shopping Cart',
+                description: 'Report a stray shopping cart.',
+            },
+            {
+                id: "a0Om00000062dGjEAI",
+                subType: 'Business Compliance Short Term Rental',
+                description: 'Report a concern with a short term rental.',
+            },
+            {
+                id: "a0Om0000005DXecEAG",
+                subType: 'Business Compliance Taxi Cab',
+                description: 'Report a concern with a taxi cab.',
+            },
+            {
+                id: "a0Om0000005DXehEAG",
+                subType: 'Business Compliance Weeds',
+                description: 'Report a lot with overgrown weeds or grass.',
+            },
+            {
+                id: "a0Om0000003eSngEAE",
+                subType: 'General: Code Enforcement',
+                description: 'Questions regarding code or housing enforcement policies.',
+            },
+            {
+                id: "a0Om0000003eSnWEAU",
+                subType: 'Graffiti',
+                description: 'Report graffiti on public and/or private property.',
+            },
+            {
+                id: "a0Om0000003eSnaEAE",
+                subType: 'Housing Complaint',
+                description: 'Report structural or electrical concerns with a property.',
+            },
+            {
+                id: "a0Om0000003eSnOEAU",
+                subType: 'Junk & Debris',
+                description: 'Report junk, debris, or trash on private property, in a front, rear or side yard or on a vacant lot. To report Illegal Dumping on a public street, please go to Solid Waste – Illegal Dumping. For dumping and trash related to encampments, use Homeless Camp – Trash.',
+            },
+            {
+                id: "a0Om0000003eSnPEAU",
+                subType: 'Landscaping',
+                description: 'Report concerns with overgrown landscaping encroaching on the public right of way.',
+            },
+            {
+                id: "a0Om0000003eSnREAU",
+                subType: 'Mechanical Noise Complaint',
+                description: 'Report mechanical noise like an air conditioner or leaf blower.',
+            },
+            {
+                id: "a0Om0000003eSnQEAU",
+                subType: 'Occupied Trailer On Private Property',
+                description: 'Report an occupied trailer or RV parked on private property.',
+            },
+            {
+                id: "a0Om0000003eSnVEAU",
+                subType: 'Pest',
+                description: 'Report roaches, mice, or rats in a rented property.',
+            },
+            {
+                id: "a0Om0000003eSnUEAU",
+                subType: 'Fences',
+                description: 'Report a downed or damaged fence or an unfenced pool.',
+            },
+            {
+                id: "a0Om0000003eSnSEAU",
+                subType: 'Signs, Banners, or Fliers',
+                description: 'Report illegal signage in the public right of way.',
+            },
+            {
+                id: "a0Om0000004sEToEAM",
+                subType: 'Stagnant Water',
+                description: 'Report an unkempt pool, or other stagnant water causing mosquitos.',
+            },
+            {
+                id: "a0Om0000003eSnKEAU",
+                subType: 'Vehicle on Private Property',
+                description: 'Report a non-operational vehicle on private property, like a driveway.',
+            },
+            {
+                id: "a0Om0000003eSnXEAU",
+                subType: 'Vehicle Abandoned on Street',
+                description: 'Report a vehicle parked on a City street in excess of 72 hours.',
+            },
+            {
+                id: "a0Om0000003eSnZEAU",
+                subType: 'Work Without a Permit',
+                description: 'Report construction work believed to be taking place without a permit.',
+            },
+            {
+                id: "a0Om0000003eSnTEAU",
+                subType: 'Yard or Garage Sale Complaint',
+                description: 'Report a property holding excessive yard or garage sales.',
+            },
+            {
+                id: "a0Om0000003eSneEAE",
+                subType: 'Zoning: Detatched Accessory Structure',
+                description: 'Report a detached structure like a carport or shed in the front or rear yard.',
+            },
+            {
+                id: "a0Om0000003eSndEAE",
+                subType: 'Zoning: Fencing',
+                description: 'Report a downed or damaged fence or an unfenced pool.',
+            },
+            {
+                id: "a0Om0000003eSnfEAE",
+                subType: 'Zoning: Home Occupation',
+                description: 'Report an unlicensed home-based business.',
+            },
+            {
+                id: "a0Om0000003eSncEAE",
+                subType: 'Zoning: Improper Land Use or Overpavement',
+                description: 'Report an unauthorized recycling center or overly paved front yard.',
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003e1eCEAQ",
+        type: 'Drains',
+        subTypes: [
+            {
+                id: "a0Om0000003e1enEAA",
+                subType: 'General: Drains',
+                description: 'Non-urgent general drains questions. Please call for situations that require immediate attention.',
+            }
+        ]
+    },
+    {
+        id: "a0Om0000003eSnmEAE",
+        type: 'Homeless Camp',
+        subTypes: [
+            {
+                id: "a0Om0000003eSnnEAE",
+                subType: 'Homeless Concern',
+                description: 'Report a camp or homeless concern on public property, excluding a park or bike trail.',
+            },
+            {
+                id: "a0Om0000005oGQLEA2",
+                subType: 'Homeless Camp-Trash',
+                description: 'To report trash from a homeless camp.',
+            },
+            {
+                id: "a0Om0000005qSdnEAE",
+                subType: 'Homeless Encampment 500ft from School',
+                description: 'Homeless Encampment Blocking Sidewalk',
+            },
+            {
+                id: "a0Om0000004sETpEAM",
+                subType: 'Homeless Camp at Park or Bike Trail',
+                description: 'Report a homeless camp at a park or bike trail.',
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003eSnoEAE",
+        type: 'Parking',
+        subTypes: [
+            {
+                id: "a0Om0000003eSnpEAE",
+                subType: 'Broken Meter or Payment Machine',
+                description: 'Report a broken or malfunctioning meter or payment machine.',
+            },
+            {
+                id: "a0Om0000003eSnqEAE",
+                subType: 'Customer Service: Parking',
+                description: "Questions regarding monthly parking, IOU's, or requests to contact Parking Staff.",
+            },
+            {
+                id: "a0Om0000003eSnrEAE",
+                subType: 'Enforcement Request',
+                description: 'Report parking violations (blocking hydrant, parked in "no parking," etc.)',
+            },
+            {
+                id: "a0Om0000003eSnsEAE",
+                subType: 'General: Parking',
+                description: 'General questions regarding parking policies or procedures.',
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003eI2lEAE",
+        type: 'Parks',
+        subTypes: [
+            {
+                id: "a0Om0000003eI2nEAE",
+                subType: 'Broken or Damaged Park Fence or Gate',
+                description: 'Report concerns with a fence or gate at a City Park.',
+            },
+            {
+                id: "a0Om0000003eI2mEAE",
+                subType: 'General: Parks',
+                description: 'Questions about park policies or procedures.',
+            },
+            {
+                id: "a0Om0000003eI2oEAE",
+                subType: 'Grounds Cleaning',
+                description: 'Request grounds cleaning or removal of trash at a City Park.',
+            },
+            {
+                id: "a0Om0000003eI2pEAE",
+                subType: 'Irrigation',
+                description: 'Report concerns with sprinkler or irrigation systems at a City Park.',
+            },
+            {
+                id: "a0Om0000003eI2rEAE",
+                subType: 'Mowing or Trimming Request',
+                description: 'Request mowing or trimming of trees or landscapes at a City Park.',
+            },
+            {
+                id: "a0Om0000003eI2sEAE",
+                subType: 'Other Park Concern',
+                description: 'Report a non-listed concern to our Parks Department.',
+            },
+            {
+                id: "a0Om0000003eI2tEAE",
+                subType: 'Park Playground',
+                description: 'Report concerns with playground or court equipment.',
+            },
+            {
+                id: "a0Om0000003eI2vEAE",
+                subType: 'Request a Park Ranger',
+                description: 'Request a Park Ranger for safety concerns.',
+            },
+            {
+                id: "a0Om0000003eI2uEAE",
+                subType: 'Restrooms',
+                description: 'Request clean up or maintenance for a park restroom.',
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003e80xEAA",
+        type: 'Sewer',
+        subTypes: [
+            {
+                id: "a0Om0000003e816EAA",
+                subType: 'General: Sewer',
+                description: 'General sewer questions.'
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003eI2iEAE",
+        type: 'Shared Rideables',
+        subTypes: [
+            {
+                id: "a0Om0000004C63xEAC",
+                subType: 'Bird',
+                description: 'Report an illegally parked BLACK BIRD bike or scooter.',
+            },
+            {
+                id: "a0Om0000005xzDSEAY",
+                subType: 'Helbiz',
+                description: 'Report an illegally parked BLUE and BLACK HELBIZ scooter.',
+            },
+            {
+                id: "a0Om0000003eI2kEAE",
+                subType: 'Lime',
+                description: 'Report an illegally parked GREEN LIME bike or scooter .',
+            },
+            {
+                id: "a0Om0000005dycyEAA",
+                subType: 'Razor',
+                description: 'Report an illegally parked RED and BLACK RAZOR bike or scooter.',
+            },
+            {
+                id: "a0ODh000005jqrBMAQ",
+                subType: 'Superpedestrian',
+                description: 'Report an illegally parked Superpedestrian scooter.',
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003dz9tEAA",
+        type: 'Solid Waste',
+        subTypes: [
+            {
+                id: "a0Om0000003dzA6EAI",
+                subType: 'General: Solid Waste',
+                description: 'Questions or concerns regarding Solid Waste policies or procedures. For assistance with a container issue, such as repair, replacement or missing cans please call 311.',
+            },
+            {
+                id: "a0Om0000004knaiEAA",
+                subType: 'Illegal Dumping',
+                description: 'Report illegal dumping on a public street. For dumping and trash related to encampments, use Homeless Camp – Trash. For Junk and Debris on private property use Code Enforcement – Junk & Debris.',
+            },
+            {
+                id: "a0Om0000003dzABEAY",
+                subType: 'Missed Weekly Collection',
+                description: 'Report a missed or partially serviced container.',
+            },
+            {
+                id: "a0Om00000062fTKEAY",
+                subType: 'Noise Complaint - RSW',
+                description: 'General noise complaint.',
+            },
+            {
+                id: "a0Om0000003dzA7EAI",
+                subType: 'Recycle Guide or Dump Coupon Request',
+                description: 'Request a replacement dump coupon or recycle guide.',
+            },
+            {
+                id: "a0Om0000003dzA8EAI",
+                subType: 'Schedule an Appointment Based Pick-Up',
+                description: 'Request an appliance/ewaste, or motor oil appointment. Contact information is required to schedule any appointment based pick-up. Free household junk appointments have all been filled for this year. Scheduling will resume in February 2024.',
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003eI2TEAU",
+        type: 'Streets',
+        subTypes: [
+            {
+                id: "a0Om0000003eI2VEAU",
+                subType: 'Bike Rack Issues',
+                description: 'Report concerns with existing bike racks or request a new bike rack installation.',
+            },
+            {
+                id: "a0Om0000003eI2WEAU",
+                subType: 'Bikeway Issues',
+                description: 'Report concerns with a bikeway, such as unsafe conditions like trash, or glass.',
+            },
+            {
+                id: "a0Om0000003eI2XEAU",
+                subType: 'Curb or Gutter',
+                description: 'Report concerns regarding a curb or gutter such as unsafe conditions, or grading issues.',
+            },
+            {
+                id: "a0Om0000003eI2UEAU",
+                subType: 'General: Streets',
+                description: 'General questions regarding policies and procedures about City Streets.',
+            },
+            {
+                id: "a0Om0000003eI2aEAE",
+                subType: 'Pothole',
+                description: 'Report a pothole on a City street.',
+            },
+            {
+                id: "a0Om0000003eI2eEAE",
+                subType: 'Street Lighting',
+                description: 'Report a malfunctioning lighting fixture, including street lamps.',
+            },
+            {
+                id: "a0Om0000003eI2bEAE",
+                subType: 'Sidewalk',
+                description: 'Report a broken, damaged, or unsafe sidewalk.',
+            },
+            {
+                id: "a0Om0000003eI2cEAE",
+                subType: 'Signs and Markings',
+                description: 'Report missing or damaged signs or repainting of street markings.',
+            },
+            {
+                id: "a0Om0000003dzAFEAY",
+                subType: 'Street Maintenance',
+                description: 'Report items blocking a lane of traffic.',
+            },
+            {
+                id: "a0Om0000003eI2fEAE",
+                subType: 'Streetscapes',
+                description: 'Report concerns with the landscaped section between the sidewalk & street, like overflowing sprinklers.',
+            },
+            {
+                id: "a0Om0000003eI2hEAE",
+                subType: 'Traffic Investigation',
+                description: 'Request new speed bumps, signage, or street markings.',
+            },
+            {
+                id: "a0Om0000003eI2gEAE",
+                subType: 'Traffic Signals',
+                description: 'Report a malfunctioning traffic signal.',
+            },
+        ]
+    },
+    {
+        id: "a0Om0000003eAxdEAE",
+        type: 'Urban Forestry',
+        subTypes: [
+            {
+                id: "a0Om0000003eAxeEAE",
+                subType: 'General: Urban Forestry',
+                description: 'Questions regarding urban forestry policies or procedures.'
+            },
+            {
+                id: "a0Om0000003eAxfEAE",
+                subType: 'Tree Service Request',
+                description: 'Request inspection or maintenance of a protected or City tree.'
+            }
+        ]
+    },
+    {
+        id: "a0Om0000003eSnhEAE",
+        type: 'Utility Billing',
+        subTypes: [
+            {
+                id: "a0Om0000003eSniEAE",
+                subType: 'General: Utility Billing',
+                description: 'General utility billing questions.'
+            }
+        ]
+    },
+    {
+        id: "a0Om0000003e81DEAQ",
+        type: 'Water',
+        subTypes: [
+            {
+                id: "a0Om0000003e81JEAQ",
+                subType: 'General: Water',
+                description: 'General water service questions.',
+            },
+            {
+                id: "a0Om0000003e81SEAQ",
+                subType: 'Water Conservation',
+                description: 'Request information about virtual Water Wise House Calls, business and residential water conservation rebates or leak investigation if a leak letter was received.',
+            },
+            {
+                id: "a0Om0000003e81REAQ",
+                subType: 'Water Use Complaint',
+                description: 'Report a water use concern.',
+            },
+        ]
+    }
 ]
 
 export const dummyDataHome = [
@@ -291,6 +869,101 @@ export function dateAtDaysAgo(daysAgo: number): Date {
     return dateNow
 }
 
+export function responseObjectToParameter(obj: responseType) {
+    return {
+        Subject: salesforceDevelopmentSignature,
+        Service_Type__c: categoryLevelToType(obj.attributes.CategoryLevel1), // CategoryLevel1
+        Sub_Service_Type__c: categoryLevelToType(obj.attributes.CategoryLevel2), // CategoryLevel2
+        Council_District__c: obj.attributes.CouncilDistrictNumber, // CouncilDistrictNumber
+        GIS_Street_Address__c: obj.attributes.CrossStreet, // CrossStreet
+        GIS_Zip_Code__c: obj.attributes.ZIP, // ZIP
+        Address__c: obj.attributes.Address, // Address
+        GIS_System_Info__c: `${obj.attributes.Data_Source} ${obj.attributes.SourceLevel1}`, // "<Data_Source>  <SourceLevel1>"
+        GIS_Neighborhood_Name__c: obj.attributes.Neighborhood, // Neighborhood
+        Address_Geolocation__Latitude__s: obj.geometry.y,
+        Address_Geolocation__Longitude__s: obj.geometry.x,
+        description: '',
+        returnRoute: ''
+    }
+}
+
+export function ParameterResponseToResponseObject(paramResObj: ParamResponseType): responseType {
+    return {
+        attributes: {
+            ReferenceNumber : paramResObj.CaseNumber, //
+            CategoryLevel1 : typeToCategoryLevel(paramResObj.Service_Type__c), //
+            CategoryLevel2 : typeToCategoryLevel(paramResObj.Sub_Service_Type__c), //
+            CategoryName : `${typeToCategoryLevel(paramResObj.Service_Type__c)} ${typeToCategoryLevel(paramResObj.Sub_Service_Type__c)}`, //
+            CouncilDistrictNumber : paramResObj.Council_District__c, //
+            DateCreated : new Date(paramResObj.CreatedDate), 
+            DateUpdated : new Date(paramResObj.LastModifiedDate), 
+            DateClosed : (paramResObj.ClosedDate !== null ? new Date(paramResObj.ClosedDate) : null), 
+            CrossStreet : paramResObj.GIS_Street_Address__c, 
+            ZIP : paramResObj.GIS_Zip_Code__c, 
+            SFTicketID : paramResObj.Id, 
+            Address : paramResObj.Address__c, 
+            Data_Source : paramResObj.GIS_System_Info__c.split(' ')[0], 
+            PublicStatus : paramResObj.Status, 
+            Neighborhood : paramResObj.GIS_Neighborhood_Name__c, 
+            SourceLevel1 : paramResObj.GIS_System_Info__c.split(' ')[1]
+        },
+        geometry: {
+            x: paramResObj.Address_Geolocation__Longitude__s, //longitude
+            y: paramResObj.Address_Geolocation__Latitude__s //latitude
+        }
+    }
+}
+
+export function grabImmediateRoute(route: string): string {
+    let result: string = ""
+
+    if (route[route.length - 1] === '/') {
+        return result
+    }
+
+    for (let i = route.length - 1; i > -1; i--) {
+        if (route[i] === '/') {
+        result = route.substring(i + 1)
+        break;
+        }
+    }
+
+    return result
+}
+
+export function categoryLevelToType(categoryLevel: string): string {
+    for (let i = 0; i < requestTypes.length; i++) {
+        if (requestTypes[i].type === categoryLevel) {
+            return requestTypes[i].id
+        }
+
+        for (let j = 0; j < requestTypes[i].subTypes.length; j++) {
+            if (requestTypes[i].subTypes[j].subType === categoryLevel) {
+                return requestTypes[i].subTypes[j].id
+            }
+        }
+    }
+
+    return ''
+}
+
+export function typeToCategoryLevel(typeID: string) {
+    for (let i = 0; i < requestTypes.length; i++) {
+        if (requestTypes[i].id === typeID) {
+            return requestTypes[i].type
+        }
+
+        for (let j = 0; j < requestTypes[i].subTypes.length; j++) {
+            if (requestTypes[i].subTypes[j].id === typeID) {
+                return requestTypes[i].subTypes[j].subType
+            }
+        }
+    }
+
+    return ''
+}
+
+
 //                                      //
 //         Custom Styles Section        //
 //                                      //
@@ -338,7 +1011,10 @@ export const global = {
     baseGold300: 'rgba(253, 170, 31, 0.33)',
 
     baseGrey100: '#6F6F6F',
-    baseGrey200: 'rgba(112, 112, 112, 0.7)'
+    baseGrey200: 'rgba(112, 112, 112, 0.7)',
+
+    darkGrey100: '#333232',
+    darkGrey200: 'rgba(51, 50, 50, 0.6)'
 }
 
 

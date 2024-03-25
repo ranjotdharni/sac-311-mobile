@@ -1,21 +1,39 @@
-import { Link } from "expo-router";
+import { Link, usePathname, router } from "expo-router";
 import { View, StyleSheet, Animated, Easing, Dimensions } from "react-native";
 import NavItem from "./NavItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
-import { global } from "../../customs";
-import { useNavigation } from "@react-navigation/native"
+import { global, grabImmediateRoute, salesforceDevelopmentSignature } from "../../customs";
+import { useNavigation, useRoute } from "@react-navigation/native"
 
 const screenWidth: number = Dimensions.get('screen').width
 const initialOffset: number = screenWidth * 0.025
 const offsetMultiplier: number = 0
 
-export default function NavBar(this: any)
+export default function NavBar(nav: any)
 {
     let offsetLeft = useRef(new Animated.Value((0 * offsetMultiplier) + initialOffset)).current
     //Each NavItem 'id' attribute should be a unique value!!!
-    const [activeTab, setActiveTab] = useState(0); //this useState hook should be set to the initial id of the tab to start off on
+    const route = useRoute()
+    const [activeTab, setActiveTab] = useState(routetoIndex((route.params as {params: string, screen: string}).screen || '')) //this useState hook should be set to the initial id of the tab to start off on
     const [navigation, setNavigation] = useState(useNavigation())
+
+    function routetoIndex(route: string): number {
+        if (route.includes('Resource')) {
+            return 2
+        }
+        else if (route.includes('Explore')) {
+            return 1
+        }
+        else if (route.includes('Profile')) {
+            return 3
+        }
+        else if (route.includes('Home')) {
+            return 0
+        }
+
+        return activeTab;
+    }
 
     function isActive( index : number ) : boolean {
         return activeTab === index
@@ -53,6 +71,10 @@ export default function NavBar(this: any)
         }).start()
     }, [activeTab])
 
+    useEffect(() => {
+        swapTab(routetoIndex((route.params as {params: string, screen: string}).screen))
+    }, [route])
+
     return (
         <View style={styles.NavContainer}>
             <View style={styles.NavBox}>
@@ -62,7 +84,21 @@ export default function NavBar(this: any)
                 <NavItem navigation={navigation} id={1} active={isActive} passUp={swapTab} title='Explore' iconName='map' url='/(tabs)/Explore' />
 
                 <View style={styles.NavCenterButton}>
-                    <Link href='/(request)/Type' style={styles.NavCenterLink} />
+                    <Link href={{pathname: '/(request)/Type', params: {
+                                                                Subject: salesforceDevelopmentSignature,
+                                                                Service_Type__c: '', // CategoryLevel1
+                                                                Sub_Service_Type__c: '', // CategoryLevel2
+                                                                Council_District__c: '', // CouncilDistrictNumber
+                                                                GIS_Street_Address__c: '', // CrossStreet
+                                                                GIS_Zip_Code__c: '', // ZIP
+                                                                Address__c: '', // Address
+                                                                GIS_System_Info__c: '311 Phone', // "<Data_Source>  <SourceLevel1>"
+                                                                GIS_Neighborhood_Name__c: '', // Neighborhood
+                                                                description: '',                                                                
+                                                                Address_Geolocation__Latitude__s: 0,
+                                                                Address_Geolocation__Longitude__s: 0,
+                                                                returnRoute: usePathname().replace('/', '')
+                                                            }}} style={styles.NavCenterLink} />
                     <MaterialIcons color='#ffffff' name='add' size={35} />
                 </View>
 

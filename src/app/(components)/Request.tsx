@@ -3,7 +3,7 @@ import { dateToFormat, global, responseType } from "../../customs";
 import CustomText from "./CustomText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
-import { Link, router } from "expo-router";
+import { Link, router, useNavigation } from "expo-router";
 import { memo, useCallback } from "react";
 import { fontGetter } from "../../customs";
 import { globalFont } from '../../customs';
@@ -13,8 +13,6 @@ const borderCuttoff: number = 15 //border radius of component, this will be appl
 
 
 function DefaultRequest( { width, height, category, type, reqNumber, date, status, compact, focusFunction } : { width: DimensionValue, height: DimensionValue, category: string, type: string, reqNumber: string, date: Date, status: string, compact: boolean, focusFunction: () => void } ) {
-    const memoizedFocusFunction = useCallback(focusFunction, [])    
-
     let internalStyle = (compact ? compactStyles : defaultStyles)
     let basicStyle = StyleSheet.create({ 
         default: {
@@ -35,7 +33,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
     
     return (
         <View style={[basicStyle.default, internalStyle.requestWrapper]} >
-            {(!compact ? <View style={internalStyle.requestCategoryWrapper}><CustomText text={category} font={fontGetter()} nol={0} style={internalStyle.requestCategory} /></View> : <></>)}
+            {(!compact ? <View style={internalStyle.requestCategoryWrapper}><CustomText text={(category.length > 25 ? category.substring(0, 22) + '...' : category)} font={fontGetter()} nol={0} style={internalStyle.requestCategory} /></View> : <></>)}
 
             <View style={defaultStyles.arrowWrapper}>
                 <View style={[internalStyle.internalWrapper, (compact ? {width: width, height: height} : {})]}>
@@ -70,7 +68,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
 
                 {
                     !compact ?
-                    <TouchableOpacity style={internalStyle.fullRequestView} onPress={memoizedFocusFunction}>
+                    <TouchableOpacity style={internalStyle.fullRequestView} onPress={focusFunction}>
                         <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseBlue100} />
                     </TouchableOpacity>
                     :
@@ -79,7 +77,7 @@ function DefaultRequest( { width, height, category, type, reqNumber, date, statu
             </View>
             {
                 compact ?
-                <TouchableOpacity style={internalStyle.fullRequestView} onPress={memoizedFocusFunction}>
+                <TouchableOpacity style={internalStyle.fullRequestView} onPress={focusFunction}>
                     <FontAwesome name={'chevron-right'} size={Dimensions.get('screen').width * 0.05} color={global.baseGrey100} />
                 </TouchableOpacity>
                 :
@@ -100,7 +98,7 @@ function Request({ data, compact, width, height } : { data: responseType, compac
             reqNumber={data.attributes.ReferenceNumber} 
             date={new Date(data.attributes.DateCreated)} 
             status={data.attributes.PublicStatus}
-            focusFunction={() => {router.push({pathname: '/(requestview)/RequestFullView', params: {requestData: JSON.stringify(data)}})}} 
+            focusFunction={() => router.push({pathname: '/(requestview)/RequestFullView', params: {requestData: JSON.stringify(data)}})} 
         />
     )
 }

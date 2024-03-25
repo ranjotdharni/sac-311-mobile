@@ -40,12 +40,40 @@ function Explore()
 {
     const [loc, setLoc] = useState<string>('')
     const router = useRouter()
-    const { reqType, reqDesc, reqLoc } = useLocalSearchParams<{reqType: string, reqDesc: string, reqLoc: string}>()
+    const {
+        Subject,
+        Service_Type__c, // CategoryLevel1
+        Sub_Service_Type__c, // CategoryLevel2
+        Council_District__c, // CouncilDistrictNumber
+        GIS_Street_Address__c, // CrossStreet
+        GIS_Zip_Code__c, // ZIP
+        Address__c, // Address
+        GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+        GIS_Neighborhood_Name__c, // Neighborhood
+        description,
+        Address_Geolocation__Latitude__s,
+        Address_Geolocation__Longitude__s,
+        returnRoute
+    } = useLocalSearchParams()
 
     useEffect(() => {
-        if (reqLoc !== loc) {
-            setLoc(reqLoc)
-            router.push({pathname: '/RequestConfirm', params: {reqType: reqType, reqDesc: reqDesc, reqLoc: reqLoc}})
+        if (Address__c !== loc) {
+            setLoc(Address__c as string)
+            router.push({pathname: '/RequestConfirm', params: {
+                Subject,
+                Service_Type__c, // CategoryLevel1
+                Sub_Service_Type__c, // CategoryLevel2
+                Council_District__c, // CouncilDistrictNumber
+                GIS_Street_Address__c, // CrossStreet
+                GIS_Zip_Code__c, // ZIP
+                Address__c, // Address
+                GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+                GIS_Neighborhood_Name__c, // Neighborhood
+                description,
+                Address_Geolocation__Latitude__s,
+                Address_Geolocation__Longitude__s,
+                returnRoute
+            }})
         }
     }, [])
 
@@ -56,8 +84,7 @@ function Explore()
 
     const [addressQuery, setAddressQuery] = useState<string>('')
     const [markers, setMarkers] = useState<Array<responseType>>([])
-    const [padDistrict, setPadDistrict] = useState<string>('')
-    const [padAddress, setPadAddress] = useState<string>('')
+    const [padObject, setPadObject] = useState<responseType>()
     const [loader, setLoader] = useState<boolean>(false)
     const [previewLoader, setPreviewLoader] = useState<boolean>(false)
     const [addressesLoading, setAddressesLoading] = useState<boolean>(false)
@@ -75,8 +102,22 @@ function Explore()
     })
 
     const forwardAddress = () => {
-        setLoc(padAddress)
-        router.push({pathname: '/RequestConfirm', params: {reqType: reqType, reqDesc: reqDesc, reqLoc: padAddress}})
+        setLoc(padObject!.attributes.Address)
+        router.push({pathname: '/RequestConfirm', params: {
+            Subject,
+            Service_Type__c, // CategoryLevel1
+            Sub_Service_Type__c, // CategoryLevel2
+            Council_District__c: padObject!.attributes.CouncilDistrictNumber, // CouncilDistrictNumber
+            GIS_Street_Address__c: padObject!.attributes.CrossStreet, // CrossStreet
+            GIS_Zip_Code__c: padObject!.attributes.ZIP, // ZIP
+            Address__c: padObject!.attributes.Address, // Address
+            GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+            GIS_Neighborhood_Name__c: padObject!.attributes.Neighborhood, // Neighborhood
+            description,
+            Address_Geolocation__Latitude__s: padObject!.geometry.y,
+            Address_Geolocation__Longitude__s: padObject!.geometry.x,
+            returnRoute
+        }})
     }
 
     function hidePad() {
@@ -104,8 +145,7 @@ function Explore()
 
     function initializePad(obj: responseType) { //will wipe current active marker!!!!!!!!!!!!!!
         showResults(false)
-        setPadDistrict(obj.attributes.CouncilDistrictNumber)
-        setPadAddress(obj.attributes.Address)
+        setPadObject(obj)
         mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.001, longitude: obj.geometry.x, latitudeDelta: activeZoom.latitudeDelta, longitudeDelta: activeZoom.longitudeDelta})
         showPad()
     }   //notice: latitude is geometry.y and longitude is geometry.x
@@ -284,7 +324,7 @@ function Explore()
                     <PanGestureHandler onEnded={detectSwipeEnd} onGestureEvent={watchSwipe}>
                         <View style={styles.padTopBar}>                            
                             <View style={styles.padLeftPartition}>
-                                <CustomText nol={3} text={padAddress} font={fontGetter()} style={styles.padAddress} />
+                                <CustomText nol={3} text={(padObject ? padObject.attributes.Address : 'loading...')} font={fontGetter()} style={styles.padAddress} />
                                 <View style={{flexDirection: 'row', marginBottom: '1%'}}>
                                     <MaterialIcons name='delete-outline' size={30} color={global.baseGrey200} />
                                     <CustomText text='Thursday' nol={0} font={fontGetter()} style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
@@ -292,7 +332,7 @@ function Explore()
                             </View>
 
                             <View style={styles.padRightPartition}>
-                                <CustomText text={padDistrict} nol={0} font={fontGetter()} style={styles.padDistrict} />
+                                <CustomText text={(padObject ? padObject.attributes.CouncilDistrictNumber : 'loading...')} nol={0} font={fontGetter()} style={styles.padDistrict} />
                                 <TouchableOpacity onPress={forwardAddress} style={styles.newRequestButton}>
                                     <CustomText text='Select' nol={0} font={fontGetter()} style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
                                 </TouchableOpacity>

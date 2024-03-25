@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView, TextInput, Image } from 'react-native';
-import { global, shadowUniversal } from "../../customs";
+import { global, requestTypes, shadowUniversal } from "../../customs";
 import { useRouter } from 'expo-router';
-import { requestTypes } from '../../addresses';
 import { FontAwesome } from '@expo/vector-icons';
 import { globalFont } from '../../customs';
 
@@ -90,7 +89,7 @@ export default function Resources() {
                         );
                     })}
                 </ScrollView>
-            </View>  
+            </View>
             <ScrollView contentContainerStyle={styles.listStyle}>
                 <View style={styles.listPaddingTop}></View>
                 {filteredRequestTypes.map((obj) => {

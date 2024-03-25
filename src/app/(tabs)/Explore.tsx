@@ -1,7 +1,7 @@
 import { View, StyleSheet, Dimensions, Pressable, Animated } from "react-native";
 import MapView, { Details, PROVIDER_GOOGLE, Region } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom } from "../../customs";
+import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom, responseObjectToParameter, ParamType } from "../../customs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
@@ -13,7 +13,7 @@ import { FlashList } from "@shopify/flash-list"
 import _ from 'lodash'
 import { fontGetter } from "../../customs";
 import { globalFont } from '../../customs';
-import { useRouter } from "expo-router";
+import { useRouter, router, useLocalSearchParams } from "expo-router";
 
 //const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markerPrimary'
@@ -38,17 +38,19 @@ const activeZoom = {
 
 function Explore()
 {
+    const { requestData } = useLocalSearchParams()
+
     const router = useRouter()
     const controller = new AbortController()
     const mapRef = useRef<MapView>(null)
     const padPanAnim = useRef(new Animated.Value(padHiddenHeight)).current
     const previewPanAnim = useRef(new Animated.Value(previewVisibleHeight)).current
 
-
     const [addressQuery, setAddressQuery] = useState<string>('')
     const [markers, setMarkers] = useState<Array<responseType>>([])
-    const [padDistrict, setPadDistrict] = useState<string>('')
-    const [padAddress, setPadAddress] = useState<string>('')
+    const [padObject, setPadObject] = useState<responseType>()
+    //const [padDistrict, setPadDistrict] = useState<string>('')
+    //const [padAddress, setPadAddress] = useState<string>('')
     const [loader, setLoader] = useState<boolean>(false)
     const [previewLoader, setPreviewLoader] = useState<boolean>(false)
     const [addressesLoading, setAddressesLoading] = useState<boolean>(false)
@@ -66,7 +68,11 @@ function Explore()
     })
 
     const forwardLocation = () => {
-        router.push({pathname: '/(request)/Type', params: {reqLoc: padAddress}})
+        const paramObj = responseObjectToParameter(padObject!)
+        paramObj.Service_Type__c = ''
+        paramObj.Sub_Service_Type__c = ''
+        paramObj.returnRoute = 'Explore'
+        router.push({pathname: '/(request)/Type', params: paramObj})
     }
 
     function hidePad() {
@@ -78,6 +84,13 @@ function Explore()
         setPreviewPan(previewHiddenHeight)
         setPadPan(padVisibleHeight)
     }
+
+    /* 
+        react-native-reanimated was giving compatability issues out the wazoo, fixed the issue for 
+        react-native-reanimated and expo complains about compatability, fixed the issue for expo and
+        react-native-reanimated complains about compatability; came up with below hacky animation 
+        as temporary solution 
+    */
 
     function watchSwipe(evt: GestureEvent<PanGestureHandlerEventPayload>) {
         setPadPan(Math.max(padVisibleHeight, padVisibleHeight + (evt.nativeEvent.translationY / 1.5)))
@@ -94,8 +107,7 @@ function Explore()
 
     function initializePad(obj: responseType) { //will wipe current active marker!!!!!!!!!!!!!!
         showResults(false)
-        setPadDistrict(obj.attributes.CouncilDistrictNumber)
-        setPadAddress(obj.attributes.Address)
+        setPadObject(obj)
         mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.001, longitude: obj.geometry.x, latitudeDelta: activeZoom.latitudeDelta, longitudeDelta: activeZoom.longitudeDelta})
         showPad()
     }   //notice: latitude is geometry.y and longitude is geometry.x
@@ -138,7 +150,7 @@ function Explore()
 
     function activateMarker(obj: responseType) {
         initializePad(obj)
-        setRequests([obj, ...requests])
+        setRequests([obj, ...requests.filter(r => r.attributes.Address === obj.attributes.Address)])
     }
 
     const onRegionChange = _.debounce(async (Cregion: Region, details: Details) => {
@@ -169,7 +181,13 @@ function Explore()
         await fetch(query).then((middle) => {
             return middle.json()
         }).then((res) => {
-            setMarkers(res.features.filter(filterFunction))
+            let marks: responseType[] = res.features.filter(filterFunction)
+            if (padObject !== undefined && marks.filter(m => m.attributes.ReferenceNumber === padObject.attributes.ReferenceNumber).length === 0) {
+                setMarkers([padObject, ...marks])
+            }
+            else {
+                setMarkers(marks)
+            }
         }).catch(err => {
             return
         })
@@ -213,6 +231,21 @@ function Explore()
         grabRequests()
 
     }, [requestFetch])
+
+    useEffect(() => {
+        if (requestData !== undefined) {
+            setTimeout(() => {
+                let initObj: responseType = JSON.parse(requestData as string)
+                initializePad(initObj)
+                if (requests.filter(r => r.attributes.ReferenceNumber === initObj.attributes.ReferenceNumber).length === 0) {
+                    setRequests([initObj, ...requests])
+                }
+                if (markers.filter(m => m.attributes.ReferenceNumber === initObj.attributes.ReferenceNumber).length === 0) {
+                    setMarkers([initObj, ...markers])
+                }
+            }, 1500)
+        }
+    }, [requestData])
 
     const memoizedMarkerRender = useMemo(() => {
         return markers.map((mark, index) => {
@@ -266,7 +299,7 @@ function Explore()
                     <PanGestureHandler onEnded={detectSwipeEnd} onGestureEvent={watchSwipe}>
                         <View style={styles.padTopBar}>                            
                             <View style={styles.padLeftPartition}>
-                                <CustomText nol={3} text={padAddress} font={fontGetter()} style={styles.padAddress} />
+                                <CustomText nol={3} text={(padObject?.attributes.Address || '')} font={fontGetter()} style={styles.padAddress} />
                                 <View style={{flexDirection: 'row', marginBottom: '1%'}}>
                                     <MaterialIcons name='delete-outline' size={30} color={global.baseGrey200} />
                                     <CustomText text='Thursday' nol={0} font={fontGetter()} style={{marginTop: '4%', marginLeft: '2.5%', color: global.baseGrey200}} />
@@ -274,7 +307,7 @@ function Explore()
                             </View>
 
                             <View style={styles.padRightPartition}>
-                                <CustomText text={padDistrict} nol={0} font={fontGetter()} style={styles.padDistrict} />
+                                <CustomText text={(padObject?.attributes.CouncilDistrictNumber || '')} nol={0} font={fontGetter()} style={styles.padDistrict} />
                                 <TouchableOpacity onPress={forwardLocation} style={styles.newRequestButton}>
                                     <CustomText text='New Request' nol={0} font={fontGetter()} style={{fontSize: 15, padding: 15, color: 'white', textAlign: 'center'}} />
                                 </TouchableOpacity>
