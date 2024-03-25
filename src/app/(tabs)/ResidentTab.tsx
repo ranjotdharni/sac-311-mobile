@@ -8,7 +8,7 @@ export default function ResidentTab() {
         <View style={styles.pageWrapper}>
             <View style={{paddingTop:'10%'}}/>
             <View style={styles.tabName}>
-                <Text style={styles.tabText}>Visitor Information</Text>
+                <Text style={styles.tabText}>Resident Information</Text>
             </View>
             <Image style={styles.imageBanner} source={require('../../assets/png/bridge.png')}/>
             <View style={styles.buttonMenu}>

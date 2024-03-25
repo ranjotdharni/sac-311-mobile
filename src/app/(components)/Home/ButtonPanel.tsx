@@ -6,13 +6,21 @@ import { fontGetter } from "../../../customs";
 import CustomText  from "../CustomText";
 import { router } from "expo-router";
 
-function Button({ text, logo, path } : { text: string, logo: any, path: any}) {     //Ensure values passed in for logo corresond to FontAwesome Icons!!!!!!!!!!!!!!!
+// Extending the component's props to include 'style'
+type ButtonProps = {
+    text: string;
+    logo: string;
+    path: string;
+    style?: object | object[];
+};
+
+function Button({ text, logo, path, style }: ButtonProps) {
     return (
-        <TouchableOpacity onPress={() => {router.push({ pathname: path })}} style={styles.ButtonWrapper}>
-            <FontAwesome name={logo} size={Dimensions.get('screen').width * 0.15} color='#2B60E9' />
-            <CustomText nol={0} font={fontGetter()} style={styles.ButtonText} text={text}/>
+        <TouchableOpacity onPress={() => { (router.push as any)({ pathname: path }) }} style={[styles.ButtonWrapper, style]}>
+            <FontAwesome name={logo as any} size={Dimensions.get('screen').width * 0.15} color={global.baseBlue100} />
+            <CustomText nol={0} font={fontGetter()} style={styles.ButtonText} text={text} />
         </TouchableOpacity>
-    )
+    );
 }
 
 export default function ButtonPanel() {
@@ -21,9 +29,9 @@ export default function ButtonPanel() {
             <CustomText nol={0} font={fontGetter()} text='Are You A...' style={styles.ButtonPanelTitle} />
             
             <View style={styles.ButtonPanelContainer}>
-                <Button text='Resident' logo='home' path="/(tabs)/ResidentTab"/>
-                <Button text='Visitor' logo='location-arrow' path="/(tabs)/VisitorTab"/>
-                <Button text='Business' logo='suitcase'  path="/(tabs)/BusinessTab"/>
+                <Button text='Resident' logo='home' path="/(tabs)/ResidentTab" style={shadowUniversal.default}/>
+                <Button text='Visitor' logo='location-arrow' path="/(tabs)/VisitorTab" style={shadowUniversal.default}/>
+                <Button text='Business' logo='suitcase'  path="/(tabs)/BusinessTab" style={shadowUniversal.default}/>
             </View>
         </View>
     )
@@ -60,14 +68,14 @@ const styles = StyleSheet.create({
     ButtonWrapper: {
         width: '30%',
         aspectRatio: 1 / 1,
-        backgroundColor: '#D8D8D8',
+        backgroundColor: global.baseWhite100,
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
     },
 
     ButtonText: {
-        color: '#2B60E9',
+        color: global.baseBlue100,
         fontSize: Dimensions.get('screen').width * 0.045,
         fontFamily: globalFont.chosenFont
     },
