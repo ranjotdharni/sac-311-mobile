@@ -1,15 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Text, FlatList , TextInput} from 'react-native';
 import { ParamType, categoryLevelToType, global, requestTypes, salesforceDevelopmentSignature, shadowUniversal } from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useNavigation } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { globalFont } from '../../customs';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function Type()
 {
     const nav = useNavigation()
-    const router = useRouter()
+    const router = useRouter();
+    const [searchValue, setSearchValue] = useState('');
+    const [filterValue, setFilterValue] = useState('None');
+
+    // Function to filter requestTypes based on searchValue
+    const filteredRequestTypes = requestTypes.map(obj => {
+        // Filter subtypes based on search value
+        const filteredSubTypes = obj.subTypes.filter(sub => {
+            const combinedText = `${sub.subType.toLowerCase()} ${sub.description.toLowerCase()}`;
+            return combinedText.includes(searchValue.toLowerCase());
+        });
+        //empty subtype value to be used as null
+        const emptySubtype = obj.subTypes.filter(sub => {
+            const nullTxt = ``;
+            return nullTxt.includes("empty");
+        });
+        // If no filter chosen, only use the subtype search term
+        if (filterValue == 'None'){
+            return {
+                ...obj,
+                subTypes: filteredSubTypes,
+                type: obj.type
+            };
+        }
+        //if a filter is chosen, then only search through the subtypes of the filtered type
+        else if (filterValue == obj.type.valueOf()){
+            return {
+                ...obj,
+                subTypes: filteredSubTypes,
+                type: filterValue
+            };
+        }
+        //otherwise return null
+        else
+            return {
+                ...obj,
+                subTypes: emptySubtype,
+                type: ''
+            };
+    }).filter(obj => obj.subTypes.length > 0);
     const {
         Subject,
         Service_Type__c, // CategoryLevel1
@@ -63,37 +103,61 @@ export default function Type()
     }
     // {pathname: '/Location', params: {reqType: arg0, reqDesc: arg1, reqLoc: (p.reqLoc || '')}}
 
-    return (
-        <View style={styles.mainWrapper}>
-            <View style={styles.exitWrapper}>
-                <View style={styles.innerExitWrapper}>
-                    <Text style={styles.barText}>Select A Service</Text>
+    return (<View style={styles.mainWrapper}>
+        <View style={styles.exitWrapper}>
+            <View style={styles.innerExitWrapper}>
+            <Text style={styles.barText}>Select A Service</Text>
                     <TouchableOpacity onPress={() => { nav.goBack() }}> 
                         <Image style={styles.resizeIcon} source={require('../../assets/png/exit_x.png')} />
                     </TouchableOpacity>
-                </View>
             </View>
-            <SearchBar value='' style={styles.searchStyle} placeholder='Search For A Service' />
-            <ScrollView contentContainerStyle={styles.listStyle}>
-                <View style={styles.listPaddingTop}></View>
-                     {
-                        requestTypes.map((obj) => {
-                            return <View style={styles.typeWrapper} key={obj.id}>
-                                <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
-                                {
-                                    obj.subTypes.map((sub) => {
-                                        return <TouchableOpacity onPress={() => {forwardRequest(obj.type, sub.subType, sub.description)}} key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
-                                            <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
-                                            <Text style={styles.subTypeDescription}>{sub.description}</Text>
-                                        </TouchableOpacity>
-                                    })
-                                }
-                            </View>
-                        })
-                     }
-                <View style={styles.listPaddingBottom}></View>
-            </ScrollView>
         </View>
+        <View style={styles.searchContainer}>
+            <Image style={styles.searchIcon} source={require('../../assets/png/search.png')} />
+            <TextInput
+                style={styles.searchInput}
+                value={searchValue}
+                onChangeText={text => setSearchValue(text)}
+                placeholder='Search for Services'
+                placeholderTextColor='#D3D3D3'
+            />
+            <TouchableOpacity onPress={() => setSearchValue('')} style={styles.clearButton}>
+                <FontAwesome name='remove' size={20} color={global.baseGrey200} />
+            </TouchableOpacity>
+        </View>
+        <View style={styles.allFiltersWrapper}>
+            <FlatList
+                horizontal
+                persistentScrollbar
+                data={requestTypes}
+                renderItem={({item}) => 
+                <TouchableOpacity key={item.id} style={styles.filterWrapper} onPress={() => setFilterValue(item.type)}>
+                    <Text style={styles.filterText}>{item.type}</Text>
+                </TouchableOpacity>
+            }
+            />
+            <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
+                            <Text style={styles.clearFilterText}>Clear Filter</Text>
+            </TouchableOpacity>
+        </View>
+        <FlatList
+            data={filteredRequestTypes}
+            renderItem={({item}) => 
+            <View style={styles.typeWrapper} key={item.id}>
+                <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{item.type}</Text></View>
+                <FlatList
+                    data={item.subTypes}
+                    renderItem={({item: subTypes}) => 
+                    <TouchableOpacity onPress={() => {forwardRequest(item.type, subTypes.subType, subTypes.description)}} key={subTypes.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
+                        <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{subTypes.subType}</Text></View>
+                        <Text style={styles.subTypeDescription}>{subTypes.description}</Text>
+                    </TouchableOpacity>
+                }
+                />
+            </View>
+        }
+        />
+    </View>  
     )
 
 }
@@ -140,9 +204,6 @@ const styles = StyleSheet.create({
         textAlign: 'center', 
         marginTop: 15,
     },
-
-//  
-
     searchStyle: {
         position: 'absolute',
         top: '12%',
@@ -160,23 +221,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0)',
     },
-    listPaddingTop: {
-        height: '0.6%',
-    },
-    listPaddingBottom: {
-        height: 150,
-    },
     typeWrapper: {
         width: '100%',
         marginBottom: 15,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
     },
     typeTitleWrapper: {
         width: '100%',
         borderBottomWidth: 1,
-        borderBottomColor: global.baseBlue100,
+        borderBottomColor: global.baseGold100,
     },
     typeTitle: {
         fontSize: 25,
@@ -185,18 +237,16 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
     },
     subTypeWrapper: {
-        width: '90%',
+        width: '96%',
         marginTop: 15,
         borderRadius: 15,
-        backgroundColor: global.baseBackground100,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
+        backgroundColor: global.baseWhite100,
         padding: 10,
+        marginLeft: '2%'
     },
     subTypeTitleWrapper: {
         width: '100%',
-        backgroundColor: global.baseGold100,
+        backgroundColor: global.baseBlue100,
         borderRadius: 15,
         padding: 2,
     },
@@ -204,7 +254,7 @@ const styles = StyleSheet.create({
         marginLeft: '2.5%',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: global.baseBackground100
+        color: global.baseWhite100
     },
     subTypeDescription: {
         marginTop: '3%',
@@ -212,5 +262,64 @@ const styles = StyleSheet.create({
         fontFamily: globalFont.chosenFont,
         fontSize: 15,
         color: global.baseGrey100,
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+        marginHorizontal: 10,
+        borderRadius: 25,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: global.baseBlue100,
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        width: '96%',
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+    },
+    searchIcon: {
+        width: 20,
+        height: 20,
+        marginRight: 5,
+    },
+    searchInput: {
+        flex: 1,
+        marginLeft: 10,
+        fontFamily: globalFont.chosenFont
+    },
+    clearButton: {
+        marginLeft: 5,
+    },
+    allFiltersWrapper:{
+        marginTop:'3%',
+        backgroundColor:'rgba(0, 0, 0, 0)',
+        flexDirection: 'row',
+        height: '7%',
+    },
+    filterWrapper:{
+        backgroundColor: global.baseBackground100,
+    },
+    filterText:{
+        fontFamily: globalFont.chosenFont,
+        backgroundColor: global.baseBlue100,
+        marginHorizontal: 3,
+        fontSize: 14,
+        color: 'white',
+        borderRadius: 10,
+        padding: 10,
+    },
+    clearFilterText:{
+        fontFamily: globalFont.chosenFont,
+        backgroundColor: global.darkGrey100,
+        marginHorizontal: 3,
+        fontSize: 14,
+        color: 'white',
+        paddingVertical: 10,
+        paddingHorizontal: 5,
     },
 });

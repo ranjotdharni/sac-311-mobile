@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, TextInput, Image } from 'react-native';
-import { global, requestTypes, shadowUniversal } from "../../customs";
-import { useRouter } from 'expo-router';
+import { View, StyleSheet, TouchableOpacity, Text, TextInput, Image , FlatList } from 'react-native';
+import { global, requestTypes, shadowUniversal, salesforceDevelopmentSignature, categoryLevelToType } from "../../customs";
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
 import { globalFont } from '../../customs';
 
@@ -46,6 +46,57 @@ export default function Resources() {
                 type: ''
             };
     }).filter(obj => obj.subTypes.length > 0);
+    const {
+        Subject,
+        Service_Type__c, // CategoryLevel1
+        Sub_Service_Type__c, // CategoryLevel2
+        Council_District__c, // CouncilDistrictNumber
+        GIS_Street_Address__c, // CrossStreet
+        GIS_Zip_Code__c, // ZIP
+        Address__c, // Address
+        GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+        GIS_Neighborhood_Name__c, // Neighborhood
+        description,
+        Address_Geolocation__Latitude__s,
+        Address_Geolocation__Longitude__s,
+        returnRoute
+    } = (
+        useLocalSearchParams().Subject === undefined ?
+                {
+            Subject: salesforceDevelopmentSignature,
+            Service_Type__c: '', // CategoryLevel1
+            Sub_Service_Type__c: '', // CategoryLevel2
+            Council_District__c: '', // CouncilDistrictNumber
+            GIS_Street_Address__c: '', // CrossStreet
+            GIS_Zip_Code__c: '', // ZIP
+            Address__c: '', // Address
+            GIS_System_Info__c: '', // "<Data_Source>  <SourceLevel1>"
+            GIS_Neighborhood_Name__c: '', // Neighborhood
+            description: '',
+            Address_Geolocation__Latitude__s: 0,
+            Address_Geolocation__Longitude__s: 0,
+            returnRoute: useLocalSearchParams().returnRoute
+        } : 
+        useLocalSearchParams()
+    )
+
+    const forwardRequest = (type: string, subtype: string, desc: string) => {
+        router.push({pathname: '/Location', params: {
+            Subject,
+            Service_Type__c: categoryLevelToType(type), // CategoryLevel1
+            Sub_Service_Type__c: categoryLevelToType(subtype), // CategoryLevel2
+            Council_District__c, // CouncilDistrictNumber
+            GIS_Street_Address__c, // CrossStreet
+            GIS_Zip_Code__c, // ZIP
+            Address__c, // Address
+            GIS_System_Info__c, // "<Data_Source>  <SourceLevel1>"
+            GIS_Neighborhood_Name__c, // Neighborhood
+            description: desc,
+            Address_Geolocation__Latitude__s,
+            Address_Geolocation__Longitude__s,
+            returnRoute
+        }})
+    }
 
     return (
         <View style={styles.mainWrapper}>
@@ -76,39 +127,37 @@ export default function Resources() {
                 </TouchableOpacity>
             </View>
             <View style={styles.allFiltersWrapper}>
-                
-                <ScrollView horizontal={true} contentContainerStyle={styles.filterScroll}>
-                    <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
-                        <Text style={styles.filterText}>Clear Filter</Text>
+                <FlatList
+                    horizontal
+                    persistentScrollbar
+                    data={requestTypes}
+                    renderItem={({item}) => 
+                    <TouchableOpacity key={item.id} style={styles.filterWrapper} onPress={() => setFilterValue(item.type)}>
+                        <Text style={styles.filterText}>{item.type}</Text>
                     </TouchableOpacity>
-                    {requestTypes.map((obj) => {
-                        return (
-                            <TouchableOpacity key={obj.id} style={styles.filterWrapper} onPress={() => setFilterValue(obj.type)}>
-                                <Text style={styles.filterText}>{obj.type}</Text>
-                            </TouchableOpacity>
-                        );
-                    })}
-                </ScrollView>
+                }
+                />
+                <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
+                                <Text style={styles.clearFilterText}>Clear Filter</Text>
+                </TouchableOpacity>
             </View>
-            <ScrollView contentContainerStyle={styles.listStyle}>
-                <View style={styles.listPaddingTop}></View>
-                {filteredRequestTypes.map((obj) => {
-                    return (
-                        <View style={styles.typeWrapper} key={obj.id}>
-                            <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
-                            {obj.subTypes.map((sub) => {
-                                return (
-                                    <TouchableOpacity key={sub.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
-                                        <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{sub.subType}</Text></View>
-                                        <Text style={styles.subTypeDescription}>{sub.description}</Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
-                    );
-                })}
-                <View style={styles.listPaddingBottom}></View>
-            </ScrollView>
+            <FlatList
+                data={filteredRequestTypes}
+                renderItem={({item}) => 
+                <View style={styles.typeWrapper} key={item.id}>
+                    <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{item.type}</Text></View>
+                    <FlatList
+                        data={item.subTypes}
+                        renderItem={({item : subTypes}) => 
+                        <TouchableOpacity onPress={() => {forwardRequest(item.type, subTypes.subType, subTypes.description)}} key={item.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
+                            <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{subTypes.subType}</Text></View>
+                            <Text style={styles.subTypeDescription}>{subTypes.description}</Text>
+                        </TouchableOpacity>
+                    }
+                    />
+                </View>
+            }
+            />
         </View>
     );
 }
@@ -191,12 +240,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         alignItems: 'center',
     },
-    listPaddingTop: {
-        height: 10,
-    },
-    listPaddingBottom: {
-        height: 150,
-    },
     typeWrapper: {
         width: '100%',
         marginBottom: 15,
@@ -254,10 +297,19 @@ const styles = StyleSheet.create({
     filterText:{
         fontFamily: globalFont.chosenFont,
         backgroundColor: global.baseBlue100,
-        marginHorizontal: 5,
+        marginHorizontal: 3,
         fontSize: 14,
         color: 'white',
         borderRadius: 10,
         padding: 10,
+    },
+    clearFilterText:{
+        fontFamily: globalFont.chosenFont,
+        backgroundColor: global.darkGrey100,
+        marginHorizontal: 3,
+        fontSize: 14,
+        color: 'white',
+        paddingVertical: 10,
+        paddingHorizontal: 5,
     },
 });

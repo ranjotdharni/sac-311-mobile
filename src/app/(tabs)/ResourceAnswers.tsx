@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, TextInput, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, TextInput, Image, FlatList } from 'react-native';
 import { global, shadowUniversal } from "../../customs";
 import { useRouter } from 'expo-router';
 import { answerTypes } from '../../addresses';
@@ -76,53 +76,53 @@ export default function ResourceAnswers() {
                 </TouchableOpacity>
             </View>
             <View style={styles.allFiltersWrapper}>
-                
-                <ScrollView horizontal={true} contentContainerStyle={styles.filterScroll}>
-                    <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
-                        <Text style={styles.filterText}>Clear Filter</Text>
+            
+            <FlatList
+                horizontal
+                persistentScrollbar
+                data={answerTypes}
+                renderItem={({item}) => 
+                    <TouchableOpacity key={item.id} style={styles.filterWrapper} onPress={() => setFilterValue(item.type)}>
+                        <Text style={styles.filterText}>{item.type}</Text>
                     </TouchableOpacity>
-                    {answerTypes.map((obj) => {
-                        return (
-                            <TouchableOpacity key={obj.id} style={styles.filterWrapper} onPress={() => setFilterValue(obj.type)}>
-                                <Text style={styles.filterText}>{obj.type}</Text>
-                            </TouchableOpacity>
-                        );
-                    })}
-                </ScrollView>
-            </View>  
-            <ScrollView contentContainerStyle={styles.listStyle}>
-                <View style={styles.listPaddingTop}></View>
-                {filteredArticleTypes.map((obj) => {
-                    return (
-                        <View style={styles.typeWrapper} key={obj.id}>
-                            <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{obj.type}</Text></View>
-                            {obj.questions.map((q) => {
-                                //If the question is an FAQ, link to FAQ answer
-                                if(obj.type =='FAQ'){
-                                    return (
-                                        <TouchableOpacity key={q.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: obj.type, answer: q.description, question: q.question}})}}>
-                                            <View style={styles.FAQTitleWrapper}>
-                                                <Text style={styles.FAQTitle}>{q.question}</Text>
-                                            </View>
-                                            <Text style={styles.questionDescription}>Tap to see details.</Text>
-                                        </TouchableOpacity>
-                                    );
-                                }
-                                //If the question is not an FAQ, link to the answer article:
-                                else{
-                                    return (
-                                        <TouchableOpacity key={q.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: obj.type, answer: q.answer, question: q.question}})}}>
-                                            <View style={styles.questionTitleWrapper}><Text style={styles.questionTitle}>{q.question}</Text></View>
-                                            <Text style={styles.questionDescription}>{q.description}</Text>
-                                        </TouchableOpacity>
-                                    );
-                                }
-                            })}
-                        </View>
-                    );
-                })}
-                <View style={styles.listPaddingBottom}></View>
-            </ScrollView>
+            }
+            />
+            <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
+                <Text style={styles.clearFilterText}>Clear Filter</Text>
+            </TouchableOpacity>
+            </View>
+            <FlatList
+            contentContainerStyle={styles.listStyle}
+            data={filteredArticleTypes}
+            renderItem={({item}) => 
+            <View style={styles.typeWrapper} key={item.id}>
+                <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{item.type}</Text></View>
+                <FlatList
+                    data={item.questions}
+                    renderItem={({item : questions}) => {
+                        if(item.type =='FAQ'){
+                            return (
+                                <TouchableOpacity key={questions.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: item.type, answer: questions.description, question: questions.question}})}}>
+                                    <View style={styles.FAQTitleWrapper}>
+                                        <Text style={styles.FAQTitle}>{questions.question}</Text>
+                                    </View>
+                                    <Text style={styles.questionDescription}>Tap to see details.</Text>
+                                </TouchableOpacity>
+                            );
+                        }
+                        //If the question is not an FAQ, link to the answer article:
+                        else{
+                            return (
+                                <TouchableOpacity key={questions.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: item.type, answer: questions.answer, question: questions.question}})}}>
+                                    <View style={styles.questionTitleWrapper}><Text style={styles.questionTitle}>{questions.question}</Text></View>
+                                    <Text style={styles.questionDescription}>{questions.description}</Text>
+                                </TouchableOpacity>
+                            );
+                        }
+                    }}
+                />
+            </View>
+        }/>
         </View>
     )
 
@@ -206,12 +206,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         alignItems: 'center',
     },
-    listPaddingTop: {
-        height: 10,
-    },
-    listPaddingBottom: {
-        height: 150,
-    },
     typeWrapper: {
         width: '100%',
         marginBottom: 15,
@@ -278,10 +272,19 @@ const styles = StyleSheet.create({
     filterWrapper:{
         backgroundColor: 'rgba(0, 0, 0, 0)',
     },
+    clearFilterText:{
+        fontFamily: globalFont.chosenFont,
+        backgroundColor: global.darkGrey100,
+        marginHorizontal: 3,
+        fontSize: 14,
+        color: 'white',
+        paddingVertical: 10,
+        paddingHorizontal: 5,
+    },    
     filterText:{
         fontFamily: globalFont.chosenFont,
         backgroundColor: global.baseBlue100,
-        marginHorizontal: 5,
+        marginHorizontal: 3,
         fontSize: 14,
         color: 'white',
         borderRadius: 10,
