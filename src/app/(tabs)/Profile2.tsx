@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Image, Pressable} from "react-native";
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
+import { globalFont, global } from "../../customs";
+
 
 export default function Profile2() {
     const [username, setUsername] = useState('');
@@ -19,8 +21,10 @@ export default function Profile2() {
   
     return (
       <SafeAreaView style={styles.container}>
-        <Image source={require('src/assets/png/logo.png')} style={{ resizeMode: 'contain', width: '80%', marginTop: -100 }} />
-        <Text style={{ fontSize: 16 }}>Log in to view your profile information.</Text>
+      <View style={styles.backgroundContainer}>
+        <Image source={require('src/assets/png/icon.png')} style={styles.imageContainer} />
+        </View>
+        <Text style={{ fontSize: 16, paddingTop: "50%" }}>Log in to view your profile information.</Text>
         <TextInput
           style={styles.input}
           placeholder='Username'
@@ -32,14 +36,14 @@ export default function Profile2() {
           onChangeText={(val) => setPassword(val)}
         />
         <Pressable style={styles.button} onPress = {tempLoginPress}>
-          <Text style={{ color: '#ffffff', textAlign: 'center' }}>Log In</Text>
+          <Text style={styles.buttonText}>Log In</Text>
         </Pressable>
-        <Text style={{ marginTop: 20 }}>Forgot your password?</Text>
+        <Pressable style={{ ...styles.createAcctButton, marginTop: 0 }} onPress={accountCreationPress}>
+          <Text style={styles.buttonText}>Create an Account</Text>
+        </Pressable>
+        <Text style={{ }}>Forgot your password?</Text>
         <Pressable>
           <Text style={{ color: '#2069bd' }}>Click here.</Text>
-        </Pressable>
-        <Pressable style={{ ...styles.button, marginTop: 0 }} onPress={accountCreationPress}>
-          <Text style={{ color: '#ffffff', textAlign: 'center' }}>Create an Account</Text>
         </Pressable>
       </SafeAreaView>
     );
@@ -51,21 +55,60 @@ export default function Profile2() {
       justifyContent: "center",
       alignItems: "center",
       gap: 20,
+      backgroundColor: global.baseBackground100,
+    },
+    imageContainer:{
+      resizeMode: 'contain', 
+      width: '100%', 
+      marginTop: 1,
+    },
+    backgroundContainer:{
+ position: 'absolute',
+    top: -70,
+    bottom: 600,
+    left: 0,
+    right: 0,
+    backgroundColor: global.baseBlue100,
+    },
+    buttonText:{
+      fontFamily: globalFont.chosenFont,
+      color: global.baseWhite100,
+      textAlign: 'center',
+      fontSize: 18
     },
     input: {
-      padding: 22,
-      textAlign: "center",
-      width: '80%',
-      borderWidth: 0.5,
-      borderRadius: 50,
-      backgroundColor: '#dfe6f0'
+        alignItems: 'center',
+        marginTop: 10,
+        marginHorizontal: 10,
+        borderRadius: 25,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: global.baseBlue100,
+        backgroundColor: global.baseWhite100,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        width: '85%',
+        height: '6%',
+        paddingVertical: 8,
+        paddingHorizontal: 30,
     },
     button: {
       padding: 22,
       textAlign: "center",
-      width: '80%',
+      width: '60%',
       borderRadius: 50,
       backgroundColor: '#1b3763',
-      color: '#ffffff'
+      color: global.baseWhite100
+    },
+    createAcctButton:{
+      padding: 22,
+      textAlign: "center",
+      width: '60%',
+      borderRadius: 50,
+      backgroundColor: global.baseBlue200,
+      color: global.baseWhite100
     }
   });  

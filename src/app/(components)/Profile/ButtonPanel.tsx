@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';
 import CustomText from '../CustomText';
-import { fontGetter } from '../../../customs';
+import { fontGetter, global, salesforceDevelopmentSignature } from '../../../customs';
 import { fontSetter } from '../../../customs';
 import { globalFont } from '../../../customs';
+import { Link, usePathname, router } from "expo-router";
 
 interface ButtonProps {
   text: string;
@@ -22,21 +23,50 @@ function Button({ text, buttonColor, textColor, onPress }: ButtonProps) {
   );
 }
 
-function ButtonDumb({ text, buttonColor, textColor } : { text: string, buttonColor: string, textColor: string }) {
-    return (
-        <View style={{...styles.ButtonWrapper, backgroundColor: buttonColor}}>
-            <TouchableOpacity style={styles.TouchableWrapper}>
-              <CustomText nol={0} font={fontGetter()} style={{...styles.ButtonText, color: textColor}} text={text} />
-            </TouchableOpacity>
-        </View>
-    )
+function ButtonDumb({ text, buttonColor, textColor, onPress }: ButtonProps) {
+  return (
+    <View style={{ ...styles.ButtonWrapper, backgroundColor: buttonColor }}>
+      <TouchableOpacity style={styles.TouchableWrapper} onPress={onPress}>
+        <Text style={{ ...styles.ButtonText, color: textColor }}>{text}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 export default function ButtonPanel({ onPressLoginSignup }: { onPressLoginSignup: () => void },) {
   return (
     <View style={styles.ButtonPanelWrapper}>
       <Button text="Login or Signup" buttonColor="white" textColor="grey" onPress={onPressLoginSignup} />
-      <ButtonDumb text="Submit New Request" buttonColor="#2F2DA3" textColor="white" />
+      <ButtonDumb
+        text="Submit New Request"
+        buttonColor={global.baseBlue100}
+        textColor="white"
+        onPress={() => {}}
+      >
+        <Link
+          to={{
+            pathname: '/request/Type',
+            params: {
+              Subject: 'salesforceDevelopmentSignature',
+              Service_Type__c: '', // CategoryLevel1
+              Sub_Service_Type__c: '', // CategoryLevel2
+              Council_District__c: '', // CouncilDistrictNumber
+              GIS_Street_Address__c: '', // CrossStreet
+              GIS_Zip_Code__c: '', // ZIP
+              Address__c: '', // Address
+              GIS_System_Info__c: '311 Phone', // "<Data_Source>  <SourceLevel1>"
+              GIS_Neighborhood_Name__c: '', // Neighborhood
+              description: '',
+              Address_Geolocation__Latitude__s: 0,
+              Address_Geolocation__Longitude__s: 0,
+              returnRoute: usePathname().replace('/', ''),
+            },
+          }}
+          style={styles.NewRequestLink}
+        >
+          <Text style={styles.requestText}>Submit New Request</Text>
+        </Link>
+      </ButtonDumb>
     </View>
   );
 }

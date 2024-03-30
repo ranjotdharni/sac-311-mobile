@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Link, usePathname, router } from "expo-router";
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ButtonPanel from '../(components)/Profile/ButtonPanel';
-import SearchBar from '../(components)/Profile/SearchBar';
-import { globalFont } from '../../customs';
+import { MaterialIcons } from "@expo/vector-icons";
+import { globalFont, global, salesforceDevelopmentSignature } from '../../customs';
 import * as Notifications from 'expo-notifications';
 import { useEffect } from 'react';
 
@@ -72,8 +73,6 @@ export default function Profile() {
   console.log("Profile component rendered.");
   return (
     <View style={{ flex: 1 }}>
-      <Text style={styles.title}>Service Requests Lookup</Text>
-      <SearchBar value='' placeholder='Request Number' />
       <View style={styles.imageContainer}>
         <Text style={styles.loginText}>Login to see your requests.</Text>
         <View style={styles.textContainer}>
@@ -86,6 +85,24 @@ export default function Profile() {
       <TouchableOpacity style={styles.testButton} onPress={handleTestButtonPress}>
         <Text style={styles.testButtonText}>TEST</Text>
       </TouchableOpacity>
+        <View style={styles.NewRequestButton}>
+                      <Link href={{pathname: '/(request)/Type', params: {
+                                                                  Subject: salesforceDevelopmentSignature,
+                                                                  Service_Type__c: '', // CategoryLevel1
+                                                                  Sub_Service_Type__c: '', // CategoryLevel2
+                                                                  Council_District__c: '', // CouncilDistrictNumber
+                                                                  GIS_Street_Address__c: '', // CrossStreet
+                                                                  GIS_Zip_Code__c: '', // ZIP
+                                                                  Address__c: '', // Address
+                                                                  GIS_System_Info__c: '311 Phone', // "<Data_Source>  <SourceLevel1>"
+                                                                  GIS_Neighborhood_Name__c: '', // Neighborhood
+                                                                  description: '',                                                                
+                                                                  Address_Geolocation__Latitude__s: 0,
+                                                                  Address_Geolocation__Longitude__s: 0,
+                                                                  returnRoute: usePathname().replace('/', '')
+                                                              }}} style={styles.NewRequestLink} />
+                  </View>
+
     </View>
   );
 }
@@ -103,11 +120,13 @@ const styles = StyleSheet.create({
     flex: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    
   },
   loginText: {
     fontSize: 20,
+    paddingTop: 100,
     fontFamily: globalFont.chosenFont,
-    color: '#BEA315',
+    color: global.baseGold100,
     textAlign: 'center',
     marginTop: 60,
   },
@@ -134,4 +153,21 @@ const styles = StyleSheet.create({
     fontFamily: globalFont.chosenFont,
     textAlign: 'center',
   },
+  NewRequestButton: {
+    width: '94.5%',
+    height: '7%',
+    marginVertical: '3%',
+    borderRadius: 10,
+    backgroundColor: 'transparent',
+    shadowColor: "#000", 
+    top: '30%',
+    left: '3%',
+},
+
+NewRequestLink: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    zIndex: 2
+},
 });
