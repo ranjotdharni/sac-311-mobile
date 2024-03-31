@@ -63,9 +63,9 @@ export default function RequestConfirm() {
                 setError('Permission Denied: Sorry, we need camera roll permission to upload images.');
             } else {
                 const result = await ImagePicker.launchImageLibraryAsync();
-                
-                if (result && 'uri' in result && typeof result.uri === 'string') {
-                    setImage(result.uri);
+
+                if (result.canceled == false) {
+                    setImage(result.assets[0].uri);
                     setError(null);
                 } else {
                     setError('No image selected');
