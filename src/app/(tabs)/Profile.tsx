@@ -1,15 +1,16 @@
-import React from 'react';
-import { Link, usePathname, router } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Link, usePathname } from "expo-router";
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import ButtonPanel from '../(components)/Profile/ButtonPanel';
-import { MaterialIcons } from "@expo/vector-icons";
 import { globalFont, global, salesforceDevelopmentSignature } from '../../customs';
 import * as Notifications from 'expo-notifications';
+import * as DocumentPicker from 'expo-document-picker'; // Import DocumentPicker
 import { useEffect } from 'react';
 
 export default function Profile() {
   const navigation = useNavigation();
+  const [selectedFile, setSelectedFile] = useState<DocumentPicker.DocumentPickerResult | null>(null); // State to store the selected file
 
   useEffect(() => {
     // This will ask for permission when the component mounts
@@ -70,6 +71,22 @@ export default function Profile() {
     }
   };
 
+  const handleAnotherButtonPress = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync(); // Open document picker
+      if (!result.canceled && result.assets?.length > 0) {
+        console.log("File selected:", result.assets[0].uri);
+        setSelectedFile(result);
+        // Handle the file here, such as uploading to server or processing
+      } else {
+        console.log("Document picking cancelled or no file selected");
+      }
+    } catch (error) {
+      console.error("Error while selecting document:", error);
+      Alert.alert('Error', 'An error occurred while selecting document.');
+    }
+  };
+
   console.log("Profile component rendered.");
   return (
     <View style={{ flex: 1 }}>
@@ -83,26 +100,39 @@ export default function Profile() {
       </View>
       <ButtonPanel onPressLoginSignup={navigateToProfile2} />
       <TouchableOpacity style={styles.testButton} onPress={handleTestButtonPress}>
-        <Text style={styles.testButtonText}>TEST</Text>
+        <Text style={styles.testButtonText}>NOTIFICATION TEST</Text>
       </TouchableOpacity>
-        <View style={styles.NewRequestButton}>
-                      <Link href={{pathname: '/(request)/Type', params: {
-                                                                  Subject: salesforceDevelopmentSignature,
-                                                                  Service_Type__c: '', // CategoryLevel1
-                                                                  Sub_Service_Type__c: '', // CategoryLevel2
-                                                                  Council_District__c: '', // CouncilDistrictNumber
-                                                                  GIS_Street_Address__c: '', // CrossStreet
-                                                                  GIS_Zip_Code__c: '', // ZIP
-                                                                  Address__c: '', // Address
-                                                                  GIS_System_Info__c: '311 Phone', // "<Data_Source>  <SourceLevel1>"
-                                                                  GIS_Neighborhood_Name__c: '', // Neighborhood
-                                                                  description: '',                                                                
-                                                                  Address_Geolocation__Latitude__s: 0,
-                                                                  Address_Geolocation__Longitude__s: 0,
-                                                                  returnRoute: usePathname().replace('/', '')
-                                                              }}} style={styles.NewRequestLink} />
-                  </View>
-
+      <TouchableOpacity style={styles.anotherButton} onPress={handleAnotherButtonPress}>
+        <Text style={styles.anotherButtonText}>FILE TEST</Text>
+      </TouchableOpacity>
+      {selectedFile && (
+        <Text style={styles.selectedFileText}>
+          Selected File: {selectedFile.assets?.[0].uri}
+        </Text>
+      )}
+      <View style={styles.NewRequestButton}>
+        <Link 
+          href={{
+            pathname: '/(request)/Type', 
+            params: {
+              Subject: salesforceDevelopmentSignature,
+              Service_Type__c: '', 
+              Sub_Service_Type__c: '', 
+              Council_District__c: '', 
+              GIS_Street_Address__c: '', 
+              GIS_Zip_Code__c: '', 
+              Address__c: '', 
+              GIS_System_Info__c: '311 Phone', 
+              GIS_Neighborhood_Name__c: '', 
+              description: '',                                                                
+              Address_Geolocation__Latitude__s: 0,
+              Address_Geolocation__Longitude__s: 0,
+              returnRoute: usePathname().replace('/', '')
+            }
+          }} 
+          style={styles.NewRequestLink} 
+        />
+      </View>
     </View>
   );
 }
@@ -153,6 +183,25 @@ const styles = StyleSheet.create({
     fontFamily: globalFont.chosenFont,
     textAlign: 'center',
   },
+  anotherButton: {
+    backgroundColor: '#DDDDDD',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  anotherButtonText: {
+    fontSize: 16,
+    fontFamily: globalFont.chosenFont,
+    textAlign: 'center',
+  },
+  selectedFileText: {
+    marginTop: 10,
+    fontSize: 16,
+    fontFamily: globalFont.chosenFont,
+    textAlign: 'center',
+  },
   NewRequestButton: {
     width: '94.5%',
     height: '7%',
@@ -162,12 +211,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000", 
     top: '30%',
     left: '3%',
-},
-
-NewRequestLink: {
+  },
+  NewRequestLink: {
     width: '100%',
     height: '100%',
     position: 'absolute',
     zIndex: 2
-},
+  },
 });
