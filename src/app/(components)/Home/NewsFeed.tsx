@@ -7,8 +7,8 @@ import Carousel from "../Carousel";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import * as Parser from 'react-native-rss-parser';
+import { fetchRSSFeed } from './fetchRSSFeed';
+import { Article } from './types';
 
 //  To-Do   //
 // Carousel Slider - completed on 11/6/2023
@@ -16,12 +16,33 @@ import * as Parser from 'react-native-rss-parser';
 export default function NewsFeed() {
 
     const navigation = useNavigation();
+    const [articles, setArticles] = useState<Article[]>([]);
 
+    useEffect(() => {
+        const initializeCarousel = async () => {
+            const articlesFromRSS = await fetchRSSFeed('https://www.kcra.com/topstories-rss');
+            setArticles(articlesFromRSS.slice(0, 3));//get only first three articles
+        };
+        initializeCarousel();
+    }, []);
+
+    const renderArticle = (article: any) => {
+        return <FeedBox 
+            key={article.id} 
+            title={article.title} 
+            imgUrl={article.imgUrl} 
+            link={article.link} 
+            desc={article.desc} 
+        />;
+    };
+
+    /*
     function callback(data: any) {
         return data.map( (item: any): any => {
             return <FeedBox key={Math.random()} title={item.title} imgUrl={item.uri} link={item.url} desc={item.description} />
         })
     }
+    */
 
     return (
         <View style={styles.NewsFeedWrapper}>
@@ -32,7 +53,7 @@ export default function NewsFeed() {
                     <Image source={require('../../../assets/png/newspaper.png')} style={styles.IconStyle} />
                 </TouchableOpacity>
             </View>
-            <Carousel bubbles={{radius: 5, spacing: 0.08, color: global.baseGrey100, activeColor: global.baseGold100, activeRadius: 6}} nestData={dummyDataNews} nestCallback={callback} itemCount={dummyDataNews.length} endPadding={'5%'} scrollOffset={Dimensions.get('screen').width * 0.98} minScroll={50} />
+            <Carousel bubbles={{radius: 5, spacing: 0.08, color: global.baseGrey100, activeColor: global.baseGold100, activeRadius: 6}} nestData={articles} nestCallback={renderArticle} itemCount={articles.length} endPadding={'5%'} scrollOffset={Dimensions.get('screen').width * 0.98} minScroll={50} />
         </View>
     )
 }
