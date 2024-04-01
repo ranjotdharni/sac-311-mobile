@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView, TextInput, Image, FlatList } from 'react-native';
-import { global, shadowUniversal } from "../../customs";
+import { global, shadowUniversal, globalColorTheme } from "../../customs";
 import { useRouter } from 'expo-router';
 import { answerTypes } from '../../addresses';
 import { FontAwesome } from '@expo/vector-icons';
@@ -48,21 +48,21 @@ export default function ResourceAnswers() {
             };
     }).filter(obj => obj.questions.length > 0);
     return (
-        <View style={styles.mainWrapper}>
-            <View style={styles.exitWrapper}>
+        <View style={[styles.mainWrapper,{backgroundColor:globalColorTheme.backgroundColor}]}>
+            <View style={[styles.exitWrapper,{backgroundColor:globalColorTheme.backgroundColor}]}>
                 <View style={styles.innerExitWrapper}>
-                <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/Resources')}}>
-                        <Text style={styles.barText}>Services</Text>
+                <TouchableOpacity style={[styles.tabNamesWrapper,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={() => {router.replace('/(tabs)/Resources')}}>
+                        <Text style={[styles.barText,{color:globalColorTheme.color}]}>Services</Text>
                     </TouchableOpacity>
-                    <View style={styles.tabNamesWrapperSelected}>
-                        <Text style={styles.barText}>Answers</Text>
+                    <View style={[styles.tabNamesWrapperSelected,{backgroundColor:globalColorTheme.blue}]}>
+                        <Text style={[styles.barText,{color:globalColorTheme.text}]}>Answers</Text>
                     </View>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/ResourceAbout')}}>
-                        <Text style={styles.barText}>About</Text>
+                    <TouchableOpacity style={[styles.tabNamesWrapper,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={() => {router.replace('/(tabs)/ResourceAbout')}}>
+                        <Text style={[styles.barText,{color:globalColorTheme.color}]}>About</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.searchContainer}>
+            <View style={[styles.searchContainer,{backgroundColor:globalColorTheme.backgroundColor2}]}>
                 <Image style={styles.searchIcon} source={require('../../assets/png/search.png')} />
                 <TextInput
                     style={styles.searchInput}
@@ -71,8 +71,8 @@ export default function ResourceAnswers() {
                     placeholder='Search for Articles'
                     placeholderTextColor='#D3D3D3'
                 />
-                <TouchableOpacity onPress={() => setSearchValue('')} style={styles.clearButton}>
-                    <FontAwesome name='remove' size={20} color={global.baseGrey200} />
+                <TouchableOpacity onPress={() => setSearchValue('')} style={[styles.clearButton,{backgroundColor:globalColorTheme.backgroundColor2}]}>
+                    <FontAwesome name='remove' size={20} color={globalColorTheme.color} />
                 </TouchableOpacity>
             </View>
             <View style={styles.allFiltersWrapper}>
@@ -83,12 +83,12 @@ export default function ResourceAnswers() {
                 data={answerTypes}
                 renderItem={({item}) => 
                     <TouchableOpacity key={item.id} style={styles.filterWrapper} onPress={() => setFilterValue(item.type)}>
-                        <Text style={styles.filterText}>{item.type}</Text>
+                        <Text style={[styles.filterText,{backgroundColor:globalColorTheme.blue, color:globalColorTheme.text}]}>{item.type}</Text>
                     </TouchableOpacity>
             }
             />
             <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
-                <Text style={styles.clearFilterText}>Clear Filter</Text>
+                <Text style={[styles.clearFilterText,{backgroundColor:globalColorTheme.backgroundColor2, color:globalColorTheme.color}]}>Clear Filter</Text>
             </TouchableOpacity>
             </View>
             <FlatList
@@ -96,26 +96,27 @@ export default function ResourceAnswers() {
             data={filteredArticleTypes}
             renderItem={({item}) => 
             <View style={styles.typeWrapper} key={item.id}>
-                <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{item.type}</Text></View>
+                <View style={styles.typeTitleWrapper}><Text style={[styles.typeTitle,{color:globalColorTheme.blue}]}>{item.type}</Text></View>
                 <FlatList
                     data={item.questions}
                     renderItem={({item : questions}) => {
                         if(item.type =='FAQ'){
                             return (
-                                <TouchableOpacity key={questions.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: item.type, answer: questions.description, question: questions.question}})}}>
-                                    <View style={styles.FAQTitleWrapper}>
-                                        <Text style={styles.FAQTitle}>{questions.question}</Text>
+                                <TouchableOpacity key={questions.id} style={[styles.questionWrapper, shadowUniversal.default, {backgroundColor:globalColorTheme.backgroundColor2}]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: item.type, answer: questions.description, question: questions.question}})}}>
+                                    <View style={[styles.FAQTitleWrapper, {backgroundColor:globalColorTheme.blue}]}>
+                                        <Text style={[styles.FAQTitle, {color:globalColorTheme.text}]}>{questions.question}</Text>
                                     </View>
-                                    <Text style={styles.questionDescription}>Tap to see details.</Text>
+                                    <Text style={[styles.questionDescription, {color:globalColorTheme.color}]}>Tap to see details.</Text>
                                 </TouchableOpacity>
                             );
                         }
                         //If the question is not an FAQ, link to the answer article:
                         else{
                             return (
-                                <TouchableOpacity key={questions.id} style={[styles.questionWrapper, shadowUniversal.default]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: item.type, answer: questions.answer, question: questions.question}})}}>
-                                    <View style={styles.questionTitleWrapper}><Text style={styles.questionTitle}>{questions.question}</Text></View>
-                                    <Text style={styles.questionDescription}>{questions.description}</Text>
+                                <TouchableOpacity key={questions.id} style={[styles.questionWrapper, shadowUniversal.default, {backgroundColor:globalColorTheme.backgroundColor2}]} onPress={() => {router.push({pathname: '/FAQFullView', params: {type: item.type, answer: questions.answer, question: questions.question}})}}>
+                                    <View style={[styles.questionTitleWrapper, {backgroundColor:globalColorTheme.blue}]}>
+                                        <Text style={[styles.questionTitle, {color:globalColorTheme.text}]}>{questions.question}</Text></View>
+                                    <Text style={[styles.questionDescription, {color:globalColorTheme.color}]}>{questions.description}</Text>
                                 </TouchableOpacity>
                             );
                         }

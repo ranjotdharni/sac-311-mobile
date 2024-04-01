@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-nati
 import CustomText from '../CustomText';
 import { fontGetter, global, salesforceDevelopmentSignature } from '../../../customs';
 import { fontSetter } from '../../../customs';
-import { globalFont } from '../../../customs';
+import { globalFont, globalColorTheme } from '../../../customs';
 import { Link, usePathname, router } from "expo-router";
 
 interface ButtonProps {
@@ -35,8 +35,8 @@ function ButtonDumb({ text, buttonColor, textColor, onPress }: ButtonProps) {
 
 export default function ButtonPanel({ onPressLoginSignup }: { onPressLoginSignup: () => void },) {
   return (
-    <View style={styles.ButtonPanelWrapper}>
-      <Button text="Login or Signup" buttonColor="white" textColor="grey" onPress={onPressLoginSignup} />
+    <View style={[styles.ButtonPanelWrapper, {backgroundColor:globalColorTheme.backgroundColor}]}>
+      <Button text="Login or Signup" buttonColor={globalColorTheme.backgroundColor2} textColor={globalColorTheme.text} onPress={onPressLoginSignup} />
       <ButtonDumb
         text="Submit New Request"
         buttonColor={global.baseBlue100}
@@ -110,5 +110,13 @@ const styles = StyleSheet.create({
     ButtonText: {
         fontSize: Dimensions.get('screen').width * 0.045,
         fontFamily: globalFont.chosenFont
+    },
+
+    NewRequestLink:{
+
+    },
+
+    requestText:{
+
     },
 })

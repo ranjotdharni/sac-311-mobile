@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { globalFont } from '../../customs';
 import { FontAwesome } from '@expo/vector-icons';
+import { globalColorTheme } from '../../customs';
 
 export default function Type()
 {
@@ -103,26 +104,26 @@ export default function Type()
     }
     // {pathname: '/Location', params: {reqType: arg0, reqDesc: arg1, reqLoc: (p.reqLoc || '')}}
 
-    return (<View style={styles.mainWrapper}>
-        <View style={styles.exitWrapper}>
+    return (<View style={[styles.mainWrapper, {backgroundColor: globalColorTheme.backgroundColor}]}>
+        <View style={[styles.exitWrapper, {backgroundColor: globalColorTheme.blue}]}>
             <View style={styles.innerExitWrapper}>
-            <Text style={styles.barText}>Select A Service</Text>
+            <Text style={[styles.barText, {color: globalColorTheme.text}]}>Select A Service</Text>
                     <TouchableOpacity onPress={() => { nav.goBack() }}> 
                         <Image style={styles.resizeIcon} source={require('../../assets/png/exit_x.png')} />
                     </TouchableOpacity>
             </View>
         </View>
-        <View style={styles.searchContainer}>
+        <View style={[styles.searchContainer, {backgroundColor: globalColorTheme.backgroundColor2}]}>
             <Image style={styles.searchIcon} source={require('../../assets/png/search.png')} />
             <TextInput
                 style={styles.searchInput}
                 value={searchValue}
                 onChangeText={text => setSearchValue(text)}
                 placeholder='Search for Services'
-                placeholderTextColor='#D3D3D3'
+                placeholderTextColor={globalColorTheme.color}
             />
-            <TouchableOpacity onPress={() => setSearchValue('')} style={styles.clearButton}>
-                <FontAwesome name='remove' size={20} color={global.baseGrey200} />
+                       <TouchableOpacity onPress={() => setSearchValue('')} style={[styles.clearButton, {backgroundColor: globalColorTheme.backgroundColor2}]}>
+                <FontAwesome name='remove' size={20} color={globalColorTheme.color} />
             </TouchableOpacity>
         </View>
         <View style={styles.allFiltersWrapper}>
@@ -131,27 +132,27 @@ export default function Type()
                 persistentScrollbar
                 data={requestTypes}
                 renderItem={({item}) => 
-                <TouchableOpacity key={item.id} style={styles.filterWrapper} onPress={() => setFilterValue(item.type)}>
-                    <Text style={styles.filterText}>{item.type}</Text>
+                <TouchableOpacity key={item.id} style={[styles.filterWrapper, {backgroundColor: globalColorTheme.backgroundColor}]} onPress={() => setFilterValue(item.type)}>
+                    <Text style={[styles.filterText, {backgroundColor: globalColorTheme.blue, color: globalColorTheme.text}]}>{item.type}</Text>
                 </TouchableOpacity>
             }
             />
-            <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
-                            <Text style={styles.clearFilterText}>Clear Filter</Text>
+            <TouchableOpacity style={[styles.filterWrapper, {backgroundColor: globalColorTheme.backgroundColor}]} onPress={() => setFilterValue("None")}>
+                            <Text style={[styles.clearFilterText, {backgroundColor: globalColorTheme.backgroundColor2, color: globalColorTheme.color}]}>Clear Filter</Text>
             </TouchableOpacity>
         </View>
         <FlatList
             data={filteredRequestTypes}
             renderItem={({item}) => 
             <View style={styles.typeWrapper} key={item.id}>
-                <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{item.type}</Text></View>
+                <View style={styles.typeTitleWrapper}><Text style={[styles.typeTitle, {color: globalColorTheme.color}]}>{item.type}</Text></View>
                 <FlatList
                     data={item.subTypes}
                     renderItem={({item: subTypes}) => 
-                    <TouchableOpacity onPress={() => {forwardRequest(item.type, subTypes.subType, subTypes.description)}} key={subTypes.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
-                        <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{subTypes.subType}</Text></View>
-                        <Text style={styles.subTypeDescription}>{subTypes.description}</Text>
-                        <Text style={styles.subTypeDesc2}>{subTypes.desc2}</Text>
+                    <TouchableOpacity onPress={() => {forwardRequest(item.type, subTypes.subType, subTypes.description)}} key={subTypes.id} style={[styles.subTypeWrapper, shadowUniversal.default, {backgroundColor: globalColorTheme.backgroundColor2}]}>
+                        <View style={[styles.subTypeTitleWrapper, {backgroundColor: globalColorTheme.blue}]}><Text style={styles.subTypeTitle}>{subTypes.subType}</Text></View>
+                        <Text style={[styles.subTypeDescription, {color: globalColorTheme.color}]}>{subTypes.description}</Text>
+						<Text style={styles.subTypeDesc2}>{subTypes.desc2}</Text>
                     </TouchableOpacity>
                 }
                 />

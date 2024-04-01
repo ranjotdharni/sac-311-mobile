@@ -65,7 +65,7 @@ const YourRequests: React.FC = () => {
                 
                 <TouchableOpacity
                     onPress={handleLoginPress}
-                    style={styles.loginButton}
+                    style={[styles.loginButton]}
                     activeOpacity={0.7} //changes button opacity when pressed
                 >
                     <Text style={styles.loginButtonText}>Login</Text>

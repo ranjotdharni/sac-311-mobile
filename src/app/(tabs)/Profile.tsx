@@ -7,6 +7,7 @@ import { globalFont, global, salesforceDevelopmentSignature } from '../../custom
 import * as Notifications from 'expo-notifications';
 import * as DocumentPicker from 'expo-document-picker'; // Import DocumentPicker
 import { useEffect } from 'react';
+import { globalColorTheme } from '../../customs';
 
 export default function Profile() {
   const navigation = useNavigation();
@@ -89,20 +90,20 @@ export default function Profile() {
 
   console.log("Profile component rendered.");
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 , backgroundColor:globalColorTheme.backgroundColor}}>
       <View style={styles.imageContainer}>
         <Text style={styles.loginText}>Login to see your requests.</Text>
         <View style={styles.textContainer}>
-          <Text style={styles.createAccountText}>
+          <Text style={[styles.createAccountText,{color:globalColorTheme.color}]}>
             Create an account or login to see requests you have made or followed.
           </Text>
         </View>
       </View>
       <ButtonPanel onPressLoginSignup={navigateToProfile2} />
-      <TouchableOpacity style={styles.testButton} onPress={handleTestButtonPress}>
+      <TouchableOpacity style={[styles.testButton,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={handleTestButtonPress}>
         <Text style={styles.testButtonText}>NOTIFICATION TEST</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.anotherButton} onPress={handleAnotherButtonPress}>
+      <TouchableOpacity style={[styles.anotherButton,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={handleAnotherButtonPress}>
         <Text style={styles.anotherButtonText}>FILE TEST</Text>
       </TouchableOpacity>
       {selectedFile && (

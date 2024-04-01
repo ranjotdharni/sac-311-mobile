@@ -1,5 +1,5 @@
 import { View, StyleSheet, Dimensions, TouchableOpacity, Text, Image } from "react-native"
-import { shadowUniversal } from "../../../customs"
+import { globalColorTheme, shadowUniversal } from "../../../customs"
 import { MaterialIcons } from "@expo/vector-icons"
 import { global } from "../../../customs"
 import { useRouter } from 'expo-router';
@@ -17,14 +17,14 @@ function WhatsNewButton() {
 export default function ForeHead() {
     const router = useRouter()
     return (
-        <View style={[styles.ForeHeadWrapper]}>
-            <View style={[shadowUniversal.homeHeader, styles.ForeHeadCover]}>
+        <View style={[styles.ForeHeadWrapper, {backgroundColor:globalColorTheme.backgroundColor}]}>
+            <View style={[shadowUniversal.homeHeader, styles.ForeHeadCover, {backgroundColor:globalColorTheme.blue}]}>
                 <View style={styles.LogoWrapper}>
                     <Image style={styles.Logo} source={require('../../../assets/png/icon.png')} />
                 </View>
 
-                <TouchableOpacity style={styles.SettingsButton} onPress={() => {router.replace('/(tabs)/Settings')}}>
-                    <MaterialIcons name="settings" size={Dimensions.get('screen').width * 0.085} color={global.baseWhite100} />
+                <TouchableOpacity style={[styles.SettingsButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.replace('/(tabs)/Settings')}}>
+                    <MaterialIcons name="settings" size={Dimensions.get('screen').width * 0.085} color={globalColorTheme.backgroundColor2} />
                 </TouchableOpacity>
             </View>
         </View>

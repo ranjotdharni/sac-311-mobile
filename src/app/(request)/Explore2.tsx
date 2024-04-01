@@ -5,6 +5,7 @@ import SearchBar from "../(components)/Profile/SearchBar";
 import { global } from "../../customs";
 import { places } from "../../addresses";
 import { useNavigation } from '@react-navigation/native';
+import { globalColorTheme } from "../../customs";
 
 function getInitialState() {
   return {

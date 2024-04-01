@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Dimensions, Animated, TouchableOpacity } from "react-native";
-import { dummyDataHome, generateEndpointUrl, responseType } from "../../../customs";
+import { dummyDataHome, generateEndpointUrl, globalColorTheme, responseType } from "../../../customs";
 import Request from "../Request";
 import { global } from "../../../customs";
 import { useEffect, useState } from "react";
@@ -46,11 +46,11 @@ export const TabsComponent: React.FC = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: globalColorTheme.backgroundColor}]}>
             <View style={styles.tabsContainer}>
                 {/* Tab "Nearby" */}
                 <TouchableOpacity style={styles.tabButton} onPress={() => onTabPress('Near You')}>
-                    <Text style={styles.tabText}>Near You</Text>
+                    <Text style={[styles.tabText, {color: globalColorTheme.blue}]}>Near You</Text>
                 </TouchableOpacity>
 
                 {/* Vertical Separator Line */}
@@ -58,7 +58,7 @@ export const TabsComponent: React.FC = () => {
 
                 {/* Tab "Your Requests" */}
                 <TouchableOpacity style={styles.tabButton} onPress={() => onTabPress('Your Requests')}>
-                    <Text style={styles.tabText}>Your Requests</Text>
+                    <Text style={[styles.tabText, {color: globalColorTheme.blue}]}>Your Requests</Text>
                 </TouchableOpacity>
             </View>
     

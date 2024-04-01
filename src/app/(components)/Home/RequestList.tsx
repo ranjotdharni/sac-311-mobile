@@ -10,6 +10,7 @@ import { Loader } from "../Loader";
 import { MaterialIcons } from "@expo/vector-icons";
 import CustomText from "../CustomText";
 import { router } from "expo-router";
+import { globalColorTheme } from "../../../customs";
 
 const initialRegion: Region = {
     latitude: 38.574713,
@@ -194,8 +195,8 @@ export default function RequestList()
     return (
         loader ? 
         <Loader /> :
-        <View style={styles.listWrapper}> 
-            <MapView zoomEnabled={false} scrollEnabled={false} rotateEnabled={false} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9}]}>
+        <View style={[styles.listWrapper, {backgroundColor: globalColorTheme.backgroundColor}]}> 
+            <MapView zoomEnabled={false} scrollEnabled={false} rotateEnabled={false} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9, borderColor: globalColorTheme.blue}]}>
                 {
                     testData.map((mark, index) => {
                         return (
@@ -211,17 +212,17 @@ export default function RequestList()
                     {
                         testData.map(item => {
                             return (
-                                <View key={item.attributes.ReferenceNumber} style={[{width: Dimensions.get('screen').width * markerViewWidth, marginLeft: Dimensions.get('screen').width * ((1 - markerViewWidth) / 2), height: '90%', backgroundColor: global.baseBackground100, borderRadius: markerItemRadius, display: 'flex', flexDirection: 'row'}, shadowUniversal.default]}>
-                                    <View style={{width: '15%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: global.baseBlue100, borderTopLeftRadius: markerItemRadius, borderBottomLeftRadius: markerItemRadius}}>
+                                <View key={item.attributes.ReferenceNumber} style={[{width: Dimensions.get('screen').width * markerViewWidth, marginLeft: Dimensions.get('screen').width * ((1 - markerViewWidth) / 2), height: '90%', backgroundColor: globalColorTheme.backgroundColor, borderRadius: markerItemRadius, display: 'flex', flexDirection: 'row'}, shadowUniversal.default]}>
+                                    <View style={{width: '15%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: globalColorTheme.blue, borderTopLeftRadius: markerItemRadius, borderBottomLeftRadius: markerItemRadius}}>
                                         <Image style={{height: '100%', aspectRatio: 1 / 1}} source={{uri: generateSymbolUrl(item.attributes.CategoryLevel1)}} />
                                     </View>
                                     <View style={{width: '85%', height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
                                         <View style={{width: '75%', height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                             <CustomText text={item.attributes.CategoryLevel1} style={{color: global.baseGold100, fontSize: 20}} font='jbm' nol={2} />
                                         </View>
-                                        <TouchableOpacity onPress={() => router.push({pathname: '/(requestview)/RequestFullView', params: {requestData: JSON.stringify(item)}})} style={{width: '55%', height: '60%', padding: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: global.baseBlue100, borderRadius: 15}}>
-                                            <CustomText text='View' style={{color: global.baseBackground100, fontSize: 13, position: 'relative', left: 5}} font='jbm' nol={0} />
-                                            <MaterialIcons size={23} style={{position: 'relative', left: 5}} color={global.baseBackground100} name="chevron-right" />
+                                        <TouchableOpacity onPress={() => router.push({pathname: '/(requestview)/RequestFullView', params: {requestData: JSON.stringify(item)}})} style={{width: '55%', height: '60%', padding: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: globalColorTheme.blue, borderRadius: 15}}>
+                                            <CustomText text='View' style={{color: globalColorTheme.backgroundColor, fontSize: 13, position: 'relative', left: 5}} font='jbm' nol={0} />
+                                            <MaterialIcons size={23} style={{position: 'relative', left: 5, top: -2}} color={globalColorTheme.backgroundColor} name="chevron-right" />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -232,14 +233,14 @@ export default function RequestList()
             </View>
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: Dimensions.get('screen').width * 0.9, height: 75}}>
                 <TouchableOpacity onPress={() => { useMyLocation(); fetchTestData(); }} style={{marginLeft: 10}}>
-                    <CustomText text={message} font='jbm' nol={0} style={{fontSize: 17, color: '#2B60E9'}} />
+                    <CustomText text={message} font='jbm' nol={0} style={{fontSize: 17, color:globalColorTheme.blue}} />
                 </TouchableOpacity>
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', width: Dimensions.get('screen').width * 0.3}}>
-                    <TouchableOpacity onPress={toLeft} style={{borderRadius: 15, backgroundColor: (highlight === 0 ? global.baseGrey200 : global.baseBlue100), width: Dimensions.get('screen').width * 0.125, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                        <MaterialIcons size={25} color={global.baseBackground100} name="chevron-left" />
+                    <TouchableOpacity onPress={toLeft} style={{borderRadius: 15, backgroundColor: (highlight === 0 ? globalColorTheme.backgroundColor : globalColorTheme.blue), width: Dimensions.get('screen').width * 0.125, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        <MaterialIcons size={25} color={(highlight === 0 ? globalColorTheme.backgroundColor : globalColorTheme.backgroundColor)} name="chevron-left" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={toRight} style={{borderRadius: 15, backgroundColor: (highlight === testData.length - 1 ? global.baseGrey200 : global.baseBlue100), width: Dimensions.get('screen').width * 0.125, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                        <MaterialIcons size={25} color={global.baseBackground100} name="chevron-right" />
+                    <TouchableOpacity onPress={toRight} style={{borderRadius: 15, backgroundColor: (highlight === testData.length - 1 ? globalColorTheme.backgroundColor : globalColorTheme.blue), width: Dimensions.get('screen').width * 0.125, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        <MaterialIcons size={25} color={(highlight === testData.length - 1 ? globalColorTheme.backgroundColor : globalColorTheme.backgroundColor)} name="chevron-right" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -288,7 +289,6 @@ const styles = StyleSheet.create({
     embeddedMap: {
         height: 175,
         marginTop: 15,
-        borderColor: global.baseBlue100,
         borderWidth: 7,
         borderRadius: 20
     },

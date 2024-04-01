@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Text, TextInput, Image , FlatList }
 import { global, requestTypes, shadowUniversal, salesforceDevelopmentSignature, categoryLevelToType } from "../../customs";
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
-import { globalFont } from '../../customs';
+import { globalFont, globalColorTheme } from '../../customs';
 
 export default function Resources() {
     const router = useRouter();
@@ -99,21 +99,21 @@ export default function Resources() {
     }
 
     return (
-        <View style={styles.mainWrapper}>
-            <View style={styles.exitWrapper}>
+        <View style={[styles.mainWrapper,{backgroundColor:globalColorTheme.backgroundColor}]}>
+            <View style={[styles.exitWrapper,{backgroundColor:globalColorTheme.backgroundColor}]}>
                 <View style={styles.innerExitWrapper}>
-                    <View style={styles.tabNamesWrapperSelected}>
-                        <Text style={styles.barText}>Services</Text>
+                    <View style={[styles.tabNamesWrapperSelected, {backgroundColor:globalColorTheme.blue}]}>
+                        <Text style={[styles.barText, {color:globalColorTheme.text}]}>Services</Text>
                     </View>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceAnswers') }}>
-                        <Text style={styles.barText}>Answers</Text>
+                    <TouchableOpacity style={[styles.tabNamesWrapper, {backgroundColor:globalColorTheme.backgroundColor2}]} onPress={() => { router.replace('/(tabs)/ResourceAnswers') }}>
+                        <Text style={[styles.barText, {color:globalColorTheme.color}]}>Answers</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => { router.replace('/(tabs)/ResourceAbout') }}>
-                        <Text style={styles.barText}>About</Text>
+                    <TouchableOpacity style={[styles.tabNamesWrapper, {backgroundColor:globalColorTheme.backgroundColor2}]} onPress={() => { router.replace('/(tabs)/ResourceAbout') }}>
+                        <Text style={[styles.barText, {color:globalColorTheme.color}]}>About</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.searchContainer}>
+            <View style={[styles.searchContainer,{backgroundColor:globalColorTheme.backgroundColor2}]}>
                 <Image style={styles.searchIcon} source={require('../../assets/png/search.png')} />
                 <TextInput
                     style={styles.searchInput}
@@ -122,8 +122,8 @@ export default function Resources() {
                     placeholder='Search for Services'
                     placeholderTextColor='#D3D3D3'
                 />
-                <TouchableOpacity onPress={() => setSearchValue('')} style={styles.clearButton}>
-                    <FontAwesome name='remove' size={20} color={global.baseGrey200} />
+                <TouchableOpacity onPress={() => setSearchValue('')} style={[styles.clearButton,{backgroundColor:globalColorTheme.backgroundColor2}]}>
+                    <FontAwesome name='remove' size={20} color={globalColorTheme.color} />
                 </TouchableOpacity>
             </View>
             <View style={styles.allFiltersWrapper}>
@@ -132,26 +132,27 @@ export default function Resources() {
                     persistentScrollbar
                     data={requestTypes}
                     renderItem={({item}) => 
-                    <TouchableOpacity key={item.id} style={styles.filterWrapper} onPress={() => setFilterValue(item.type)}>
-                        <Text style={styles.filterText}>{item.type}</Text>
+                    <TouchableOpacity key={item.id} style={[styles.filterWrapper,{backgroundColor:globalColorTheme.backgroundColor}]} onPress={() => setFilterValue(item.type)}>
+                        <Text style={[styles.filterText,{backgroundColor:globalColorTheme.blue, color:globalColorTheme.text}]}>{item.type}</Text>
                     </TouchableOpacity>
                 }
                 />
-                <TouchableOpacity style={styles.filterWrapper} onPress={() => setFilterValue("None")}>
-                                <Text style={styles.clearFilterText}>Clear Filter</Text>
+                <TouchableOpacity style={[styles.filterWrapper,{backgroundColor:globalColorTheme.backgroundColor}]} onPress={() => setFilterValue("None")}>
+                    <Text style={[styles.clearFilterText,{backgroundColor:globalColorTheme.backgroundColor2, color:globalColorTheme.color}]}>Clear Filter</Text>
                 </TouchableOpacity>
             </View>
             <FlatList
                 data={filteredRequestTypes}
                 renderItem={({item}) => 
                 <View style={styles.typeWrapper} key={item.id}>
-                    <View style={styles.typeTitleWrapper}><Text style={styles.typeTitle}>{item.type}</Text></View>
+                    <View style={styles.typeTitleWrapper}><Text style={[styles.typeTitle, {color:globalColorTheme.blue}]}>{item.type}</Text></View>
                     <FlatList
                         data={item.subTypes}
                         renderItem={({item : subTypes}) => 
-                        <TouchableOpacity onPress={() => {forwardRequest(item.type, subTypes.subType, subTypes.description)}} key={item.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
-                            <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{subTypes.subType}</Text></View>
-                            <Text style={styles.subTypeDescription}>{subTypes.description}</Text>
+                        <TouchableOpacity onPress={() => {forwardRequest(item.type, subTypes.subType, subTypes.description)}} key={item.id} style={[styles.subTypeWrapper, shadowUniversal.default, {backgroundColor:globalColorTheme.backgroundColor2}]}>
+                            <View style={[styles.subTypeTitleWrapper,{backgroundColor:globalColorTheme.blue}]}>
+                                <Text style={[styles.subTypeTitle,{color:globalColorTheme.text}]}>{subTypes.subType}</Text></View>
+                            <Text style={[styles.subTypeDescription,{color:globalColorTheme.color}]}>{subTypes.description}</Text>
                         </TouchableOpacity>
                     }
                     />
