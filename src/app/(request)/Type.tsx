@@ -151,6 +151,7 @@ export default function Type()
                     <TouchableOpacity onPress={() => {forwardRequest(item.type, subTypes.subType, subTypes.description)}} key={subTypes.id} style={[styles.subTypeWrapper, shadowUniversal.default]}>
                         <View style={styles.subTypeTitleWrapper}><Text style={styles.subTypeTitle}>{subTypes.subType}</Text></View>
                         <Text style={styles.subTypeDescription}>{subTypes.description}</Text>
+                        <Text style={styles.subTypeDesc2}>{subTypes.desc2}</Text>
                     </TouchableOpacity>
                 }
                 />
@@ -262,6 +263,13 @@ const styles = StyleSheet.create({
         fontFamily: globalFont.chosenFont,
         fontSize: 15,
         color: global.baseGrey100,
+    },
+    subTypeDesc2: {
+        marginTop: '3%',
+        marginLeft: '3%',
+        fontFamily: globalFont.chosenFont,
+        fontSize: 12,
+        color: global.baseGrey200,
     },
     searchContainer: {
         flexDirection: 'row',
