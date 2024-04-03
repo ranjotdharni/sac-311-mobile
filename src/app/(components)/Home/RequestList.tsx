@@ -195,14 +195,8 @@ export default function RequestList()
     return (
         loader ? 
         <Loader /> :
-<<<<<<< HEAD
-        <View style={styles.listWrapper}> 
-
-            <MapView zoomEnabled={false} scrollEnabled={false} rotateEnabled={false} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9}]}>
-=======
         <View style={[styles.listWrapper, {backgroundColor: globalColorTheme.backgroundColor}]}> 
             <MapView zoomEnabled={false} scrollEnabled={false} rotateEnabled={false} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9, borderColor: globalColorTheme.blue}]}>
->>>>>>> c2f76f20f8583752c2a814d9cbba0a75014a310e
                 {
                     testData.map((mark, index) => {
                         return (
