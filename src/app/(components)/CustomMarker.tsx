@@ -1,8 +1,7 @@
 import { Marker } from "react-native-maps";
 import { responseType } from "../../customs";
 import { memo, useEffect, useRef, useState } from "react";
-import { Animated, StyleSheet } from "react-native";
-import { Easing } from "react-native-reanimated";
+import { Animated, StyleSheet, Easing } from "react-native";
 
 function CustomMarker({ markerData, image, fadeInDelay, iconScale, backgroundColor, passUp } : { markerData: responseType, image: string, fadeInDelay: number, iconScale: number, backgroundColor: string, passUp: (obj: responseType) => void }) {
     let opacity = useRef(new Animated.Value(0)).current
@@ -38,6 +37,22 @@ function CustomMarker({ markerData, image, fadeInDelay, iconScale, backgroundCol
         </Marker.Animated>
     )
 }
+
+/*
+<Marker.Animated opacity={opacity} key={markerData.attributes.ReferenceNumber + "MarkerTop"} style={{overflow: 'visible', width: iconScale, height: iconScale}} tracksViewChanges={true} coordinate={{latitude: markerData.geometry.y, longitude: markerData.geometry.x}} onPress={() => { passUp(markerData) }}>
+            {
+                trigger 
+                ?
+                <Animated.View key={markerData.attributes.ReferenceNumber + "MarkerTopWrapper"} style={styles.markerTopWrapper}>
+                    <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayBack"} style={[styles.markerTopOverlayBack, { backgroundColor:backgroundColor, borderRadius: iconScale / 3 }]}></Animated.View>
+                    <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayPin"} style={[styles.markerTopOverlayPin, {backgroundColor: backgroundColor, borderRadius: iconScale / 2}]}></Animated.View>
+                    <Animated.Image key={markerData.attributes.ReferenceNumber + "MarkerTopInset"} style={styles.markerTopInset} source={{uri: image}} />
+                </Animated.View> 
+                :
+                <Animated.View></Animated.View>
+            }
+        </Marker.Animated>
+*/
 
 const styles = StyleSheet.create({
     markerTopWrapper: {

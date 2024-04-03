@@ -2,7 +2,7 @@ import { View, StyleSheet, Dimensions, Pressable, Animated } from "react-native"
 import MapView, { Details, PROVIDER_GOOGLE, Region } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
 import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom, responseObjectToParameter, ParamType } from "../../customs";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
 import Request from "../(components)/Request";
@@ -14,6 +14,7 @@ import _ from 'lodash'
 import { fontGetter } from "../../customs";
 import { globalFont } from '../../customs';
 import { useRouter, router, useLocalSearchParams } from "expo-router";
+import { Context } from "../(components)/context/TokenContext";
 
 //const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markerPrimary'
@@ -328,11 +329,11 @@ function Explore()
                     }
                 </Animated.View>
                 <Animated.View style={{width: '100%', height: '100%'}}>
-                <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
-                    {
-                        memoizedMarkerRender
-                    }
-                </MapView>
+                    <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
+                        {
+                            memoizedMarkerRender
+                        }
+                    </MapView>                    
                 </Animated.View>
                 <SearchBar value={addressQuery} style={styles.searchBar} onSubmit={() => { showResults(false) }} passUp={setQuery} onClear={() => { setAddressQuery('') }} placeholder={'Search Address'} />
                 {
@@ -357,6 +358,14 @@ function Explore()
         </View>
     )
 }
+
+/*#
+<MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
+                    {
+                        memoizedMarkerRender
+                    }
+                </MapView>
+#*/
 
 const styles = StyleSheet.create({
     wrapper: {

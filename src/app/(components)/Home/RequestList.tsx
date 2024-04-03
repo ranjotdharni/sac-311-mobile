@@ -195,6 +195,7 @@ export default function RequestList()
         loader ? 
         <Loader /> :
         <View style={styles.listWrapper}> 
+
             <MapView zoomEnabled={false} scrollEnabled={false} rotateEnabled={false} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9}]}>
                 {
                     testData.map((mark, index) => {
@@ -247,13 +248,19 @@ export default function RequestList()
     )
 }
 
-/*
-{
-                testData.map(item => {
-                    return <Request key={item.attributes.ReferenceNumber} data={item} width='90%' height={Dimensions.get('screen').height * 0.2} compact={false} />
-                })
-            }
-*/
+/*#
+<MapView zoomEnabled={false} scrollEnabled={false} rotateEnabled={false} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={initialRegion} style={[styles.embeddedMap, {width: Dimensions.get('screen').width * 0.9}]}>
+                {
+                    testData.map((mark, index) => {
+                        return (
+                            <Marker onPress={() => setHighlight(index)} id={mark.attributes.ReferenceNumber + "MarkerId"} key={mark.attributes.ReferenceNumber  + "MarkerEmbeddedKey"} coordinate={{latitude: mark.geometry.y, longitude: mark.geometry.x}}>
+                                <Image style={[styles.mapMarker, {width: index === highlight ? 30 : 15}]} source={{uri: generateSymbolUrl(mark.attributes.CategoryLevel1)}} />
+                            </Marker>
+                        )
+                    })
+                }
+            </MapView>
+#*/
 
 const styles = StyleSheet.create({
     listWrapper: {

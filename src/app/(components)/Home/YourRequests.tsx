@@ -1,10 +1,13 @@
 import { Text, View, StyleSheet, TouchableOpacity, TextInput, ScrollView, Dimensions } from "react-native";
-import { ParamResponseType, ParameterResponseToResponseObject, global, responseType, salesforceDevelopmentSignature } from "../../../customs";
-import React, { useEffect, useState } from 'react';
+import { ParamResponseType, ParameterResponseToResponseObject, global, responseType, salesforceDevelopmentSignature, salesforceSandboxUrl } from "../../../customs";
+import React, { useContext, useEffect, useState } from 'react';
 import Request from "../Request";
 import { Loader } from "../Loader";
+import { Context } from "../context/TokenContext";
 
 const YourRequests: React.FC = () => {
+    const { token } = useContext(Context)
+
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [data, setData] = useState<Array<responseType>>([])
@@ -16,10 +19,10 @@ const YourRequests: React.FC = () => {
     async function grabUserRequests() {
         const query = `SELECT Description, Address_Geolocation__Latitude__s, Address_Geolocation__Longitude__s, CaseNumber, Service_Type__c, Sub_Service_Type__c, Council_District__c, CreatedDate, LastModifiedDate, ClosedDate, GIS_Street_Address__c, GIS_Zip_Code__c, Id, Address__c, GIS_System_Info__c, Status, GIS_Neighborhood_Name__c FROM Case WHERE Subject = '${salesforceDevelopmentSignature}'`
 
-        await fetch(process.env.EXPO_PUBLIC_SANDBOX_URL + '/query?q=' + query, {
+        await fetch(salesforceSandboxUrl + '/query?q=' + query, {
             method: 'GET',
             headers: {
-                'Authorization': process.env.EXPO_PUBLIC_ACCESS_TOKEN as string
+                'Authorization': token
             }
         }).then((middle) => {
             return middle.json()

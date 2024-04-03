@@ -120,6 +120,7 @@ export default function RequestFullView() {
                     </TouchableOpacity>
                 </View>
             </View>
+
             <MapView scrollEnabled={false} zoomEnabled={false} style={styles.embeddedMap} initialRegion={initialRegion} provider={PROVIDER_GOOGLE}>
                 <Marker style={{overflow: 'visible', backgroundColor: 'transparent'}} coordinate={{latitude: data.geometry.y, longitude: data.geometry.x}}>
                     <View style={{overflow: 'visible', backgroundColor: 'transparent'}}>
@@ -130,6 +131,7 @@ export default function RequestFullView() {
                     </View>
                 </Marker>
             </MapView>
+
             <View style={styles.innerPageWrapper}>
                 {/*Main Info*/}
                 <ScrollView style={styles.infoWrapper} contentContainerStyle={{alignItems: 'center'}}>
@@ -202,10 +204,16 @@ export default function RequestFullView() {
 }
 
 /*
-<View style={{width: '45%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginRight: '2.5%', marginBottom: '0.5%'}}>
-                            <CustomText text="Status" nol={0} font='jbm' style={{fontSize: 10, color: global.baseGrey200}} />
-                            <CustomText text={data.attributes.PublicStatus} nol={0} font='jbm' style={{color: global.darkGrey100}} />
+<MapView scrollEnabled={false} zoomEnabled={false} style={styles.embeddedMap} initialRegion={initialRegion} provider={PROVIDER_GOOGLE}>
+                <Marker style={{overflow: 'visible', backgroundColor: 'transparent'}} coordinate={{latitude: data.geometry.y, longitude: data.geometry.x}}>
+                    <View style={{overflow: 'visible', backgroundColor: 'transparent'}}>
+                        <View style={{zIndex: 1, width: 50, aspectRatio: 1 / 1, backgroundColor: global.baseBlue100, borderRadius: 25, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                            <MaterialIcons name={(data.attributes.PublicStatus === 'CLOSED' ? 'check' : 'build')} size={25} color={global.baseBackground100} />
                         </View>
+                        <View style={{zIndex: 0, width: 25, aspectRatio: 1 / 1, position: 'relative', top: -20, backgroundColor: global.baseBlue100, alignSelf: 'center', transform: [{rotate: '45deg'}]}}></View>
+                    </View>
+                </Marker>
+            </MapView>
 */
 
 const styles = StyleSheet.create({

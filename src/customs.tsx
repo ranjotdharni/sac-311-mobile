@@ -4,13 +4,13 @@
 
 import { StyleSheet } from 'react-native'
 
-
 //                              //
 //             Variables        //
 //                              //
 
 export const salesforceDevelopmentSignature: string = '311MigrationDev' // IF YOU CHANGE THIS, CHANGE 'ParamType' BELOW AS WELL!!!!!!!!!!!!!!!!!!!
 
+export const salesforceSandboxUrl: string = 'https://saccity--qa.sandbox.my.salesforce.com/services/data/v60.0'
 
 //                              //
 //      Static Types Section    //

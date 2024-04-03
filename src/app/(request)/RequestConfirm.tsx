@@ -1,16 +1,19 @@
 import { useLocalSearchParams } from "expo-router";
 import { useNavigation } from '@react-navigation/native';
 import { Text, TouchableOpacity, View, StyleSheet, Image, Alert, ScrollView, TextInput } from "react-native";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { ParamType, global, grabImmediateRoute, typeToCategoryLevel } from "../../customs";
+import { ParamType, global, grabImmediateRoute, salesforceSandboxUrl, typeToCategoryLevel } from "../../customs";
 import { globalFont } from "../../customs";
 import { fontGetter } from "../../customs";
 import CustomText from "../(components)/CustomText";
 import { Loader } from "../(components)/Loader";
+import { Context } from "../(components)/context/TokenContext";
 
 
 export default function RequestConfirm() {
+    const { token } = useContext(Context)
+
     const nav = useNavigation()
 
     const {
@@ -80,11 +83,11 @@ export default function RequestConfirm() {
         const [error, setError] = useState<boolean>(false)
         
         async function createRequest(paramObj: ParamType) {
-            await fetch(process.env.EXPO_PUBLIC_SANDBOX_URL + '/sobjects/Case', {
+            await fetch(salesforceSandboxUrl + '/sobjects/Case', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': process.env.EXPO_PUBLIC_ACCESS_TOKEN as string
+                    'Authorization': token
                 },
                 body: JSON.stringify(paramObj)
             }).then((middle) => {

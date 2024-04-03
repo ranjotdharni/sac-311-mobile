@@ -353,11 +353,11 @@ function Explore()
                     }
                 </Animated.View>
                 <Animated.View style={{width: '100%', height: '100%'}}>
-                <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
-                    {
-                        memoizedMarkerRender
-                    }
-                </MapView>
+                    <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
+                        {
+                            memoizedMarkerRender
+                        }
+                    </MapView>
                 </Animated.View>
                 <SearchBar value={addressQuery} style={styles.searchBar} onSubmit={() => { showResults(false) }} passUp={setQuery} onClear={() => { setAddressQuery('') }} placeholder={'Search Address'} />
                 {
@@ -382,6 +382,14 @@ function Explore()
         </View>
     )
 }
+
+/*
+<MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
+                    {
+                        memoizedMarkerRender
+                    }
+                </MapView>
+*/
 
 const styles = StyleSheet.create({
     wrapper: {
