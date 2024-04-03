@@ -1,19 +1,48 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text } from 'react-native';
-import CustomText from '../(components)/CustomText';
-import { useNavigation } from 'expo-router';
-import { global } from "../../customs";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useNavigation } from '@react-navigation/native';
+import { global, globalColorTheme } from "../../customs";
 import localData from './patch.json';
 import BulletPointDisplay from './BulletPoints';
 import { globalFont } from '../../customs';
-import { router } from "expo-router";
 
 export type WhatsNewData = {
-    header: string;
-    body: string;
-  };
+  header: string;
+  body: string;
+};
 
-export default function WhatsNew(){
+const Tab = createMaterialTopTabNavigator();
+
+export default function WhatsNew() {
+  
+
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.mainWrapper}>
+      <View style={styles.xWrapper}>
+        <View style={styles.inXWrapper}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image style={styles.xIcon} source={require('../../assets/png/exit_x.png')} />
+          </TouchableOpacity>
+          <Text style={styles.topText}>What's New in the App!</Text>
+        </View>
+      </View>
+      <Tab.Navigator screenOptions={({route}) => ({
+                tabBarStyle: {backgroundColor:globalColorTheme.backgroundColor},
+                tabBarActiveTintColor:globalColorTheme.color,
+                tabBarInactiveTintColor:globalColorTheme.color,
+            })}
+            >
+        <Tab.Screen name="Overview" component={OverviewScreen} />
+        <Tab.Screen name="Details" component={DetailsScreen} />
+      </Tab.Navigator>
+    </View>
+  );
+};
+
+const OverviewScreen = () => {
     // Define the state with the correct type
   const [data, setData] = useState<WhatsNewData | null>(null);
 
@@ -21,116 +50,73 @@ export default function WhatsNew(){
     // Directly set the imported JSON data to state
     setData(localData);
   }, []);
+  return (
+    <View style={styles.container}>
+        {data ? (
+            <>
+        <Text style={styles.headerText}>{data.header}</Text>
+        <Text style={styles.bodyText}>{data.body}</Text>
 
-    const navi = useNavigation()
-    return(
-        <View style={styles.mainWrapper}>
+        <BulletPointDisplay/>
+        </>
+        ):(
+            <Text style={styles.headerText}> Loading...</Text>
+        )}
+    </View>
+  );
+};
 
-            <View style={styles.xWrapper}>
-                <View style={styles.inXWrapper}>
-                    <TouchableOpacity onPress={() => {router.replace('/(tabs)/Home')}}> 
-                        <Image style={styles.xIcon} source={require('../../assets/png/exit_x.png')} />
-                    </TouchableOpacity>
-                    <Text style={styles.topText}>Patch Notes</Text>
-                </View>
-            </View>
-            <View style={styles.container}>
-              <Image
-                    source={require('../../assets/png/whatsnewbg.png')}
-                    style={styles.bgImage}
-                />
-             <View style={styles.overlay}>
-                {data ? (
-                    <>
-                   <Text style={styles.headerText}>{data.header}</Text>
-                   <BulletPointDisplay />
-                   <Text style={styles.bodyText}>{data.body}</Text>
-                   </>
-                ) : (
-                    <Text style={styles.headerText}> Loading... </Text>
-                )}
-               </View>
-            </View>
-        </View>
-    );
+const DetailsScreen = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.headerText}>Details Screen</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    mainWrapper: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: global.baseBackground100,
-    },
-    container: {
-        width: '100%',
-        height: '90%',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    xWrapper:{
-        width: '100%',
-        height: '7%',
-        shadowColor: '#000',
-        shadowOffset:{
-            width:-2,
-            height:-2
-        },
-        shadowOpacity: .25,
-        shadowRadius: 4,
-        elevation: 5,
-        backgroundColor: global.baseBlue100,
-    },
-    xIcon:{
-        width: 25,
-        height: 25,
-    },
-    inXWrapper:{
-        marginright: '10%',
-        left: 20,
-        marginTop: '6%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    bgImage:{
-        resizeMode: 'cover',
-        position: 'absolute',
-        top: 0,
-        width: '100%',
-        height: '100%',
-        opacity: .8,
-    },
-    overlay:{
-        width: '80%',
-        height: '80%',
-        top: 20,
-        backgroundColor: 'rgba(255,255,255, .85)',
-        borderRadius: 10,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 8,
-    },
-    topText: {
-        fontSize: 20,
-        fontFamily: globalFont.chosenFont,
-        color: global.baseBackground100,
-        marginRight: '41%',
-    },
-    headerText: {
-        fontSize: 18,
-        color: 'black',
-        fontFamily: globalFont.chosenFont,
-        textAlign: 'center',
-    },
-    bodyText: {
-        fontSize: 16,
-        top: 20,
-        color: 'black',
-        fontFamily: globalFont.chosenFont,
-        textAlign: 'center',
-    },
+  mainWrapper: {
+    flex: 1,
+    backgroundColor: global.baseBackground100,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: '2%',
+    marginLeft: '2%',
+    marginRight: '2%',
+  },
+  xWrapper: {
+    height: 50,
+    backgroundColor: global.baseBlue100,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  xIcon: {
+    width: 20,
+    height: 20,
+  },
+  inXWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  topText: {
+    fontSize: 22,
+    color: global.baseBackground100,
+    marginLeft: '8%',
+    fontFamily: globalFont.chosenFont,
+  },
+  headerText: {
+    fontSize: 18,
+    color: 'black',
+    fontFamily: globalFont.chosenFont,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  bodyText: {
+    padding: '2%',
+    fontSize: 16,
+    fontFamily: globalFont.chosenFont,
+    textAlign: 'left',
+  }
 });
-
-
-
-
-

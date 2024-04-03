@@ -9,11 +9,12 @@ import { fontGetter } from "../../customs";
 import CustomText from "../(components)/CustomText";
 import { Loader } from "../(components)/Loader";
 import { Context } from "../(components)/context/TokenContext";
-
+import * as DocumentPicker from 'expo-document-picker'; // Import DocumentPicker
 
 export default function RequestConfirm() {
     const { token } = useContext(Context)
 
+    const [selectedFile, setSelectedFile] = useState<DocumentPicker.DocumentPickerResult | null>(null);
     const nav = useNavigation()
 
     const {
@@ -65,9 +66,9 @@ export default function RequestConfirm() {
                 setError('Permission Denied: Sorry, we need camera roll permission to upload images.');
             } else {
                 const result = await ImagePicker.launchImageLibraryAsync();
-                
-                if (result && 'uri' in result && typeof result.uri === 'string') {
-                    setImage(result.uri);
+
+                if (result.canceled == false) {
+                    setImage(result.assets[0].uri);
                     setError(null);
                 } else {
                     setError('No image selected');
@@ -75,6 +76,22 @@ export default function RequestConfirm() {
             }
         } catch (error) {
             setError('Error picking image: ' + (error as Error).message);
+        }
+    };
+
+    const handleUploadFilesPress = async () => {
+        try {
+            const result = await DocumentPicker.getDocumentAsync(); // Open document picker
+            if (!result.canceled && result.assets?.length > 0) {
+                console.log("File selected:", result.assets[0].uri);
+                setSelectedFile(result);
+                // Handle the file here, such as uploading to server or processing
+            } else {
+                console.log("Document picking cancelled or no file selected");
+            }
+        } catch (error) {
+            console.error("Error while selecting document:", error);
+            Alert.alert('Error', 'An error occurred while selecting document.');
         }
     };
 
@@ -178,10 +195,12 @@ export default function RequestConfirm() {
                     <View style={styles.textContainer}>
                         <Text style={[styles.basicText, { color: '#BEA315' }]}>Add Files</Text>
                         <View style={[styles.attachmentRectangle, styles.shadow]}>
-                            <Text style={[styles.basicText, styles.rectangleText]}>
-                                (Your files)
-                            </Text>
-                            <TouchableOpacity style={styles.attachmentButton}>
+                            <View style={{ flex: 1 }}>
+                                <Text style={[styles.basicText, styles.rectangleText, { maxWidth: '70%' }]}>
+                                    {(selectedFile ? selectedFile.assets?.[0].uri : 'No file selected')}
+                                </Text>
+                            </View>
+                            <TouchableOpacity style={[styles.attachmentButton, { justifyContent: 'center' }]} onPress={handleUploadFilesPress}>
                                 <Text style={styles.attachmentButtonText}>Upload Files</Text>
                             </TouchableOpacity>
                         </View>

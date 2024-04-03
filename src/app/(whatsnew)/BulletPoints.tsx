@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bulletPoint: {
-    padding: 5,
-    fontSize: 16,
+    padding: 10,
+    fontSize: 14,
     fontFamily: globalFont.chosenFont,
   },
 });

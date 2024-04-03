@@ -1,7 +1,7 @@
 import { View, StyleSheet, Dimensions, Pressable, Animated, Image, GestureResponderEvent } from "react-native";
 import MapView, { Details, PROVIDER_GOOGLE, Region } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom } from "../../customs";
+import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom, globalColorTheme } from "../../customs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
@@ -302,15 +302,15 @@ function Explore()
 
     return (
         <View style={{flex: 1}}>
-                <View style={styles.exitWrapper}>
-                    <View style={styles.innerExitWrapper}>
+                <View style={[styles.exitWrapper,{backgroundColor:globalColorTheme.blue}]}>
+                    <View style={[styles.innerExitWrapper,{backgroundColor:globalColorTheme.blue}]}>
                         <CustomText style={styles.barText} text='Select Location' nol={0} font='jbm' />
                         <TouchableOpacity onPress={() => { /*nav.goBack()*/ }}> 
                             <Image style={styles.resizeIcon} source={require('../../assets/png/exit_x.png')} />
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Animated.View style={[styles.markerPreview, shadowUniversal.default, { transform: [ { translateY: previewPanAnim } ] }]}>
+                <Animated.View style={[styles.markerPreview, shadowUniversal.default, { transform: [ { translateY: previewPanAnim } ], backgroundColor:globalColorTheme.backgroundColor}]}>
                     <MaterialIcons name="filter-alt" size={25} color={global.baseGrey100} style={{left: '5%'}} />
                     <View style={styles.markerPreviewContent}>
                         {
@@ -363,7 +363,7 @@ function Explore()
                 {
                     (
                         results ?
-                        <View style={[styles.searchResults, shadowUniversal.default]}>
+                        <View style={[styles.searchResults, shadowUniversal.default, {backgroundColor:globalColorTheme.backgroundColor}]}>
                             {
                                 (
                                     addressesLoading ? 

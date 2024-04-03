@@ -110,7 +110,7 @@ export default function News() {
                             </View>
                             <View style={{ backgroundColor: global.baseGrey100 }}></View>
                             <View style={styles.RssNewsWrapper}>
-                                <RssFeed />
+                                <RssFeed filteredData={totalRssData}/>
                             </View>
                         </View>
                     </View>

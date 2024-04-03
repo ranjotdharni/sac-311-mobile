@@ -1,17 +1,13 @@
 //RSS Feed integration from sacramentocityexpress
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Linking, StyleSheet, Dimensions, Image, TextInput } from 'react-native';
-import axios from 'axios';
-import * as Parser from 'react-native-rss-parser';
 import { router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { globalFont, global, newsFeedSites } from '../../../customs';
-import { and } from 'firebase/firestore';
+import { globalFont, global } from '../../../customs';
 import { ScrollView } from 'react-native-gesture-handler';
 import CustomText from "../CustomText";
 
 const borderOffset = 20;
-const RssFeed: React.FC = () => {
+export default function RssFeed({ filteredData }: { filteredData: any[] }) {
   const [rssData, setRssData] = useState<any[]>([]);
   const [totalRssData, setTotalRssData] = useState<any[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -20,51 +16,26 @@ const RssFeed: React.FC = () => {
   const [totalCategories, setTotalCategories] = useState<any[]>([]);
   const [currentCategory, setCurrentCategory] = useState<any>('');
 
-  const fetchRssFeed = async () => {
-    newsFeedSites.map(async (site) => {
-      try {
-        const response = await axios.get(site.url);
+  const initializeRssFeed = () => {
+    let categories = new Array();
+    filteredData.map((item) => {
+      item.categories.map((category: any) => {
+        if (!categories.includes(category.name)) {
+          categories.push(category.name);
+        }
+      });
+    });
 
-        const data = await Parser.parse(response.data);
-
-        const latestItems = data.items.slice((page - 1) * 5, 10);
-        const filteredData = data.items.filter((item) => item.enclosures.length != 0 && item.links.length != 0);
-
-        let categories = new Array();
-        filteredData.map((item) => {
-          item.categories.map((category: any) => {
-            if (!categories.includes(category.name)) {
-              categories.push(category.name);
-            }
-          });
-        });
-
-        setRssData((prevData) => [...prevData, ...filteredData]);
-        setTotalRssData((prevData) => [...prevData, ...filteredData]);
-
-        rssData.sort((item1: any, item2: any) => {
-          const itemDate1 = new Date(item1.published);
-          const itemDate2 = new Date(item2.published);
-          return itemDate1.getTime() - itemDate2.getTime();
-        });
-        totalRssData.sort((item1: any, item2: any) => {
-          const itemDate1 = new Date(item1.published);
-          const itemDate2 = new Date(item2.published);
-          return itemDate1.getTime() - itemDate2.getTime();
-        });
-        setTotalCategories((prevData) => [...prevData, ...categories]);
-
-      } catch (error) {
-        console.error('Error fetching RSS feed:', error);
-      }
-    })
+    setRssData(filteredData);
+    setTotalRssData(filteredData);
+    setTotalCategories(categories);
   };
 
   useEffect(() => {
-    fetchRssFeed();
+    initializeRssFeed();
   }, []);
 
-
+  //Filters data based on category and search value chosen
   const filterData = () => {
     const filteredRssData = totalRssData.filter(item => {
       const textToSearch = `${item.title.toLowerCase()} ${item.description.toLowerCase()}`;
@@ -80,41 +51,6 @@ const RssFeed: React.FC = () => {
 
     setRssData(finalFilter);
   }
-
-  const renderItem = ({ item }: { item: any }) => {
-    return (
-      <TouchableOpacity onPress={() => router.push({ pathname: '/(web)/WebView', params: { url: item.links[0].url } })} >
-        <View style={styles.RSSWrapper}>
-          <View style={styles.RSSContent}>
-            <CustomText style={styles.title} font={globalFont.chosenFont} text={item.title} nol={3} />
-            <Text> {`${new Date(item.published).toLocaleDateString()} ${new Date(item.published).toLocaleTimeString()}`}</Text>
-          </View>
-          <View style={styles.RSSImageWrapper}>
-            <Image style={styles.RSSImage} source={{ uri: item?.enclosures[0].url }}></Image>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  }
-
-  //if infinitely scrolling list is needed
-  const handleEndReached = () => {
-    // Fetch more articles when the user reaches the end of the list
-    console.log(page);
-    console.log(renderBool);
-    console.log(page <= 1);
-    if (page <= 1 && renderBool) {
-      setPage((prevPage) => (prevPage + 1));
-      fetchRssFeed();
-    } else if (page <= 1 && !renderBool) {
-      setRenderBool(true);
-    } else {
-      setPage((prevPage) => (prevPage - 1));
-      fetchRssFeed();
-    }
-    console.log(page);
-
-  };
 
   return (
     <>
@@ -133,56 +69,74 @@ const RssFeed: React.FC = () => {
             placeholderTextColor="#D3D3D3">
           </TextInput>
         </View>
+
         <View style={styles.padding}></View>
+
         <View style={styles.AllCategoriesWrapper}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ marginLeft: '2%' }}>
+          <TouchableOpacity key={Math.random()} style={styles.ClearCategoryBox} onPress={() => {
+            setCurrentCategory('');
+            setRenderBool(false);
+            filterData();
+            setRenderBool(true);
+          }}>
+            <Text style={styles.CategoryText}>None</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity key={Math.random()} style={styles.CategoryBox} onPress={() => {
-              setCurrentCategory('');
-              setRenderBool(false);
-              filterData();
-              setRenderBool(true);
-            }}>
-              <Text style={styles.CategoryText}>None</Text>
-            </TouchableOpacity>
+          <FlatList
+            horizontal
+            data={totalCategories}
+            keyExtractor={(category) => category}
+            renderItem={({ item }) =>
 
-            {
-              totalCategories.map((category) => {
-                return (
-                  <>
-                    <View style={styles.CategoryPadding}></View>
-                    <TouchableOpacity style={styles.CategoryBox} onPress={() => {
-                      setCurrentCategory(category);
-                      setRenderBool(false);
-                      filterData();
-                      setRenderBool(true);
-                    }}>
-                      <Text style={styles.CategoryText}>{category}</Text>
-                    </TouchableOpacity>
-                  </>
-                );
-              })
-              
+              <TouchableOpacity onPress={() => {
+                console.log();
+                setCurrentCategory(item);
+                console.log(renderBool);
+                setRenderBool((bool) => !bool);
+                console.log(renderBool);
+                console.log();
+                filterData();
+                console.log(renderBool);
+                setRenderBool((bool) => !bool);
+                console.log(renderBool);
+              }}>
+                <View style={styles.CategoryBox}>
+                  <Text style={styles.CategoryText}>{item}</Text>
+                </View>
+              </TouchableOpacity>
             }
-
-          </ScrollView>
+          />
         </View>
+
         <View style={styles.padding}></View>
+
         <FlatList
           data={rssData}
           keyExtractor={(item) => item.id}
           extraData={renderBool}
-          renderItem={renderItem}
+          renderItem={({ item }) =>
+            <TouchableOpacity onPress={() => router.push({ pathname: '/(web)/WebView', params: { url: item.links[0].url } })} >
+              <View style={styles.RSSWrapper}>
+                <View style={styles.RSSContent}>
+                  <CustomText style={styles.title} font={globalFont.chosenFont} text={item.title} nol={3} />
+                  <Text> {`${new Date(item.published).toLocaleDateString()} ${new Date(item.published).toLocaleTimeString()}`}</Text>
+                </View>
+                <View style={styles.RSSImageWrapper}>
+                  <Image style={styles.RSSImage} source={{ uri: item?.enclosures[0].url }}></Image>
+                </View>
+              </View>
+            </TouchableOpacity>
+          }
         //if infinitely scrolling list is needed
-        //onEndReached={handleEndReached}
-        //onEndReachedThreshold={0.80} // Adjust as needed 
+        // onEndReached={handleEndReached} //function callback
+        // onEndReachedThreshold={0.80} // Adjust as needed
         />
       </View>
     </>
   );
 };
 
-export default RssFeed;
+//export default RssFeed;
 
 const styles = StyleSheet.create({
   padding: {
@@ -241,19 +195,14 @@ const styles = StyleSheet.create({
     fontFamily: globalFont.chosenFont,
     marginBottom: 2,
     borderRadius: 15,
-    //backgroundColor: 'lightblue',
     padding: 8,
     color: 'white',
   },
   RSSImageWrapper: {
     height: '100%',
     width: '35%',
-    //aspectRatio: 1 / 1,
-    //borderRadius: borderOffset,
   },
   RSSImage: {
-    //height: 40,
-    //width: '100%',
     aspectRatio: 1.5 / 1,
     borderRadius: borderOffset,
   },
@@ -266,19 +215,18 @@ const styles = StyleSheet.create({
   AllCategoriesWrapper: {
     height: '7%',
     width: '100%',
-    //flexDirection: 'row',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     marginTop: '2%',
   },
   CategoryBox: {
-    height: '80%',
+    height: '100%',
     width: Dimensions.get('screen').width * 0.25,
     backgroundColor: global.baseBlue100,
-    //marginHorizontal: '1%',
-    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
-    //paddingRight: '1%',
-    //paddingLight: '1%',
+    alignItems: 'center',
+    marginRight: Dimensions.get('screen').width * 0.01,
 
   },
   CategoryText: {
@@ -289,5 +237,14 @@ const styles = StyleSheet.create({
   },
   CategoryPadding: {
     width: Dimensions.get('screen').width * 0.01,
-  }
+  },
+  ClearCategoryBox: {
+    height: '100%',
+    width: Dimensions.get('screen').width * 0.20,
+    backgroundColor: global.darkGrey100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: '1%',
+    marginLeft: '1%',
+  },
 })

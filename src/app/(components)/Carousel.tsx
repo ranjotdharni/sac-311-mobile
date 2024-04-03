@@ -1,6 +1,7 @@
 import React from "react";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { DimensionValue, ScrollView, View, StyleSheet, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import { Article } from './Home/types';
 
 //  When using this prop and determining what scrollOffset prop should be!!!!!
 //======================================================================================================================================================================================
@@ -35,10 +36,33 @@ export default function Carousel({ nestData, nestCallback, endPadding, scrollOff
 
     const scrollRef = useRef<ScrollView>(null)
     const bubbleRefs = useRef<Array<View>>([])
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [timer, setTimer] = useState(null);
     let index = 0  
     let scrollStartX = 0
 
     const bubbleKeys = (bubbles !== undefined ? new Array(itemCount).fill(0) : [])
+
+    //scroll to a specific index
+    const scrollToIndex = (index: any) => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTo({ x: scrollOffset * index, animated: true });
+            setCurrentIndex(index);
+        }
+    };
+
+    //handle automatic scrolling
+    useEffect(() => {
+        const scrollAutomatically = () => {
+            const nextIndex = currentIndex + 1 === itemCount ? 0 : currentIndex + 1;
+            scrollToIndex(nextIndex);
+        };
+
+        const timer = setInterval(scrollAutomatically, 5000); // milliseconds between automatic scrolla
+
+        //clear the interval on component unmount
+        return () => clearInterval(timer);
+    }, [currentIndex, itemCount, scrollOffset]);
 
     bubbleKeys.forEach((item: any, currIndex: number) => {
         bubbleKeys[currIndex] =  Math.floor(Math.random() * 100000)
@@ -109,7 +133,7 @@ export default function Carousel({ nestData, nestCallback, endPadding, scrollOff
     return (
         <>
             <ScrollView decelerationRate={0} showsHorizontalScrollIndicator={false} ref={scrollRef} horizontal onScrollBeginDrag={onScrollBegin} onScrollEndDrag={onScrollEnd} contentContainerStyle={{/*flexGrow: 1,*/ paddingRight: endPadding}}>
-                { nestCallback(nestData) }
+                { nestData.map((article: Article) => nestCallback(article)) }
             </ScrollView>
             {(bubbles !== undefined ? <View style={[styles.bubbleWrapper, { width: Dimensions.get('screen').width * bubbles!.spacing, left: Dimensions.get('screen').width * ((1 - bubbles!.spacing) / 2), }]}>
                 {

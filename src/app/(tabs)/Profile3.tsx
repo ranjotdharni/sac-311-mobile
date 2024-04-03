@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20, 
     },
     saveButton: {
-        backgroundColor: '#2F2DA3',
+        backgroundColor: global.baseBlue100,
         borderRadius: 15,
         marginRight: 10,
         flex: 0.33,
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontFamily: globalFont.chosenFont,
         textAlign: 'left',
-        color: '#9B9B9B',
+        color: global.baseBlue100,
         //paddingVertical: 10,
         marginTop: 15,
         marginBottom: 5
@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
         //fontWeight: 'bold',   //bold makes this font look weird o.O
         fontFamily: globalFont.chosenFont,
         fontSize: 26,
-        color: '#2F2DA3',
+        color: global.baseBlue100,
         textAlign: 'left',
         paddingHorizontal: 15,
         paddingVertical: 8,
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
     subtitle: {
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: '#BEA315',
+        color: global.baseGrey100,
         textAlign: 'left',
         paddingHorizontal: 15,
         paddingVertical: 5,
@@ -491,7 +491,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: '#BEA315',
+        color: global.baseGold100,
         height: '100%',
         paddingVertical: 12
     },
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: '#6F6F6F',
+        color: global.baseGrey100,
         height: '100%',
         paddingVertical: 12
     }

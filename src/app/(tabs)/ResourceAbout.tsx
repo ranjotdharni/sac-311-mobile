@@ -1,32 +1,32 @@
 import { View, StyleSheet, TouchableOpacity, Text, Linking } from 'react-native';
 import { global } from "../../customs";
 import { useRouter } from 'expo-router';
-import { globalFont } from "../../customs";
+import { globalFont, globalColorTheme } from "../../customs";
 
 export default function Resources()
 {
     const router = useRouter();
     return (
-        <View style={styles.mainWrapper}>
-            <View style={styles.exitWrapper}>
+        <View style={[styles.mainWrapper,{backgroundColor:globalColorTheme.backgroundColor}]}>
+            <View style={[styles.exitWrapper,{backgroundColor:globalColorTheme.backgroundColor}]}>
                 <View style={styles.innerExitWrapper}>
-                <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/Resources')}}>
-                        <Text style={styles.barText}>Services</Text>
+                <TouchableOpacity style={[styles.tabNamesWrapper,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={() => {router.replace('/(tabs)/Resources')}}>
+                        <Text style={[styles.barText,{color:globalColorTheme.color}]}>Services</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabNamesWrapper} onPress={() => {router.replace('/(tabs)/ResourceAnswers')}}>
-                        <Text style={styles.barText}>Answers</Text>
+                    <TouchableOpacity style={[styles.tabNamesWrapper,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={() => {router.replace('/(tabs)/ResourceAnswers')}}>
+                        <Text style={[styles.barText,{color:globalColorTheme.color}]}>Answers</Text>
                     </TouchableOpacity>
-                    <View style={styles.tabNamesWrapperSelected}>
-                        <Text style={styles.barText}>About</Text>
+                    <View style={[styles.tabNamesWrapperSelected,{backgroundColor:globalColorTheme.blue}]}>
+                        <Text style={[styles.barText,{color:globalColorTheme.text}]}>About</Text>
                     </View>
                 </View>
             </View>
             <View style={styles.contentWrapper}>
                 <View style={styles.aboutTitleWrapper}>
-                    <Text style={styles.aboutTitle}>About</Text>
+                    <Text style={[styles.aboutTitle,{color:globalColorTheme.blue}]}>About</Text>
                 </View>
-                <View style={styles.aboutWrapper}>
-                    <Text style={styles.aboutText}>
+                <View style={[styles.aboutWrapper,{backgroundColor:globalColorTheme.backgroundColor2}]}>
+                    <Text style={[styles.aboutText,{color:globalColorTheme.color}]}>
                         The City of Sacramento's world-class service just got even better!
                         The new City of Sacramento 311 Customer Service website and mobile app provide an improved customer
                         experience by offering more ways to easily submit and track your service requests. Our goal is to 
@@ -37,7 +37,7 @@ export default function Resources()
                 </View>
                 <View style={styles.callWrapper}>
                     <TouchableOpacity onPress={()=>Linking.openURL(`tel:${311}`)}>
-                        <Text style={styles.callText}>Call 311</Text>
+                        <Text style={[styles.callText,{color:globalColorTheme.text, backgroundColor: globalColorTheme.blue}]}>Call 311</Text>
                     </TouchableOpacity>
                 </View>
             </View>

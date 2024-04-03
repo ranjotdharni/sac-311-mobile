@@ -5,6 +5,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { global, grabImmediateRoute, salesforceDevelopmentSignature } from "../../customs";
 import { useNavigation, useRoute } from "@react-navigation/native"
+import { globalColorTheme } from '../../customs';
 
 const screenWidth: number = Dimensions.get('screen').width
 const initialOffset: number = screenWidth * 0.025
@@ -77,13 +78,13 @@ export default function NavBar(nav: any)
 
     return (
         <View style={styles.NavContainer}>
-            <View style={styles.NavBox}>
+            <View style={{flexDirection: 'row', backgroundColor:globalColorTheme.backgroundColor, height: '100%', width: '90%', justifyContent: 'space-evenly', alignItems: 'center', borderRadius: 15, shadowColor: "#000000", shadowOffset: {width: 0, height: 5,},shadowOpacity: 0.33,shadowRadius: 6,elevation: 5}}>
                 <Animated.View style={{borderRadius: 10, backgroundColor: global.baseGold100, position: 'absolute', height: '90%', aspectRatio: 1 / 1, transform: [{ translateX: offsetLeft }]}}></Animated.View>
 
                 <NavItem navigation={navigation} id={0} active={isActive} passUp={swapTab} title='Home' iconName='home' url='/(tabs)/Home' />
                 <NavItem navigation={navigation} id={1} active={isActive} passUp={swapTab} title='Explore' iconName='map' url='/(tabs)/Explore' />
 
-                <View style={styles.NavCenterButton}>
+                <View style={[styles.NavCenterButton,{backgroundColor:globalColorTheme.blue}]}>
                     <Link href={{pathname: '/(request)/Type', params: {
                                                                 Subject: salesforceDevelopmentSignature,
                                                                 Service_Type__c: '', // CategoryLevel1
@@ -99,7 +100,7 @@ export default function NavBar(nav: any)
                                                                 Address_Geolocation__Longitude__s: 0,
                                                                 returnRoute: usePathname().replace('/', '')
                                                             }}} style={styles.NavCenterLink} />
-                    <MaterialIcons color='#ffffff' name='add' size={35} />
+                    <MaterialIcons color={globalColorTheme.backgroundColor2} name='add' size={35} />
                 </View>
 
                 <NavItem navigation={navigation} id={2} active={isActive} passUp={swapTab} title='Resources' iconName='bookmark' url='/(tabs)/Resources' />
@@ -116,24 +117,6 @@ const styles = StyleSheet.create({
         height: '7.5%',
         alignItems: 'center',
         bottom: 20
-    },
-
-    NavBox: {
-        flexDirection: 'row',
-        backgroundColor: 'white',
-        height: '100%',
-        width: '90%',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        borderRadius: 15,
-        shadowColor: "#000000",
-        shadowOffset: {
-	        width: 0,
-	        height: 5,
-        },
-        shadowOpacity: 0.33,
-        shadowRadius: 6,
-        elevation: 5,
     },
 
     NavCenterButton: {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar, View, Text, StyleSheet, Dimensions, Pressable } from 'react-native';
-import { globalFont } from "../../customs";
+import { globalFont, global } from "../../customs";
 
 export default function Business() {
     const navigation = useNavigation();
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: '#6F6F6F',
+        color: global.baseGrey100,
         height: '100%',
         paddingVertical: 12
     },
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         fontFamily: globalFont.chosenFont,
         fontSize: 18,
-        color: '#BEA315',
+        color: global.baseGold100,
         height: '100%',
         paddingVertical: 12
     },

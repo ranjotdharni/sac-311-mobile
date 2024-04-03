@@ -123,10 +123,10 @@ export default function Profile0()
             </View>
 
             <View style={styles.rowContainer}>
-                <Pressable style={{...styles.button, backgroundColor: global.baseGold100}} onPress={cancelPress}>
+                <Pressable style={{...styles.button, backgroundColor: global.baseBlue200}} onPress={cancelPress}>
                     <Text style={{color: '#ffffff', textAlign: 'center'}}>Cancel</Text>
                 </Pressable>
-                <Pressable style={{...styles.button, backgroundColor: '#1b3763'}} onPress={createPress}>
+                <Pressable style={{...styles.button, backgroundColor: global.baseBlue100}} onPress={createPress}>
                     <Text style={{color: '#ffffff', textAlign: 'center'}}>Create Account</Text>
                 </Pressable>
             </View>
@@ -141,13 +141,14 @@ const styles = StyleSheet.create({
         color: '#2F2DA3',
         fontFamily: globalFont.chosenFont,
         textAlign: 'center',
-        marginBottom: '5%'
+        marginBottom: '1%'
     },
     container: {
         flex: 1,
         marginTop: '15%',
         alignItems: 'center',
-        gap: 5,
+        gap: 2,
+        backgroundColor: global.baseBackground100,
     },
     rowContainer: {
         padding: 0,
@@ -156,22 +157,43 @@ const styles = StyleSheet.create({
     },
     rowTextContainer: {
         flexDirection: 'row',
-        gap: 75
+        gap: 110
     },
     input: {
-        padding: 15,
-        textAlign: 'center',
-        width: '80%',
-        borderWidth: 0.5,
-        borderRadius: 50,
-        backgroundColor: '#dfe6f0',
+        alignItems: 'center',
+        marginTop: 5,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: global.baseBlue100,
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        width: '96%',
+        paddingVertical: 8,
+        paddingHorizontal: 15,
     },
     multipleRowInput: {
-        padding: 15,
-        textAlign: 'center',
-        borderWidth: 0.5,
-        borderRadius: 50,
-        backgroundColor: '#dfe6f0'
+        alignItems: 'center',
+        marginTop: 5,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: global.baseBlue100,
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        width: '96%',
+        paddingVertical: 8,
+        paddingHorizontal: 15,
     },
     button: {
       padding: 15,
@@ -182,17 +204,18 @@ const styles = StyleSheet.create({
       marginTop: 20
     },
     firstRowFieldText: {
-        fontSize: 20,
+        fontSize: 16,
         fontFamily: globalFont.chosenFont,
         color: '#2F2DA3',
         textAlign: 'center',
     },
     fieldText: {
-        fontSize: 20,
+        fontSize: 16,
         fontFamily: globalFont.chosenFont,
         color: '#2F2DA3',
         alignSelf: "flex-start",
-        paddingLeft: 59,
-        paddingRight: 59
+        paddingTop: 5,
+        paddingLeft: 30,
+        paddingRight: 59,
     }
   });  

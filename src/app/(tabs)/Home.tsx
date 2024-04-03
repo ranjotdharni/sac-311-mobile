@@ -4,7 +4,7 @@ import ButtonPanel from "../(components)/Home/ButtonPanel";
 import ForeHead from "../(components)/Home/ForeHead";
 import RequestList from "../(components)/Home/RequestList";
 import { TabsComponent as NearbyWidget } from "../(components)/Home/NearbyWidget";
-import { shadowUniversal, global } from "../../customs";
+import { shadowUniversal, global, globalColorTheme } from "../../customs";
 import { StatusBar } from "expo-status-bar";
 
 
@@ -12,7 +12,7 @@ export default function Home()
 {
     return (
         <>
-        <View style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').height, backgroundColor: global.baseBackground100}}>
+        <View style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').height, backgroundColor: globalColorTheme.backgroundColor}}>
             <ForeHead />
             <View style={{flex: 1}}>
             <ScrollView contentContainerStyle={{flexGrow: 1}}>

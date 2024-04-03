@@ -1,14 +1,17 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { Link, usePathname } from "expo-router";
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ButtonPanel from '../(components)/Profile/ButtonPanel';
-import SearchBar from '../(components)/Profile/SearchBar';
-import { globalFont } from '../../customs';
+import { globalFont, global, salesforceDevelopmentSignature } from '../../customs';
 import * as Notifications from 'expo-notifications';
+import * as DocumentPicker from 'expo-document-picker'; // Import DocumentPicker
 import { useEffect } from 'react';
+import { globalColorTheme } from '../../customs';
 
 export default function Profile() {
   const navigation = useNavigation();
+  const [selectedFile, setSelectedFile] = useState<DocumentPicker.DocumentPickerResult | null>(null); // State to store the selected file
 
   useEffect(() => {
     // This will ask for permission when the component mounts
@@ -69,23 +72,68 @@ export default function Profile() {
     }
   };
 
+  const handleAnotherButtonPress = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync(); // Open document picker
+      if (!result.canceled && result.assets?.length > 0) {
+        console.log("File selected:", result.assets[0].uri);
+        setSelectedFile(result);
+        // Handle the file here, such as uploading to server or processing
+      } else {
+        console.log("Document picking cancelled or no file selected");
+      }
+    } catch (error) {
+      console.error("Error while selecting document:", error);
+      Alert.alert('Error', 'An error occurred while selecting document.');
+    }
+  };
+
   console.log("Profile component rendered.");
   return (
-    <View style={{ flex: 1 }}>
-      <Text style={styles.title}>Service Requests Lookup</Text>
-      <SearchBar value='' placeholder='Request Number' />
+    <View style={{ flex: 1 , backgroundColor:globalColorTheme.backgroundColor}}>
       <View style={styles.imageContainer}>
         <Text style={styles.loginText}>Login to see your requests.</Text>
         <View style={styles.textContainer}>
-          <Text style={styles.createAccountText}>
+          <Text style={[styles.createAccountText,{color:globalColorTheme.color}]}>
             Create an account or login to see requests you have made or followed.
           </Text>
         </View>
       </View>
       <ButtonPanel onPressLoginSignup={navigateToProfile2} />
-      <TouchableOpacity style={styles.testButton} onPress={handleTestButtonPress}>
-        <Text style={styles.testButtonText}>TEST</Text>
+      <TouchableOpacity style={[styles.testButton,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={handleTestButtonPress}>
+        <Text style={styles.testButtonText}>NOTIFICATION TEST</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={[styles.anotherButton,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={handleAnotherButtonPress}>
+        <Text style={styles.anotherButtonText}>FILE TEST</Text>
+      </TouchableOpacity>
+      {selectedFile && (
+        <Text style={styles.selectedFileText}>
+          Selected File: {selectedFile.assets?.[0].uri}
+        </Text>
+      )}
+      <View style={styles.NewRequestButton}>
+        <Link 
+          href={{
+            pathname: '/(request)/Type', 
+            params: {
+              Subject: salesforceDevelopmentSignature,
+              Service_Type__c: '', 
+              Sub_Service_Type__c: '', 
+              Council_District__c: '', 
+              GIS_Street_Address__c: '', 
+              GIS_Zip_Code__c: '', 
+              Address__c: '', 
+              GIS_System_Info__c: '311 Phone', 
+              GIS_Neighborhood_Name__c: '', 
+              description: '',                                                                
+              Address_Geolocation__Latitude__s: 0,
+              Address_Geolocation__Longitude__s: 0,
+              returnRoute: usePathname().replace('/', '')
+            }
+          }} 
+          style={styles.NewRequestLink} 
+        />
+      </View>
     </View>
   );
 }
@@ -103,11 +151,13 @@ const styles = StyleSheet.create({
     flex: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    
   },
   loginText: {
     fontSize: 20,
+    paddingTop: 100,
     fontFamily: globalFont.chosenFont,
-    color: '#BEA315',
+    color: global.baseGold100,
     textAlign: 'center',
     marginTop: 60,
   },
@@ -133,5 +183,40 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: globalFont.chosenFont,
     textAlign: 'center',
+  },
+  anotherButton: {
+    backgroundColor: '#DDDDDD',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  anotherButtonText: {
+    fontSize: 16,
+    fontFamily: globalFont.chosenFont,
+    textAlign: 'center',
+  },
+  selectedFileText: {
+    marginTop: 10,
+    fontSize: 16,
+    fontFamily: globalFont.chosenFont,
+    textAlign: 'center',
+  },
+  NewRequestButton: {
+    width: '94.5%',
+    height: '7%',
+    marginVertical: '3%',
+    borderRadius: 10,
+    backgroundColor: 'transparent',
+    shadowColor: "#000", 
+    top: '30%',
+    left: '3%',
+  },
+  NewRequestLink: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    zIndex: 2
   },
 });
