@@ -88,7 +88,7 @@ export default function Profile() {
     }
   };
 
-  console.log("Profile component rendered.");
+  //console.log("Profile component rendered.");
   return (
     <View style={{ flex: 1 , backgroundColor:globalColorTheme.backgroundColor}}>
       <View style={styles.imageContainer}>

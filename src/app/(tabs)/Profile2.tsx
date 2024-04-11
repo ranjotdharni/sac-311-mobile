@@ -2,19 +2,47 @@ import { View, Text, StyleSheet, TextInput, SafeAreaView, Image, Pressable} from
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { globalFont, global } from "../../customs";
+import { FIREBASE_APP } from '../../FirebaseConfig';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { setUserId } from '../../global';
 
-
+//login page
 export default function Profile2() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const navigation = useNavigation();
 
-    //pressing login button automatically proceeds to profile page
-    const tempLoginPress = () => {
-      (navigation.navigate as (screen: string) => void)('Profile3');
+    const auth = getAuth(FIREBASE_APP);
+
+    const handleSignIn = () => {
+        if (email.trim() === '' || password.trim() === '') {
+            console.log("Email or password cannot be empty");
+            return;
+        }
+
+        console.log("Attempting to sign in with email: ", email, " and password: ", password);
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            //signed in successfully
+            const user = userCredential.user;
+
+            console.log("Signed in successfully: ", user.uid);
+
+            setUserId(user.uid);
+            //stuff that happens after successful sign in
+            (navigation.navigate as (screen: string) => void)('Profile3');
+        })
+        .catch((error) => {
+            //error messages here
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error("Sign in error:", error.message);
+            alert(`Login failed: ${error.message}`);
+        });
     };
 
+    //navigates to the profile creation screen
     const accountCreationPress = () => {
       (navigation.navigate as (screen: string) => void)('Profile0');
     };
@@ -27,15 +55,15 @@ export default function Profile2() {
         <Text style={{ fontSize: 16, paddingTop: "50%" }}>Log in to view your profile information.</Text>
         <TextInput
           style={styles.input}
-          placeholder='Username'
-          onChangeText={(val) => setUsername(val)}
+          placeholder='Email'
+          onChangeText={(val) => setEmail(val)}
         />
         <TextInput
           style={styles.input}
           placeholder='Password'
           onChangeText={(val) => setPassword(val)}
         />
-        <Pressable style={styles.button} onPress = {tempLoginPress}>
+        <Pressable style={styles.button} onPress = {handleSignIn}>
           <Text style={styles.buttonText}>Log In</Text>
         </Pressable>
         <Pressable style={{ ...styles.createAcctButton, marginTop: 0 }} onPress={accountCreationPress}>

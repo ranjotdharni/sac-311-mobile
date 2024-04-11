@@ -7,6 +7,9 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { globalFont } from '../../customs';
+import { useRoute } from '@react-navigation/native';
+import { currentUserUID } from '../(components)/currentUser';/////////////////////this might be a first attempt at global variable
+import { userId, setUserId } from '../../global';
 
 
 /*
@@ -19,8 +22,14 @@ TODO:
     - sign out button only returns user to login page currently
 */
 
+
+//profile page
 export default function Profile3(){
+
     const navigation = useNavigation();
+
+    const route = useRoute();
+    //const userId = route.params?.userId;
 
     const [userAddress, setUserAddress] = useState('');
     const [aptNum, setAptNum] = useState('');
@@ -57,14 +66,14 @@ export default function Profile3(){
     // sign out button takes user back to login page
     const handleSignOutPress = async () => {
         await AsyncStorage.clear(); // clear user data
-        (navigation.navigate as (screen: string) => void)('Profile2');
+        (navigation.navigate as (screen: string) => void)('Profile2');////////////////////////////////////////////////////////////////
     };
 
 
     //fetch user data from firestore dummy database
-    const fetchUserData = async () => {
+    const fetchUserData = async (userId: any) => {
         //create a reference to the Firestore document
-        const userDocRef = doc(FIRESTORE_DB, 'Users', 'UserInfo');
+        const userDocRef = doc(FIRESTORE_DB, 'users', userId);
         
         //attempt to fetch the document
         const userDoc = await getDoc(userDocRef);
@@ -72,12 +81,12 @@ export default function Profile3(){
         if (userDoc.exists()) {
             const userData = userDoc.data();
             if(userData){   //check if userData is undefined
-                setUserAddress(userData.StreetAddress || '');
+                setUserAddress(userData.address || '');
                 setAptNum(userData.Suite || '');
-                setZipCode(userData.ZipCode || '');
+                setZipCode(userData.zip || '');
                 setFirstName(userData.FirstName || '');
                 setLastName(userData.LastName || '');
-                setUserEmail(userData.Email || '');
+                setUserEmail(userData.email || '');
                 if (userData.PhoneNumber) {
                     const parts = userData.PhoneNumber.split('-');//assumes phone number is saved as "xxx-xxx-xxxx"
                     setFirstPart(parts[0] || '');
@@ -87,9 +96,10 @@ export default function Profile3(){
             }
             else{
                 //default values loaded into fields
+                console.log('default values loaded');////////////////for testing
             }
         } else {
-            console.log('No user data found');
+            console.log('No user data found');///////////////////////for testing
         }
     };
 
@@ -97,74 +107,32 @@ export default function Profile3(){
     //save data to firestore dummy database
     const saveUserData = async () => {
         //create a reference to the Firestore document
-        const userDocRef = doc(FIRESTORE_DB, 'Users', 'UserInfo');
+        const userDocRef = doc(FIRESTORE_DB, 'users', 'userId');///////////////problem with using userId here
       
         const phoneNumber = `${firstPart}-${secondPart}-${thirdPart}`;
       
         //use setDoc to update the document
         await setDoc(userDocRef, {
-          Email: userEmail,
-          FirstName: firstName,
-          LastName: lastName,
-          PhoneNumber: phoneNumber,
-          StreetAddress: userAddress,
-          Suite: aptNum,
-          ZipCode: zipCode,
+          email: userEmail,
+          fName: firstName,
+          lName: lastName,
+          phoneNumber: phoneNumber,
+          address: userAddress,
+          suite: aptNum,
+          zip: zipCode,
         }, { merge: true }); //using merge: true to update the document without overwriting it entirely
       
         console.log('User data updated successfully');
     };
 
-/*  old fetch/save functions
-
-    // save user data in async storage
-    const saveUserData = async () => {
-        try {
-            await AsyncStorage.setItem('userData', JSON.stringify({
-                firstName,
-                lastName,
-                userEmail,
-                userAddress,
-                aptNum,
-                zipCode,
-                firstPart,
-                secondPart,
-                thirdPart,
-            }));
-        } catch (error) {
-          // handle errors here
-        }
-    };
-
-    const loadUserData = async () => {
-        try {
-            const userDataString = await AsyncStorage.getItem('userData');
-            if (userDataString !== null) {
-                const userData = JSON.parse(userDataString);
-                setFirstName(userData.firstName);
-                setLastName(userData.lastName);
-                setUserEmail(userData.userEmail);
-                setFirstPart(userData.firstPart);
-                setSecondPart(userData.secondPart);
-                setThirdPart(userData.thirdPart);
-                setUserAddress(userData.userAddress);
-                setAptNum(userData.aptNum);
-                setZipCode(userData.zipCode);
-            }
-        } catch (error) {
-          // handle errors here
-        }
-    };
-    */
-
     // load user data when user clicks back into profile view
     React.useEffect(() => {
-        fetchUserData();
-    }, []);
+        fetchUserData(userId);
+    }, [userId]);
     
     // undo profile changes
     const revertUserData = async () => {
-        fetchUserData();
+        fetchUserData(userId);
     };
         
 

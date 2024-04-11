@@ -77,6 +77,15 @@ export interface ParamResponseType {
     attributes: Array<Object>
 }
 
+//for homepage news carousel RSS feed integration
+export interface Article {
+    id: string;
+    title: string;
+    imgUrl: string;
+    link: string;
+    desc: string;
+}
+
 
 //                              //
 //      Dummy Data Section      //

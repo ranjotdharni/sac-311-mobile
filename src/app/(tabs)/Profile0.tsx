@@ -3,10 +3,18 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { globalFont } from "../../customs";
 import { global } from "../../customs";
+import { FIREBASE_APP } from '../../FirebaseConfig';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { FIRESTORE_DB } from '../../FirebaseConfig';
+import { doc, setDoc } from "firebase/firestore"; 
+import { userId, setUserId } from '../../global';
 
-
+//profile creation
 export default function Profile0()
 {
+
+    const auth = getAuth(FIREBASE_APP);
+
     const [fName, setFName] = useState('');
     const [lName, setLName] = useState('');
     const [email, setEmail] = useState('');
@@ -20,20 +28,44 @@ export default function Profile0()
 
     const navigation = useNavigation();
 
+    const handleSignUp = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            //user is signed in
+            const user = userCredential.user;
+            //setUserId(user.uid);
+            createUserProfile(user.uid, { fName, lName, email, phoneNumber, address, city, state, zip });
+            (navigation.navigate as (screen: string) => void)('Profile3');
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            //insert error notification here
+        });
+    };
+
+    const createUserProfile = async (userId: any, profileData: any) => {
+        try {
+            await setDoc(doc(FIRESTORE_DB, "users", userId), profileData);
+            console.log("Profile created/updated");///////////////////////////////////////////testing
+        } catch (error) {
+            console.error("Error creating user profile:", error);/////////////////////////////testing
+        }
+    };
+
     //This will check if the account creation attempt will be a unique account when we get access to salesforce
+    /*
     const checkIfUnique = () => {
         return true;
     }
-
-    //Will create the account
-    const createAccount = () => {
-    }
+    */
 
     //Currently the cancel and create account buttons just lead back to other profile pages
     const cancelPress = () => {
         (navigation.navigate as (screen: string) => void)('Profile2');
     };
 
+    /*
     const createPress = () => {
         if((password.match(passConfirmation) === null) || (passConfirmation.match(password) === null)){ //checks that both passwords are the same
             window.alert('Passwords must be identical');
@@ -45,6 +77,7 @@ export default function Profile0()
         }
         
     };
+    */
 
     return (
         <View style={styles.container}>
@@ -126,7 +159,7 @@ export default function Profile0()
                 <Pressable style={{...styles.button, backgroundColor: global.baseBlue200}} onPress={cancelPress}>
                     <Text style={{color: '#ffffff', textAlign: 'center'}}>Cancel</Text>
                 </Pressable>
-                <Pressable style={{...styles.button, backgroundColor: global.baseBlue100}} onPress={createPress}>
+                <Pressable style={{...styles.button, backgroundColor: global.baseBlue100}} onPress={handleSignUp}>
                     <Text style={{color: '#ffffff', textAlign: 'center'}}>Create Account</Text>
                 </Pressable>
             </View>
