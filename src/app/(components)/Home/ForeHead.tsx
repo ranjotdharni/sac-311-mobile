@@ -7,25 +7,38 @@ import { globalFont } from '../../../customs';
 
 function WhatsNewButton() {
     return (
-        <TouchableOpacity style={styles.NewButton}>
-            <Text style={styles.NewButtonText}>What's New</Text>
-            <MaterialIcons name="info-outline" size={Dimensions.get('screen').width * 0.05} color={global.baseBackground100} />
+        <TouchableOpacity style={styles.WhatsNewButton}>
+            <TouchableOpacity style={[styles.WhatsNewButton, {backgroundColor:globalColorTheme.blue}]}>
+               <Text style={styles.NewButtonText}>What's New</Text>
+                <MaterialIcons name="info" size={Dimensions.get('screen').width * 0.085} color={globalColorTheme.backgroundColor2} />
+            </TouchableOpacity>
+
         </TouchableOpacity>
     )
 }
 
 export default function ForeHead() {
-    const router = useRouter()
+    const router = useRouter();
+    const navigateToWhatsNew = () => {
+        router.replace('/(whatsnew)/WhatsNew');
+    };
+
     return (
         <View style={[styles.ForeHeadWrapper, {backgroundColor:globalColorTheme.backgroundColor}]}>
             <View style={[shadowUniversal.homeHeader, styles.ForeHeadCover, {backgroundColor:globalColorTheme.blue}]}>
                 <View style={styles.LogoWrapper}>
                     <Image style={styles.Logo} source={require('../../../assets/png/icon.png')} />
                 </View>
+                
+                <TouchableOpacity style={[styles.WhatsNewButton, {backgroundColor: globalColorTheme.blue}]} onPress={navigateToWhatsNew}>
+                    <Text style={styles.NewButtonText}>What's New</Text>
+                    <MaterialIcons name="info" size={Dimensions.get('screen').width * 0.085} color={globalColorTheme.backgroundColor2} />
+                </TouchableOpacity>
 
                 <TouchableOpacity style={[styles.SettingsButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.replace('/(tabs)/Settings')}}>
                     <MaterialIcons name="settings" size={Dimensions.get('screen').width * 0.085} color={globalColorTheme.backgroundColor2} />
                 </TouchableOpacity>
+                
             </View>
         </View>
     )
@@ -54,7 +67,7 @@ const styles = StyleSheet.create({
 
     NewButton: {
         width: '35%',
-        backgroundColor: global.baseBlue100,
+        backgroundColor: global.baseBlue200,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -72,7 +85,8 @@ const styles = StyleSheet.create({
     NewButtonText: {
         color: global.baseBackground100,
         fontSize: Dimensions.get('screen').width * 0.04,
-        fontFamily: globalFont.chosenFont
+        fontFamily: globalFont.chosenFont,
+        marginRight: '2%',
     },
 
     LogoWrapper: {
@@ -124,4 +138,18 @@ const styles = StyleSheet.create({
         top: Dimensions.get('screen').height * 0.0025, //Must be 1/2 the height of the View in Home.tsx with key '0o10101'
         height:'100%'
     },
+    WhatsNewButton:{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'flex-end',
+        paddingLeft: '1%',
+        paddingTop: '0.5%',
+        paddingBottom: '0.5%',
+        marginRight: '2%',
+        position: 'relative',
+        top: Dimensions.get('screen').height * 0.0025, //Must be 1/2 the height of the View in Home.tsx with key '0o10101'
+        height:'100%',
+
+    }
 })
