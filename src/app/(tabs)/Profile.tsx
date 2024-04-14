@@ -1,91 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, usePathname } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Alert } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ButtonPanel from '../(components)/Profile/ButtonPanel';
 import { globalFont, global, salesforceDevelopmentSignature } from '../../customs';
-import * as Notifications from 'expo-notifications';
-import * as DocumentPicker from 'expo-document-picker'; // Import DocumentPicker
-import { useEffect } from 'react';
 import { globalColorTheme } from '../../customs';
 
 export default function Profile() {
   const navigation = useNavigation();
-  const [selectedFile, setSelectedFile] = useState<DocumentPicker.DocumentPickerResult | null>(null); // State to store the selected file
-
-  useEffect(() => {
-    // This will ask for permission when the component mounts
-    (async () => {
-      const { status } = await Notifications.requestPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission for notifications was denied');
-        return;
-      }
-
-      // Set up a notification channel on Android
-      if (Platform.OS === 'android') {
-        Notifications.setNotificationChannelAsync('default', {
-          name: 'default',
-          importance: Notifications.AndroidImportance.MAX,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: '#FF231F7C',
-        });
-      }
-    })();
-  }, []);
 
   const navigateToProfile2 = () => {
     (navigation.navigate as (screen: string) => void)('Profile2');
-  };
-
-  const handleTestButtonPress = async () => {
-    try {
-      console.log("Attempting to send push notification...");
-      // Get the Expo push token
-      const expoPushToken = (await Notifications.getExpoPushTokenAsync()).data;
-      // Construct the notification data
-      const message = {
-        to: expoPushToken,
-        sound: 'default',
-        title: 'Test Notification',
-        body: 'This is a test notification!',
-      };
-      // Send the push notification
-      let response = await fetch('https://exp.host/--/api/v2/push/send', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Accept-encoding': 'gzip, deflate',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(message),
-      });
-      let data = await response.json();
-      console.log("Push notification sent successfully:", data);
-  
-      // Check for errors in the response and implement retry logic
-      if (data.data.status === 'error') {
-        console.error("Error sending push notification:", data.data.message);
-      }
-    } catch (error) {
-      console.error("Error while trying to send push notification:", error);
-    }
-  };
-
-  const handleAnotherButtonPress = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync(); // Open document picker
-      if (!result.canceled && result.assets?.length > 0) {
-        console.log("File selected:", result.assets[0].uri);
-        setSelectedFile(result);
-        // Handle the file here, such as uploading to server or processing
-      } else {
-        console.log("Document picking cancelled or no file selected");
-      }
-    } catch (error) {
-      console.error("Error while selecting document:", error);
-      Alert.alert('Error', 'An error occurred while selecting document.');
-    }
   };
 
   //console.log("Profile component rendered.");
@@ -100,17 +25,6 @@ export default function Profile() {
         </View>
       </View>
       <ButtonPanel onPressLoginSignup={navigateToProfile2} />
-      <TouchableOpacity style={[styles.testButton,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={handleTestButtonPress}>
-        <Text style={styles.testButtonText}>NOTIFICATION TEST</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.anotherButton,{backgroundColor:globalColorTheme.backgroundColor2}]} onPress={handleAnotherButtonPress}>
-        <Text style={styles.anotherButtonText}>FILE TEST</Text>
-      </TouchableOpacity>
-      {selectedFile && (
-        <Text style={styles.selectedFileText}>
-          Selected File: {selectedFile.assets?.[0].uri}
-        </Text>
-      )}
       <View style={styles.NewRequestButton}>
         <Link 
           href={{
@@ -151,7 +65,6 @@ const styles = StyleSheet.create({
     flex: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    
   },
   loginText: {
     fontSize: 20,
@@ -171,38 +84,6 @@ const styles = StyleSheet.create({
   textContainer: {
     width: '80%',
   },
-  testButton: {
-    backgroundColor: '#DDDDDD',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: 'center',
-    marginTop: 20,
-  },
-  testButtonText: {
-    fontSize: 16,
-    fontFamily: globalFont.chosenFont,
-    textAlign: 'center',
-  },
-  anotherButton: {
-    backgroundColor: '#DDDDDD',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: 'center',
-    marginTop: 10,
-  },
-  anotherButtonText: {
-    fontSize: 16,
-    fontFamily: globalFont.chosenFont,
-    textAlign: 'center',
-  },
-  selectedFileText: {
-    marginTop: 10,
-    fontSize: 16,
-    fontFamily: globalFont.chosenFont,
-    textAlign: 'center',
-  },
   NewRequestButton: {
     width: '94.5%',
     height: '7%',
@@ -210,8 +91,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'transparent',
     shadowColor: "#000", 
-    top: '30%',
+    top: '39%', 
     left: '3%',
+    position: 'relative',
   },
   NewRequestLink: {
     width: '100%',
