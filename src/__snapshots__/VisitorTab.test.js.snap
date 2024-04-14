@@ -1,0 +1,339 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VisitorTab renders correctly 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#f5faff",
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      {
+        "paddingTop": "10%",
+      }
+    }
+  />
+  <View
+    style={
+      {
+        "backgroundColor": "#203d61",
+        "height": "6%",
+        "justifyContent": "center",
+        "width": "100%",
+      }
+    }
+  >
+    <Text
+      style={
+        {
+          "color": "#f5faff",
+          "fontFamily": "jbm",
+          "fontSize": 18,
+          "paddingLeft": "3%",
+        }
+      }
+    >
+      Visitor Information
+    </Text>
+  </View>
+  <Image
+    source={1}
+    style={
+      {
+        "height": "15%",
+        "width": "100%",
+      }
+    }
+  />
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "backgroundColor": "#f2f2f2",
+          "borderRadius": 15,
+          "height": "auto",
+          "justifyContent": "center",
+          "marginBottom": "3%",
+          "marginTop": "3%",
+          "padding": "2%",
+          "width": "85%",
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "fontFamily": "jbm",
+            "fontSize": 18,
+          }
+        }
+      >
+        Explore Sacramento
+      </Text>
+      <Text
+        style={
+          {
+            "fontFamily": "jbm",
+            "fontSize": 12,
+          }
+        }
+      >
+        Find out more about what there is to do in Sacramento.
+      </Text>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "rgba(253, 170, 31, 0.5)",
+            "borderRadius": 10,
+            "height": "auto",
+            "justifyContent": "center",
+            "marginBottom": "2%",
+            "marginTop": "2%",
+            "paddingBottom": "2%",
+            "paddingTop": "2%",
+            "width": "80%",
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "fontFamily": "jbm",
+              "fontSize": 16,
+            }
+          }
+        >
+          VisitCalifornia.com
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "backgroundColor": "#f2f2f2",
+          "borderRadius": 15,
+          "height": "auto",
+          "justifyContent": "center",
+          "marginBottom": "3%",
+          "marginTop": "3%",
+          "padding": "2%",
+          "width": "85%",
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "fontFamily": "jbm",
+            "fontSize": 18,
+          }
+        }
+      >
+        Book Your Stay
+      </Text>
+      <Text
+        style={
+          {
+            "fontFamily": "jbm",
+            "fontSize": 12,
+          }
+        }
+      >
+        Explore options booking a hotel, places to eat nearby, and more.
+      </Text>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "rgba(253, 170, 31, 0.5)",
+            "borderRadius": 10,
+            "height": "auto",
+            "justifyContent": "center",
+            "marginBottom": "2%",
+            "marginTop": "2%",
+            "paddingBottom": "2%",
+            "paddingTop": "2%",
+            "width": "80%",
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "fontFamily": "jbm",
+              "fontSize": 16,
+            }
+          }
+        >
+          VisitSacramento.com
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "backgroundColor": "#f2f2f2",
+          "borderRadius": 15,
+          "height": "auto",
+          "justifyContent": "center",
+          "marginBottom": "3%",
+          "marginTop": "3%",
+          "padding": "2%",
+          "width": "85%",
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "fontFamily": "jbm",
+            "fontSize": 18,
+          }
+        }
+      >
+        Tripadvisor: Sacramento
+      </Text>
+      <Text
+        style={
+          {
+            "fontFamily": "jbm",
+            "fontSize": 12,
+          }
+        }
+      >
+        Find hotels, vacation rentals, browse travel forums, and more on Tripadvisor.
+      </Text>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "rgba(253, 170, 31, 0.5)",
+            "borderRadius": 10,
+            "height": "auto",
+            "justifyContent": "center",
+            "marginBottom": "2%",
+            "marginTop": "2%",
+            "paddingBottom": "2%",
+            "paddingTop": "2%",
+            "width": "80%",
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "fontFamily": "jbm",
+              "fontSize": 16,
+            }
+          }
+        >
+          Tripadvisor.com
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;

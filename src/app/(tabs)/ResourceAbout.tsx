@@ -3,7 +3,7 @@ import { global } from "../../customs";
 import { useRouter } from 'expo-router';
 import { globalFont, globalColorTheme } from "../../customs";
 
-export default function Resources()
+export default function ResourceAbout()
 {
     const router = useRouter();
     return (
@@ -36,7 +36,7 @@ export default function Resources()
                     </Text>
                 </View>
                 <View style={styles.callWrapper}>
-                    <TouchableOpacity onPress={()=>Linking.openURL(`tel:${311}`)}>
+                    <TouchableOpacity testID="callBtn" onPress={()=>Linking.openURL(`tel:${311}`)}>
                         <Text style={[styles.callText,{color:globalColorTheme.text, backgroundColor: globalColorTheme.blue}]}>Call 311</Text>
                     </TouchableOpacity>
                 </View>

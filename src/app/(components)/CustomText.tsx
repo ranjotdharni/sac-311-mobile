@@ -21,7 +21,7 @@ import { globalFont } from "../../customs"
 
 export default function CustomText({ text, style, font, nol } : { text: string, style: any, font: any, nol: number }) {
     let [fontsLoaded] = useFonts({
-        'jbm': require('../../assets/fonts/jbm.ttf'),
+        'jbm': require('../../assets/fonts/JBM.ttf'),
         'JBM-B': require('../../assets/fonts/JBM-B.ttf'),
         'opendyslexic': require('../../assets/fonts/opendyslexic.ttf')
     })

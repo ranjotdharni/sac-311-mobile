@@ -11,7 +11,7 @@ export default function NavItem({ id, title, iconName, active, url, passUp, navi
 {
    
     return (
-        <Pressable style={styles.NavItemWrapper}>
+        <Pressable testID="navItem" style={styles.NavItemWrapper}>
             <Link href={url} onPressOut={ () => { passUp(id) } } style={{width: '100%', height: '100%', zIndex: 2}} />
             <View style={styles.NavPress}>
                 <MaterialIcons style={styles.NavIcon} name={iconName} color={(active(id) ? global.baseBackground100 : global.baseGrey100)} size={25} />
