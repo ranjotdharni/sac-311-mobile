@@ -1,0 +1,327 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResourceAbout renders correctly 1`] = `
+<View
+  style={
+    [
+      {
+        "backgroundColor": "#f5faff",
+        "height": "100%",
+        "width": "100%",
+      },
+      {
+        "backgroundColor": "#ffffff",
+      },
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "backgroundColor": "#f5faff",
+          "elevation": 5,
+          "height": "12%",
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 2,
+            "width": -2,
+          },
+          "shadowOpacity": 0.25,
+          "shadowRadius": 4,
+          "width": "100%",
+        },
+        {
+          "backgroundColor": "#ffffff",
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginTop": "15%",
+          "paddingHorizontal": 15,
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#ffffff",
+            "borderRadius": 15,
+            "opacity": 1,
+            "paddingHorizontal": 10,
+            "width": "auto",
+          }
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "color": "#203d61",
+                "fontFamily": "jbm",
+                "fontSize": 17,
+                "padding": 2,
+              },
+              {
+                "color": "#000000",
+              },
+            ]
+          }
+        >
+          Services
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#ffffff",
+            "borderRadius": 15,
+            "opacity": 1,
+            "paddingHorizontal": 10,
+            "width": "auto",
+          }
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "color": "#203d61",
+                "fontFamily": "jbm",
+                "fontSize": 17,
+                "padding": 2,
+              },
+              {
+                "color": "#000000",
+              },
+            ]
+          }
+        >
+          Answers
+        </Text>
+      </View>
+      <View
+        style={
+          [
+            {
+              "backgroundColor": "rgba(253, 170, 31, 0.33)",
+              "borderRadius": 15,
+              "paddingHorizontal": 10,
+              "width": "auto",
+            },
+            {
+              "backgroundColor": "#203d61",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "color": "#203d61",
+                "fontFamily": "jbm",
+                "fontSize": 17,
+                "padding": 2,
+              },
+              {
+                "color": "#E7EAED",
+              },
+            ]
+          }
+        >
+          About
+        </Text>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "padding": 20,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "padding": 10,
+        }
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "alignSelf": "center",
+              "color": "#203d61",
+              "fontFamily": "jbm",
+              "fontSize": 45,
+            },
+            {
+              "color": "#203d61",
+            },
+          ]
+        }
+      >
+        About
+      </Text>
+    </View>
+    <View
+      style={
+        [
+          {
+            "backgroundColor": "#ffffff",
+            "borderRadius": 20,
+            "padding": 20,
+          },
+          {
+            "backgroundColor": "#ffffff",
+          },
+        ]
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "alignSelf": "center",
+              "fontFamily": "jbm",
+              "fontSize": 14,
+            },
+            {
+              "color": "#000000",
+            },
+          ]
+        }
+      >
+        The City of Sacramento's world-class service just got even better! The new City of Sacramento 311 Customer Service website and mobile app provide an improved customer experience by offering more ways to easily submit and track your service requests. Our goal is to make government more accessible and life a little easier for our residents, businesses and visitors. Our Customer Service Agents are available 24/7. Whether it's waste collection, leaf pickup, street sweeping or world-class drinking water, Sacramento is a leader in providing quality customer services.
+      </Text>
+    </View>
+    <View
+      style={
+        {
+          "padding": 10,
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "opacity": 1,
+          }
+        }
+        testID="callBtn"
+      >
+        <Text
+          style={
+            [
+              {
+                "alignSelf": "center",
+                "backgroundColor": "#203d61",
+                "borderRadius": 20,
+                "color": "#fff",
+                "fontFamily": "jbm",
+                "fontSize": 36,
+                "padding": 20,
+              },
+              {
+                "backgroundColor": "#203d61",
+                "color": "#E7EAED",
+              },
+            ]
+          }
+        >
+          Call 311
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;

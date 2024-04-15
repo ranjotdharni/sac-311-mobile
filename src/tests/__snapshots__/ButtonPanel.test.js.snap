@@ -1,0 +1,182 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ButtonPanel make sure the panel renders 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#ffffff",
+      "height": 293.48,
+      "width": 750,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "height": "85%",
+        "justifyContent": "space-evenly",
+        "position": "relative",
+        "top": "-2.5%",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "aspectRatio": 1,
+          "backgroundColor": "#ffffff",
+          "borderRadius": 10,
+          "elevation": 5,
+          "justifyContent": "center",
+          "opacity": 1,
+          "shadowColor": "#000000",
+          "shadowOffset": {
+            "height": 4,
+            "width": -2,
+          },
+          "shadowOpacity": 0.33,
+          "shadowRadius": 10,
+          "width": "30%",
+        }
+      }
+      testID="homeBtn"
+    >
+      <Text />
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "aspectRatio": 1,
+          "backgroundColor": "#ffffff",
+          "borderRadius": 10,
+          "elevation": 5,
+          "justifyContent": "center",
+          "opacity": 1,
+          "shadowColor": "#000000",
+          "shadowOffset": {
+            "height": 4,
+            "width": -2,
+          },
+          "shadowOpacity": 0.33,
+          "shadowRadius": 10,
+          "width": "30%",
+        }
+      }
+      testID="visBtn"
+    >
+      <Text />
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "aspectRatio": 1,
+          "backgroundColor": "#ffffff",
+          "borderRadius": 10,
+          "elevation": 5,
+          "justifyContent": "center",
+          "opacity": 1,
+          "shadowColor": "#000000",
+          "shadowOffset": {
+            "height": 4,
+            "width": -2,
+          },
+          "shadowOpacity": 0.33,
+          "shadowRadius": 10,
+          "width": "30%",
+        }
+      }
+      testID="bizBtn"
+    >
+      <Text />
+    </View>
+  </View>
+</View>
+`;

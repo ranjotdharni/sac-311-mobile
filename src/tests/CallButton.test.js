@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/react-native';
-import ResourceAbout from '../(tabs)/ResourceAbout'; 
+import ResourceAbout from '../app/(tabs)/ResourceAbout'; 
 import { Linking } from 'react-native';
 
 describe('ResourceAbout Page', () => {
