@@ -16,6 +16,7 @@ import { TextInput } from "react-native-gesture-handler";
 import NewsFeedBox from "../(components)/News/NewsFeedBox";
 import Carousel from "../(components)/Carousel";
 import CustomText from "../(components)/CustomText";
+import { filter } from "lodash";
 
 const borderOffset = 20;
 
@@ -25,43 +26,24 @@ export default function News() {
     const [headlineData, setheadlineData] = useState<any[]>([]);
     const [totalRssData, setTotalRssData] = useState<any[]>([]);
     const [rssFeedState, setRssFeedState] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<number>(0);
 
     const fetchRssFeed = async () => {
-        newsFeedSites.map(async (site) => {
-            try {
-                const response = await axios.get(site.url);
+        try {
+            const response = await axios.get('https://sacramentocityexpress.com/feed');
 
-                const data = await Parser.parse(response.data);
+            const data = await Parser.parse(response.data);
 
-                //if smaller data set needed can add .slice(0, [amount of entries wanted]) before the .filter
-                const filteredData = data.items.filter((item) => !(!Array.isArray(item.enclosures) || item.enclosures.length == 0) && !(!Array.isArray(item.links) || item.links.length == 0));
+            //Data for the Carousel at the top
+            if (data.items.length < 6)
+                setheadlineData(data.items.slice(0, data.items.length - 1));
+            else
+                setheadlineData(data.items.slice(0, 6));
 
-                //console.log(filteredData[0]);
+            setTotalRssData(data.items);
 
-                //Data for the Carousel at the top, currently holds 3 of each news site's most recent articles
-                setheadlineData((prevData) => [...prevData, ...filteredData.slice(0, 2)]);
-
-                //All the articles that will be shown
-                setTotalRssData((prevData) => [...prevData, ...filteredData.slice(3, filteredData.length - 1)]);
-
-                //Sorting of the articles based on the published date
-                headlineData.sort((item1: any, item2: any) => {
-                    const itemDate1 = new Date(item1.published);
-                    const itemDate2 = new Date(item2.published);
-                    return itemDate1.getTime() - itemDate2.getTime();
-                });
-                totalRssData.sort((item1: any, item2: any) => {
-                    const itemDate1 = new Date(item1.published);
-                    const itemDate2 = new Date(item2.published);
-                    return itemDate1.getTime() - itemDate2.getTime();
-                });
-
-                setIsLoading((prevData) => prevData+1)
-            } catch (error) {
-                console.error('Error fetching RSS feed:', error);
-            }
-        });
+        } catch (error) {
+            console.error('Error fetching RSS feed:', error);
+        }
     };
 
     useEffect(() => {
@@ -71,7 +53,7 @@ export default function News() {
     function renderHeadlines(data: any) {
         return data.map((item: any): any => {
             const itemDate = new Date(item.published);
-            return <NewsFeedBox key={Math.random()} title={item.title} imgUrl={item.enclosures[0].url} link={item.links[0].url} date={itemDate} desc={item.description} />
+            return <NewsFeedBox key={Math.random()} title={item.title} link={item.links[0].url} date={itemDate} desc={item.description} />
         })
     }
 
@@ -93,7 +75,8 @@ export default function News() {
                 <Image style={styles.backgroundImage} source={require('../../assets/png/whatsnewbg.png')} />
                 <View style={styles.NewsFeedWrapper}>
                     <ScrollView showsHorizontalScrollIndicator={true} horizontal >
-                        {renderHeadlines(headlineData)}
+                        {renderHeadlines(headlineData)
+                        }
                     </ScrollView>
                 </View>
                 <View style={{ height: '2%' }}></View>
@@ -110,7 +93,7 @@ export default function News() {
                             </View>
                             <View style={{ backgroundColor: global.baseGrey100 }}></View>
                             <View style={styles.RssNewsWrapper}>
-                                <RssFeed filteredData={totalRssData}/>
+                                <RssFeed filteredData={totalRssData} />
                             </View>
                         </View>
                     </View>
@@ -123,21 +106,18 @@ export default function News() {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.AllNewsFeedWrapper}>
-                        {
-                            totalRssData.slice(0,2).map((item) => 
-                            <TouchableOpacity key={item.id} style={{marginTop: '1%'}} onPress={() => router.push({ pathname: '/(web)/WebView', params: { url: item.links[0].url } })} >
-                                <View style={styles.RSSWrapper}>
-                                    <View style={styles.RSSContent}>
-                                        <CustomText style={styles.title} font={globalFont.chosenFont} text={item.title} nol={3} />
-                                        <Text> {`${new Date(item.published).toLocaleDateString()} ${new Date(item.published).toLocaleTimeString()}`}</Text>
+                            {totalRssData.slice(6, 8).map((item) =>
+                                <TouchableOpacity key={item.id} onPress={() => router.push({ pathname: '/(web)/WebView', params: { url: item.links[0].url } })} >
+                                    <View style={styles.RSSWrapper}>
+                                        <View style={styles.RSSContent}>
+                                            <CustomText style={styles.title} font={globalFont.chosenFont} text={item.title} nol={3} />
+                                            <Text> {`${new Date(item.published).toLocaleDateString()} ${new Date(item.published).toLocaleTimeString()}`}</Text>
+                                        </View>
+
                                     </View>
-                                    <View style={styles.RSSImageWrapper}>
-                                        <Image style={styles.RSSImage} source={{ uri: item.enclosures[0].url }}></Image>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
+                                </TouchableOpacity>
                             )
-                        }
+                            }
                         </View>
                     </View>
                 }
@@ -159,11 +139,8 @@ const styles = StyleSheet.create({
         position: 'relative',
         backgroundColor: global.baseBackground200,
         width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height * 0.275,
+        height: Dimensions.get('screen').height * 0.205,
         overflow: 'visible',
-    },
-    listPaddingTop: {
-        height: '7%',
     },
     listPaddingBottom: {
         height: '7%',
@@ -194,9 +171,7 @@ const styles = StyleSheet.create({
         color: global.baseBackground100
     },
     barText: {
-        //textAlign: 'center',
         fontSize: 25,
-        //marginLeft: '21%',
         fontFamily: globalFont.chosenFont,
         color: global.baseBackground100
     },
@@ -222,27 +197,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        //marginLeft: '6%',
         marginTop: '13%',
-    },
-    addressHeader: {
-        alignSelf: 'center',
-        fontSize: 20,
-        color: global.baseBackground100,
-        backgroundColor: global.baseBlue100,
-        padding: 5,
-        borderRadius: 10,
-        overflow: 'hidden',
-        textAlign: 'center'
     },
     AllNewsWrapper: {
         width: '100%',
-        height: '39%',
+        height: '49%',
         flexDirection: 'column',
     },
     AllNewsBarWrapper: {
         width: '100%',
-        height: '20%',
+        height: '16%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -266,9 +230,6 @@ const styles = StyleSheet.create({
     SliderButtonImage: {
         height: '100%',
         width: '100%',
-        //marginRight: '4%',
-        //borderTopLeftRadius: borderOffset,
-        //borderBottomLeftRadius: borderOffset,
     },
     AllNewsFeedWrapper: {
         width: '100%',
@@ -296,31 +257,18 @@ const styles = StyleSheet.create({
         height: Dimensions.get('screen').height * 0.82,
         backgroundColor: global.baseGrey100,
     },
-    RSSImageWrapper: {
-        height: '100%',
-        width: '35%',
-        //aspectRatio: 1 / 1,
-        //borderRadius: borderOffset,
-      },
-      RSSImage: {
-        //height: 40,
-        //width: '100%',
-        aspectRatio: 1.5 / 1,
-        borderRadius: borderOffset,
-      },
-      RSSWrapper: {
-        paddingLeft: '4%',
-        paddingRight: '4%',
-        paddingBottom: '4%',
+    RSSWrapper: {
+        paddingBottom: '6%',
         flexDirection: 'row'
-      },
-      RSSContent: {
-        width: '65%',
+    },
+    RSSContent: {
+        width: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start'
-      },
-      title: {
+        alignItems: 'flex-start',
+        backgroundColor: global.darkGrey200,
+    },
+    title: {
         fontSize: 18,
         fontWeight: 'bold',
         fontFamily: globalFont.chosenFont,
@@ -329,5 +277,5 @@ const styles = StyleSheet.create({
         //backgroundColor: 'lightblue',
         padding: 8,
         color: 'white',
-      },
+    },
 })
