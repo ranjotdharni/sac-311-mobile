@@ -23,16 +23,16 @@ function CityInfo() {
     return (
         <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:globalColorTheme.backgroundColor}}>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/executive-team"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Government Offices</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Government Offices</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/accessibility"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Sacramento Accessibility Policy</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Sacramento Accessibility Policy</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://data.cityofsacramento.org/"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Browse All City Data</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Browse All City Data</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/contact-us"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Contact Us</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Contact Us</Text>
             </Pressable>
         </View>
     )
@@ -43,13 +43,13 @@ function AppInfo() {
         <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:globalColorTheme.backgroundColor}}>
             
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://311.cityofsacramento.org/s/about-311"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>About 311</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>About 311</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/web-policies"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Privacy Policy</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Privacy Policy</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Leave Feedback</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Leave Feedback</Text>
             </Pressable>
         </View>
     )
@@ -137,7 +137,12 @@ function General() {
                     <Text style={{ fontSize: 19, fontFamily: globalFont.chosenFont, color: globalColorTheme.color, paddingLeft: '5%', fontWeight: '500' }}>
                         Notification Permissions
                     </Text>
-                    <Switch value={notifEnabled} onValueChange={toggleNotifs} />
+                    <Switch
+                        onValueChange={toggleNotifs} 
+                        value={notifEnabled}
+                        trackColor={{false:'#DDDDDD', true:'#00EE63'}}
+                        thumbColor={globalColorTheme.blue}
+                    />
                 </View>
             </View>
             <Text style={{ backgroundColor: globalColorTheme.backgroundColor, color: globalColorTheme.color, fontSize: 13, fontFamily: globalFont.chosenFont, paddingLeft: '5%', paddingBottom: '3%', fontWeight: '300' }}>

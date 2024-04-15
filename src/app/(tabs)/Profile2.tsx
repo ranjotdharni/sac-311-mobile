@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Image, Pressable} from "react-native";
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
-import { globalFont, global } from "../../customs";
+import { globalFont, global, globalColorTheme } from "../../customs";
 import { FIREBASE_APP } from '../../FirebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { setUserId } from '../../global';
@@ -48,30 +48,32 @@ export default function Profile2() {
     };
   
     return (
-      <SafeAreaView style={styles.container}>
-      <View style={styles.backgroundContainer}>
-        <Image source={require('src/assets/png/icon.png')} style={styles.imageContainer} />
+      <SafeAreaView style={[styles.container, {backgroundColor:globalColorTheme.backgroundColor}]}>
+      <View style={[styles.backgroundContainer, {backgroundColor:globalColorTheme.backgroundColor}]}>
+        <Image source={require('src/assets/png/icon.png')} style={[styles.imageContainer, {backgroundColor:globalColorTheme.blue}]} />
         </View>
-        <Text style={{ fontSize: 16, paddingTop: "50%" }}>Log in to view your profile information.</Text>
+        <Text style={{ fontSize: 16, paddingTop: "70%", color:globalColorTheme.opposite}}>Log in to view your profile information.</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, {color:globalColorTheme.opposite, backgroundColor:globalColorTheme.backgroundColor2}]}
           placeholder='Email'
+          placeholderTextColor={globalColorTheme.opposite}
           onChangeText={(val) => setEmail(val)}
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, {color:globalColorTheme.opposite, backgroundColor:globalColorTheme.backgroundColor2}]}
           placeholder='Password'
+          placeholderTextColor={globalColorTheme.opposite}
           onChangeText={(val) => setPassword(val)}
         />
-        <Pressable style={styles.button} onPress = {handleSignIn}>
-          <Text style={styles.buttonText}>Log In</Text>
+        <Pressable style={[styles.button, {backgroundColor:globalColorTheme.blue}]} onPress = {handleSignIn}>
+          <Text style={[styles.buttonText, {color:globalColorTheme.text}]}>Log In</Text>
         </Pressable>
-        <Pressable style={{ ...styles.createAcctButton, marginTop: 0 }} onPress={accountCreationPress}>
-          <Text style={styles.buttonText}>Create an Account</Text>
+        <Pressable style={{ ...styles.createAcctButton, marginTop: 0, backgroundColor:globalColorTheme.blue }} onPress={accountCreationPress}>
+          <Text style={[styles.buttonText, {color:globalColorTheme.text}]}>Create an Account</Text>
         </Pressable>
-        <Text style={{ }}>Forgot your password?</Text>
+        <Text style={{color:globalColorTheme.opposite}}>Forgot your password?</Text>
         <Pressable>
-          <Text style={{ color: '#2069bd' }}>Click here.</Text>
+          <Text style={{ color:globalColorTheme.opposite }}>Click here.</Text>
         </Pressable>
       </SafeAreaView>
     );
@@ -86,9 +88,10 @@ export default function Profile2() {
       backgroundColor: global.baseBackground100,
     },
     imageContainer:{
-      resizeMode: 'contain', 
+      resizeMode: 'center', 
       width: '100%', 
-      marginTop: 1,
+      height: '130%',
+      marginTop: 100,
     },
     backgroundContainer:{
  position: 'absolute',
