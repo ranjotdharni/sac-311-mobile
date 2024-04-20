@@ -77,6 +77,15 @@ export interface ParamResponseType {
     attributes: Array<Object>
 }
 
+//for homepage news carousel RSS feed integration
+export interface Article {
+    id: string;
+    title: string;
+    imgUrl: string;
+    link: string;
+    desc: string;
+}
+
 
 //                              //
 //      Dummy Data Section      //
@@ -1141,6 +1150,7 @@ export const globalColorTheme= {
     color : '#000000',
     blue : '#203d61',
     theme : 'lightTheme',
+    opposite : '#3B3B3B',
     fontSize: 19,
     fontFamily: globalFont.chosenFont,
     paddingLeft: '5%',
@@ -1156,6 +1166,7 @@ export function colorThemeSetter(newTheme:string){
         globalColorTheme.color = '#000000';             //textcolor = black
         globalColorTheme.blue = '#203d61';             //textcolor = dark blue
         globalColorTheme.text = '#E7EAED';              //textcolor = off-white
+        globalColorTheme.opposite = '#3B3B3B';              // textcolor = dark-gray
     }
     
     else if (newTheme == 'darkTheme'){
@@ -1165,6 +1176,7 @@ export function colorThemeSetter(newTheme:string){
         globalColorTheme.color = '#E7EAED';             //textcolor = off-white
         globalColorTheme.blue = '#33619b';             //textcolor = light blue
         globalColorTheme.text = '#E7EAED';              //textcolor = off-white
+        globalColorTheme.opposite = '#E7EAED';              // textcolor = off-white
         
     }
 

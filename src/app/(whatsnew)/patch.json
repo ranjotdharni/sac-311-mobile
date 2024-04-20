@@ -1,10 +1,15 @@
 {
     "header": "Welcome to the New City of Sacramento 311 Mobile App",
-    "body": "A lot has changed, but here is a handy guide to understand the new look and functionality",
+    "OverviewBody": "A lot has changed, but here is a handy guide to understand the new look and functionality. Swipe right to explore the new features!",
+    "HomeBody": "Welcome to the new home screen!",
+    "ExploreBody": "The explore page will seem familiar, but it runs faster than ever!",
+    "PlusBody": "This is a handy button that will let you make a new request from any screen in the app!",
+    "ResourcesBody": "Here you will find a comprehensive description of each service, as well as commonly asked questions!",
+    "ProfileBody": "",
+
     "points": [
-        "Fixed a bug in the login flow.",
-        "Improved performance on older devices.",
-        "Added a new feature to customize profiles."
+        "Complete overhaul of the 311 app.",
+        "Keep going for more details on the new features."
       ]
 }
   

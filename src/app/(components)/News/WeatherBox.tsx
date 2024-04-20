@@ -57,7 +57,7 @@ const WeatherBox: React.FC = () => {
 	}
 
 	const weatherIcon = (precipitation_probability: number, precipitation: number, cloud_cover: number, isDay: number) => {
-		if (precipitation_probability >= 5 || precipitation > 0) {
+		if (precipitation_probability >= 15 || precipitation > 0) {
 			return require('../../../assets/png/rain.png');
 		} else if (cloud_cover >= 70) {
 			return require('../../../assets/png/cloudy.png');
