@@ -54,7 +54,7 @@ export default function NewsFeed() {
                     <Image source={require('../../../assets/png/newspaper.png')} style={{backgroundColor:globalColorTheme.backgroundColor2, width: 25, height: 25, marginLeft: 5, marginTop: 15}} />
                 </TouchableOpacity>
             </View>
-            <Carousel bubbles={{radius: 5, spacing: 0.08, color: globalColorTheme.backgroundColor2, activeColor: global.baseGold100, activeRadius: 6}} nestData={articles} nestCallback={renderArticle} itemCount={articles.length} endPadding={'5%'} scrollOffset={Dimensions.get('screen').width * 0.98} minScroll={50} />
+            <Carousel nestData={articles} nestCallback={renderArticle} itemCount={articles.length} endPadding={'5%'} scrollOffset={Dimensions.get('screen').width * 0.98} minScroll={50} />
         </View>
     )
 }
