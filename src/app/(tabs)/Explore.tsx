@@ -1,7 +1,7 @@
-import { View, StyleSheet, Dimensions, Pressable, Animated } from "react-native";
+import { View, StyleSheet, Dimensions, Pressable, Animated, Easing } from "react-native";
 import MapView, { Details, PROVIDER_GOOGLE, Region } from "react-native-maps";   //By default, this component uses Google Maps as provider
 import SearchBar from "../(components)/Profile/SearchBar";
-import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom, responseObjectToParameter, ParamType } from "../../customs";
+import { global, shadowUniversal, generateEndpointUrl, responseType, dateAtDaysAgo, dateToFormat, generateSymbolUrl, inclusiveRandom, responseObjectToParameter, ParamType, globalColorTheme, DEFAULT_REGION } from "../../customs";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import CustomText from "../(components)/CustomText";
 import { TouchableOpacity, PanGestureHandler, GestureEvent, PanGestureHandlerEventPayload } from "react-native-gesture-handler";
@@ -14,7 +14,7 @@ import _ from 'lodash'
 import { fontGetter } from "../../customs";
 import { globalFont } from '../../customs';
 import { useRouter, router, useLocalSearchParams } from "expo-router";
-import { Context } from "../(components)/context/TokenContext";
+import Filter, { CreateQueryParameters, INITIAL_PARAMETERS, INITIAL_QUERY, generateFilteredEndpointUrl } from "../(components)/Explore/Filter";
 
 //const padKeySuffix: string = '-padRequests'
 const markerKeySuffix: string = '-markerPrimary'
@@ -25,7 +25,9 @@ const padVisibleHeight = Dimensions.get('screen').height * 0.47
 const previewHiddenHeight = Dimensions.get('screen').height
 const previewVisibleHeight = Dimensions.get('screen').height * 0.85
 
-const requestItemWidth = 0.75 // as a decimal percentage of screen width, used in multiple places synchronously so stored here for maintainability 
+const filterHiddenPosition: number = -1 * Dimensions.get('screen').width 
+
+const requestItemWidth = 0.75 // as a decimal percentage of screen width, used in multiple places simultaneously so stored here for maintainability 
 //const padAnimationTiming = 1000
 
 const reloadStop = {
@@ -46,7 +48,9 @@ function Explore()
     const mapRef = useRef<MapView>(null)
     const padPanAnim = useRef(new Animated.Value(padHiddenHeight)).current
     const previewPanAnim = useRef(new Animated.Value(previewVisibleHeight)).current
+    const filterPanAnim = useRef(new Animated.Value(filterHiddenPosition)).current
 
+    const [markerQuery, setMarkerQuery] = useState<{whereClause: CreateQueryParameters, count: number, distance: number}>({whereClause: INITIAL_PARAMETERS[0], count: INITIAL_PARAMETERS[1], distance: INITIAL_PARAMETERS[3]})
     const [addressQuery, setAddressQuery] = useState<string>('')
     const [markers, setMarkers] = useState<Array<responseType>>([])
     const [padObject, setPadObject] = useState<responseType>()
@@ -61,12 +65,9 @@ function Explore()
     const [requestFetch, triggerRequestFetch] = useState<responseType>()
     const [padPan, setPadPan] = useState(padHiddenHeight)
     const [previewPan, setPreviewPan] = useState(previewVisibleHeight)
-    const [region, setRegion] = useState<Region>({
-        latitude: 38.574713,
-        longitude: -121.491489,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    })
+    const [filterPan, setFilterPan] = useState(filterHiddenPosition)
+    const [filterFade, setFilterFade] = useState(0)
+    const [region, setRegion] = useState<Region>(DEFAULT_REGION)
 
     const forwardLocation = () => {
         const paramObj = responseObjectToParameter(padObject!)
@@ -82,6 +83,7 @@ function Explore()
     }
 
     function showPad() {
+        setFilterPan(filterHiddenPosition)
         setPreviewPan(previewHiddenHeight)
         setPadPan(padVisibleHeight)
     }
@@ -112,6 +114,19 @@ function Explore()
         mapRef.current?.animateToRegion({latitude: obj.geometry.y - 0.001, longitude: obj.geometry.x, latitudeDelta: activeZoom.latitudeDelta, longitudeDelta: activeZoom.longitudeDelta})
         showPad()
     }   //notice: latitude is geometry.y and longitude is geometry.x
+
+    function showOrHideFilter() {
+        if (filterPan !== filterHiddenPosition) {
+            setFilterPan(filterHiddenPosition)
+            setTimeout(() => {
+                setFilterFade(0)
+            }, 500)
+        }
+        else {
+            setFilterFade(1)
+            setFilterPan(0)
+        }
+    }
 
     const fetchAddresses = _.throttle(async () => {
         if (addressQuery === '') {
@@ -154,22 +169,13 @@ function Explore()
         setRequests([obj, ...requests.filter(r => r.attributes.Address === obj.attributes.Address)])
     }
 
-    const onRegionChange = _.debounce(async (Cregion: Region, details: Details) => {
-        setRegion(Cregion)
-        if (region.latitudeDelta < reloadStop.latitudeDelta && region.longitudeDelta < reloadStop.longitudeDelta) {
+    const onRegionChange = _.debounce(async (Cregion: Region, details: Details, force: boolean) => {
+        if (!force && region.latitudeDelta < reloadStop.latitudeDelta && region.longitudeDelta < reloadStop.longitudeDelta) {
             return
         }
 
+        setMarkers([])
         setPreviewLoader(true)
-        // default markers are requests w/ valid addresses and created within in the last 7 days
-        const params: [string, string][] = [
-            ['orderByFields', 'Address'],
-            ['geometryType', 'esriGeometryPoint'],
-            ['geometry', `${Cregion.longitude},${Cregion.latitude}`],
-            ['distance', '2000'],
-            ['returnDistinctValues', 'true']
-        ]
-        const query = generateEndpointUrl(`NOT(Address='') AND DateCreated > DATE '${dateToFormat('YYYY-MM-DD', dateAtDaysAgo(3))}'`, inclusiveRandom(75, 100), params)
     
         let set = new Set<string>()
         function filterFunction(item: responseType) {   // Filters out duplicate addresses, needed to prevent two markers in same location blinking on top of one another
@@ -179,7 +185,9 @@ function Explore()
             return s1 !== s2
         }
 
-        await fetch(query).then((middle) => {
+        let q: string = generateFilteredEndpointUrl(markerQuery.whereClause, markerQuery.count, region, markerQuery.distance)
+
+        await fetch(q).then((middle) => {
             return middle.json()
         }).then((res) => {
             let marks: responseType[] = res.features.filter(filterFunction)
@@ -194,7 +202,7 @@ function Explore()
         })
 
         setPreviewLoader(false)
-    }, 1000)
+    }, 1000, {leading: false, trailing: true})
 
     useEffect(() => {
         Animated.spring(padPanAnim, {
@@ -211,8 +219,19 @@ function Explore()
     }, [previewPan])
 
     useEffect(() => {
-        onRegionChange(region, {})
+        Animated.spring(filterPanAnim, {
+            toValue: filterPan,
+            useNativeDriver: true
+        }).start()
+    }, [filterPan])
+
+    useEffect(() => {
+        onRegionChange(region, {}, false)
     }, [])
+
+    useEffect(() => {
+        setFilterPan(filterHiddenPosition)
+    }, [addressQuery])
 
     useEffect(() => {
         async function grabRequests() {
@@ -248,21 +267,10 @@ function Explore()
         }
     }, [requestData])
 
-    const memoizedMarkerRender = useMemo(() => {
-        return markers.map((mark, index) => {
-            return (
-                <CustomMarker 
-                    key={mark.attributes.ReferenceNumber + markerKeySuffix} 
-                    markerData={mark} 
-                    image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
-                    iconScale={45}
-                    fadeInDelay={index * 50}
-                    backgroundColor={global.baseBlue100}
-                    passUp={activateMarker}
-                />
-            )
-        })
-    }, [markers])
+    useEffect(() => {
+        let obj: Details | undefined = undefined
+        onRegionChange(region, obj!, true)
+    }, [markerQuery])
 
     const memoizedRequestData = useMemo(() => requests.map((req, idx) => {
         return (
@@ -286,8 +294,11 @@ function Explore()
 
     return (
         <View style={{flex: 1}}>
+                <Animated.View style={[styles.filterContainer, shadowUniversal.default, { opacity: filterFade, transform: [ { translateX: filterPanAnim } ] }]}>
+                    <Filter region={region} passUpQuery={setMarkerQuery} />
+                </Animated.View>
                 <Animated.View style={[styles.markerPreview, shadowUniversal.default, { transform: [ { translateY: previewPanAnim } ] }]}>
-                    <MaterialIcons name="filter-alt" size={25} color={global.baseGrey100} style={{left: '5%'}} />
+                    <MaterialIcons onPress={showOrHideFilter} name="filter-alt" size={25} color={global.baseGrey100} style={{left: '5%'}} />
                     <View style={styles.markerPreviewContent}>
                         {
                             previewLoader ?
@@ -329,9 +340,23 @@ function Explore()
                     }
                 </Animated.View>
                 <Animated.View style={{width: '100%', height: '100%'}}>
-                    <MapView onRegionChange={onRegionChange} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
+                    <MapView onRegionChange={(r: Region, d: Details) => { setRegion(r); onRegionChange(r, d, false) }} ref={mapRef} provider={PROVIDER_GOOGLE} initialRegion={region} style={{width: '100%', height: '100%', position:'absolute'}}>
                         {
-                            memoizedMarkerRender
+                            markers.map((mark, index) => {
+                                return (
+                                    <CustomMarker 
+                                        key={mark.attributes.ReferenceNumber + markerKeySuffix} 
+                                        markerData={mark} 
+                                        image={generateSymbolUrl(mark.attributes.CategoryLevel1)}
+                                        iconScale={50}
+                                        fadeInDelay={index * 50}
+                                        backgroundColor={global.baseBlue100}
+                                        activeColor={global.baseGold100}
+                                        active={padObject?.attributes.ReferenceNumber === mark.attributes.ReferenceNumber && padPan !== padHiddenHeight}
+                                        passUp={activateMarker}
+                                    />
+                                )
+                            })
                         }
                     </MapView>                    
                 </Animated.View>
@@ -549,6 +574,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center'
+    },
+
+    filterContainer: {
+        position: 'absolute',
+        zIndex: 2,
+        width: Dimensions.get('screen').width * 0.9,
+        height: Dimensions.get('screen').height * 0.35,
+        top: '12.5%',
+        left: Dimensions.get('screen').width * 0.05,
+
+        backgroundColor: global.baseBackground100,
+        borderRadius: 10,
     }
 })
 
