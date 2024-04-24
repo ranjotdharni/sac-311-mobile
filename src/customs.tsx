@@ -3,6 +3,7 @@
 //                              //
 
 import { StyleSheet } from 'react-native'
+import { Region } from 'react-native-maps'
 
 //                              //
 //             Variables        //
@@ -11,6 +12,13 @@ import { StyleSheet } from 'react-native'
 export const salesforceDevelopmentSignature: string = '311MigrationDev' // IF YOU CHANGE THIS, CHANGE 'ParamType' BELOW AS WELL!!!!!!!!!!!!!!!!!!!
 
 export const salesforceSandboxUrl: string = 'https://saccity--qa.sandbox.my.salesforce.com/services/data/v60.0'
+
+export const DEFAULT_REGION: Region = {
+    latitude: 38.574713,
+    longitude: -121.491489,
+    latitudeDelta: 0.0322,
+    longitudeDelta: 0.0121,
+}
 
 //                              //
 //      Static Types Section    //
@@ -91,7 +99,7 @@ export interface Article {
 //      Dummy Data Section      //
 //                              //
 
-const symbolReference = [
+export const symbolReference = [
     {category: 'Animal Control', url: '9750d7d29ebe0f642bb414e7bb60a4d4'},
     {category: 'Building and Planning', url: '6f30eb2bf6323ab0383e57efab6c3dc1'},
     {category: 'Code Enforcement', url: 'e3dea662e30e1a880f31107ed2743d65'},
@@ -116,7 +124,7 @@ const symbolReference = [
 export const requestTypes = [
     {
         id: "a0Om0000003dz9rEAA",
-        type: 'Animal Care',
+        type: 'Animal Control',
         subTypes: [
             {
                 id: "a0Om0000003dz9wEAA",
@@ -876,8 +884,9 @@ export function generateSudoId(digits: number)
 //                                                                                                                                                                                     //
 //USAGE EXAMPLE: Using a Date object generated on 10/31/2023                                                                                                                           //
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// dateToFormat('MMM dd, yYyY', new Date()) -> outputs string 'Oct 31, 2023'            !!!!!!!!!!!!!!!!EXAMPLE ON THIS LINE!!!!!!!!!!!!!!!!                                           //
+// dateToFormat('MMM dd, yYyY', new Date()) -> outputs string 'Oct 31, 2023'            !!!!!!!!!!!!!!!!EXAMPLE ON THIS LINE!!!!!!!!!!!!!!!!                                           // 
 //                                                                                                                                                                                     //
+// ^the only reason the above function call's input string uses both upper and lowercase characters is to demonstrate that this function is case insensitive!                          //
 //=====================================================================================================================================================================================//
 export function dateToFormat(arg1: string, arg2: Date): string
 {
