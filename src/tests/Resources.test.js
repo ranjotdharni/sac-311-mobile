@@ -7,8 +7,8 @@ describe("Resources", () => {
     expect(page).toMatchSnapshot();
   });
 
-  it("has 2 children", () => {
+  it("renders 4 children components", () => {
     const tree = renderer.create(<Resources />).toJSON();
-    expect(tree.children.length).toBe(2);
+    expect(tree.children.length).toBe(4);
   });
 });

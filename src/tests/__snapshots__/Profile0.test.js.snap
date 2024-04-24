@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Profile renders correctly 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#ffffff",
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "flex": 0,
+        "justifyContent": "flex-end",
+      }
+    }
+  >
+    <Text
+      style={
+        {
+          "color": "#fdaa1f",
+          "fontFamily": "jbm",
+          "fontSize": 20,
+          "marginTop": 60,
+          "paddingTop": 100,
+          "textAlign": "center",
+        }
+      }
+    >
+      Login to see your requests.
+    </Text>
+    <View
+      style={
+        {
+          "width": "80%",
+        }
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "color": "#000000",
+              "fontFamily": "jbm",
+              "fontSize": 20,
+              "marginTop": 15,
+              "textAlign": "center",
+            },
+            {
+              "color": "#000000",
+            },
+          ]
+        }
+      >
+        Create an account or login to see requests you have made or followed.
+      </Text>
+    </View>
+  </View>
+  <View
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "opacity": 1,
+      }
+    }
+  />
+</View>
+`;

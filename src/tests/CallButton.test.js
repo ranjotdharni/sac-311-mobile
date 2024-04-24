@@ -8,7 +8,7 @@ describe('ResourceAbout Page', () => {
     const callButton = getByTestId('callBtn');
     fireEvent.press(callButton);
 
-    // Verify that phone app was opened with the 311 number
+    // Verify that native phone app was opened with the 311 number
     expect(Linking.openURL).toHaveBeenCalledWith(`tel:${311}`);
 
   });

@@ -1,14 +1,14 @@
 import renderer from "react-test-renderer";
-import ResourceAbout from "../app/(tabs)/ResourceAbout";
+import Profile from "../app/(tabs)/Profile";
 
-describe("ResourceAbout", () => {
+describe("Profile", () => {
   it("renders correctly", () => {
-    const page = renderer.create(<ResourceAbout />).toJSON();
+    const page = renderer.create(<Profile />).toJSON();
     expect(page).toMatchSnapshot();
   });
 
   it("renders 2 children components", () => {
-    const tree = renderer.create(<ResourceAbout />).toJSON();
+    const tree = renderer.create(<Profile />).toJSON();
     expect(tree.children.length).toBe(2);
   });
 });

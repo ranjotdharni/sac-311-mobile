@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Image, Pressable} from "react-native";
 import { useState } from "react";
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { globalFont, global } from "../../customs";
 
 
@@ -8,15 +8,14 @@ export default function Profile2() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const navigation = useNavigation();
-
+    const router = useRouter();
     //pressing login button automatically proceeds to profile page
     const tempLoginPress = () => {
-      (navigation.navigate as (screen: string) => void)('Profile3');
+      router.push({pathname:'/Profile3'});
     };
 
     const accountCreationPress = () => {
-      (navigation.navigate as (screen: string) => void)('Profile0');
+      router.push({pathname:'/Profile0'});
     };
   
     return (

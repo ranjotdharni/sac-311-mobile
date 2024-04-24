@@ -7,7 +7,7 @@ describe("BusinessTab", () => {
     expect(page).toMatchSnapshot();
   });
 
-  it("has 4 children", () => {
+  it("renders 4 children components", () => {
     const tree = renderer.create(<BusinessTab />).toJSON();
     expect(tree.children.length).toBe(4);
   });
