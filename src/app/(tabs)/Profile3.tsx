@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar, View, ScrollView, Text, StyleSheet, Pressable, Dimensions, Image, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,8 +8,7 @@ import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { globalFont } from '../../customs';
 import { useRoute } from '@react-navigation/native';
-import { currentUserUID } from '../(components)/currentUser';/////////////////////this might be a first attempt at global variable
-import { userId, setUserId } from '../../global';
+import { UserContext } from '../(components)/context/UserContext';
 
 
 /*
@@ -26,10 +25,10 @@ TODO:
 //profile page
 export default function Profile3(){
 
+    const { userId, setUserId } = useContext(UserContext);
     const navigation = useNavigation();
 
     const route = useRoute();
-    //const userId = route.params?.userId;
 
     const [userAddress, setUserAddress] = useState('');
     const [aptNum, setAptNum] = useState('');
@@ -65,74 +64,65 @@ export default function Profile3(){
 
     // sign out button takes user back to login page
     const handleSignOutPress = async () => {
-        await AsyncStorage.clear(); // clear user data
-        (navigation.navigate as (screen: string) => void)('Profile2');////////////////////////////////////////////////////////////////
+        await AsyncStorage.clear();
+        (navigation.navigate as (screen: string) => void)('Profile2');
     };
 
 
     //fetch user data from firestore dummy database
-    const fetchUserData = async (userId: any) => {
-        //create a reference to the Firestore document
-        const userDocRef = doc(FIRESTORE_DB, 'users', userId);
-        
-        //attempt to fetch the document
-        const userDoc = await getDoc(userDocRef);
-
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            if(userData){   //check if userData is undefined
+    const fetchUserData = async () => {
+        console.log("Attempting to fetch user info from profile id: ", userId)
+        if (userId) {
+            const userDocRef = doc(FIRESTORE_DB, 'users', userId);
+            const userDoc = await getDoc(userDocRef);
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
                 setUserAddress(userData.address || '');
-                setAptNum(userData.Suite || '');
+                setAptNum(userData.suite || '');
                 setZipCode(userData.zip || '');
-                setFirstName(userData.FirstName || '');
-                setLastName(userData.LastName || '');
+                setFirstName(userData.fName || '');
+                setLastName(userData.lName || '');
                 setUserEmail(userData.email || '');
                 if (userData.PhoneNumber) {
-                    const parts = userData.PhoneNumber.split('-');//assumes phone number is saved as "xxx-xxx-xxxx"
+                    const parts = userData.PhoneNumber.split('-');
                     setFirstPart(parts[0] || '');
                     setSecondPart(parts[1] || '');
                     setThirdPart(parts[2] || '');
                 }
+            } else {
+                //console.log('No user data found for id: ', userId);
             }
-            else{
-                //default values loaded into fields
-                console.log('default values loaded');////////////////for testing
-            }
-        } else {
-            console.log('No user data found');///////////////////////for testing
+        }else {
+            //console.log('No user data found for id: ', userId);///////////////////////for testing
         }
     };
 
-
     //save data to firestore dummy database
     const saveUserData = async () => {
-        //create a reference to the Firestore document
-        const userDocRef = doc(FIRESTORE_DB, 'users', 'userId');///////////////problem with using userId here
-      
-        const phoneNumber = `${firstPart}-${secondPart}-${thirdPart}`;
-      
-        //use setDoc to update the document
-        await setDoc(userDocRef, {
-          email: userEmail,
-          fName: firstName,
-          lName: lastName,
-          phoneNumber: phoneNumber,
-          address: userAddress,
-          suite: aptNum,
-          zip: zipCode,
-        }, { merge: true }); //using merge: true to update the document without overwriting it entirely
-      
-        console.log('User data updated successfully');
+        if (userId) {
+            const userDocRef = doc(FIRESTORE_DB, 'users', userId);
+            const phoneNumber = `${firstPart}-${secondPart}-${thirdPart}`;
+            await setDoc(userDocRef, {
+                email: userEmail,
+                fName: firstName,
+                lName: lastName,
+                phoneNumber,
+                address: userAddress,
+                suite: aptNum,
+                zip: zipCode,
+            }, { merge: true });
+           //console.log('User data updated successfully');///////////////////////////////////////////////////////
+        }
     };
 
     // load user data when user clicks back into profile view
-    React.useEffect(() => {
-        fetchUserData(userId);
+    useEffect(() => {
+        fetchUserData();
     }, [userId]);
     
     // undo profile changes
     const revertUserData = async () => {
-        fetchUserData(userId);
+        await fetchUserData();
     };
         
 
