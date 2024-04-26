@@ -1,109 +1,81 @@
-import { useRouter } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Alert } from 'react-native';
-import { globalFont, global, salesforceDevelopmentSignature } from '../../customs';
-import { globalColorTheme } from '../../customs';
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { globalFont, globalColorTheme } from '../../customs';
 
 export default function Profile() {
-  const router = useRouter();
+  const navigation = useNavigation();
+
   const navigateToProfile2 = () => {
-    router.push({pathname:'/Profile2'});
+    (navigation.navigate as (screen: string) => void)('Profile2');
   };
 
-  console.log("Profile component rendered.");
   return (
-    <View style={{ flex: 1 , backgroundColor:globalColorTheme.backgroundColor}}>
-      <View style={styles.imageContainer}>
-        <Text style={styles.loginText}>Login to see your requests.</Text>
-        <View style={styles.textContainer}>
-          <Text style={[styles.createAccountText,{color:globalColorTheme.color}]}>
-            Create an account or login to see requests you have made or followed.
+    <View style={{ flex: 1 }}>
+      <Image source={require('src/assets/png/icon.png')} style={[styles.headerImage, {backgroundColor:globalColorTheme.blue}]} />
+      <View style={[styles.container, {backgroundColor:globalColorTheme.backgroundColor}]}>
+        <Text style={[styles.loginText, {color:globalColorTheme.color}]}>Login/Signup</Text>
+        <View style={[styles.textWrapper, {backgroundColor:globalColorTheme.backgroundColor}]}>
+          <Text style={[styles.createAccountText, {color:globalColorTheme.color}]}>
+            Hey! Want in? Sign up and log in with your City of Sacramento account. With an account, you can track your requests, save contact info, and follow others' updates.
           </Text>
         </View>
+        <TouchableOpacity onPress={navigateToProfile2} style={[styles.button, {backgroundColor:globalColorTheme.blue}]}>
+          <Text style={[styles.buttonText, {color:globalColorTheme.text}]}>Login/Signup</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={navigateToProfile2} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#2F2DA3',
-    fontFamily: globalFont.chosenFont,
-    textAlign: 'center',
-    marginTop: 50,
-  },
-  imageContainer: {
-    flex: 0,
-    justifyContent: 'flex-end',
+  container: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    
+    zIndex: 1,
+    marginTop: 0, 
+  },
+  headerImage: {
+    resizeMode: 'center',
+    width: '100%',
+    height: '10%', 
+    paddingHorizontal: 50,
+    paddingVertical: 100,
+    marginBottom: -10,
+  },
+  textWrapper: {
+    paddingHorizontal: 5,
+    maxWidth: 500,
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: globalColorTheme.blue,
+    paddingVertical: 20,
+    paddingHorizontal: 100,
+    borderRadius: 10,
+    marginBottom: 75,
   },
   loginText: {
-    fontSize: 20,
-    paddingTop: 100,
+    fontSize: 25,
     fontFamily: globalFont.chosenFont,
-    color: global.baseGold100,
+    color: globalColorTheme.color,
     textAlign: 'center',
-    marginTop: 60,
+    marginBottom: 25,
+  },
+  buttonText: {
+    fontSize: 20,
+    fontFamily: globalFont.chosenFont,
+    color: 'white',
+    textAlign: 'center',
   },
   createAccountText: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: globalFont.chosenFont,
-    color: '#000000',
+    color: globalColorTheme.color,
     textAlign: 'center',
-    marginTop: 15,
-  },
-  textContainer: {
-    width: '80%',
-  },
-  testButton: {
-    backgroundColor: '#DDDDDD',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: 'center',
-    marginTop: 20,
-  },
-  testButtonText: {
-    fontSize: 16,
-    fontFamily: globalFont.chosenFont,
-    textAlign: 'center',
-  },
-  anotherButton: {
-    backgroundColor: '#DDDDDD',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: 'center',
-    marginTop: 10,
-  },
-  anotherButtonText: {
-    fontSize: 16,
-    fontFamily: globalFont.chosenFont,
-    textAlign: 'center',
-  },
-  selectedFileText: {
-    marginTop: 10,
-    fontSize: 16,
-    fontFamily: globalFont.chosenFont,
-    textAlign: 'center',
-  },
-  NewRequestButton: {
-    width: '94.5%',
-    height: '7%',
-    marginVertical: '3%',
-    borderRadius: 10,
-    backgroundColor: 'transparent',
-    shadowColor: "#000", 
-    top: '30%',
-    left: '3%',
-  },
-  NewRequestLink: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    zIndex: 2
+    textShadowColor: 'white',
+    textShadowRadius: 1,
+    marginBottom: 150,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Text, FlatList , TextInput} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Text, FlatList , TextInput, Pressable, Modal} from 'react-native';
 import { ParamType, categoryLevelToType, global, requestTypes, salesforceDevelopmentSignature, shadowUniversal } from "../../customs";
 import SearchBar from '../(components)/Profile/SearchBar';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { globalFont } from '../../customs';
 import { FontAwesome } from '@expo/vector-icons';
 import { globalColorTheme } from '../../customs';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default function Type()
 {
@@ -14,6 +15,12 @@ export default function Type()
     const router = useRouter();
     const [searchValue, setSearchValue] = useState('');
     const [filterValue, setFilterValue] = useState('None');
+    const [modalData, setModalData] = useState({
+        type: '',
+        subtype: '',
+        desc: '',
+        desc2: ''
+    });
 
     // Function to filter requestTypes based on searchValue
     const filteredRequestTypes = requestTypes.map(obj => {
@@ -104,62 +111,88 @@ export default function Type()
     }
     // {pathname: '/Location', params: {reqType: arg0, reqDesc: arg1, reqLoc: (p.reqLoc || '')}}
 
-    return (<View style={[styles.mainWrapper, {backgroundColor: globalColorTheme.backgroundColor}]}>
-        <View style={[styles.exitWrapper, {backgroundColor: globalColorTheme.blue}]}>
-            <View style={styles.innerExitWrapper}>
-            <Text style={[styles.barText, {color: globalColorTheme.text}]}>Select A Service</Text>
-                    <TouchableOpacity onPress={() => { nav.goBack() }}> 
-                        <Image style={styles.resizeIcon} source={require('../../assets/png/exit_x.png')} />
-                    </TouchableOpacity>
+    const pushToPopup = (type: string, subtype: string, desc: string, desc2: string) => {
+        const data = {
+            type: type,
+            subtype: subtype,
+            desc: desc,
+            desc2: desc2
+        }
+        setModalData(data);
+    }
+
+    return (
+        <View style={[styles.mainWrapper, {backgroundColor: globalColorTheme.backgroundColor}]}>
+            <Modal visible={modalData.type !== ''} animationType='slide' transparent={true} onRequestClose={() => {setModalData({...modalData, type: ''});}}>
+                <View style={styles.modalView}>
+                    <Text style={styles.requestPopupType}>{modalData.subtype}</Text>
+                    <Text style={styles.requestPopupDescription}>{modalData.desc}</Text>
+                    <Text style={[styles.requestPopupDetails, modalData.desc2 ==""?{fontSize:0}:{}]}>{modalData.desc2}</Text>
+                    <Text style={styles.requestConfirmationText}>Place this type of request?</Text>
+                    <View style={styles.requestBtnWrapper}>
+                        <Pressable style={styles.cancelRequestBtn} onPress={() => {setModalData({...modalData, type: ''});}}>
+                            <Text style={styles.cancelRequestText}>Cancel</Text>
+                        </Pressable>
+                        <Pressable style={styles.placeRequestBtn} onPress={() => {setModalData({...modalData, type: ''}); forwardRequest(modalData.type, modalData.subtype, modalData.desc)}}> 
+                                <Text style={styles.placeRequestText}>Confirm</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+            <View style={[styles.exitWrapper, {backgroundColor: globalColorTheme.blue}]}>
+                <View style={styles.innerExitWrapper}>
+                <Text style={[styles.barText, {color: globalColorTheme.text}]}>Select A Service</Text>
+                        <TouchableOpacity onPress={() => { nav.goBack() }}> 
+                            <Image style={styles.resizeIcon} source={require('../../assets/png/exit_x.png')} />
+                        </TouchableOpacity>
+                </View>
             </View>
-        </View>
-        <View style={[styles.searchContainer, {backgroundColor: globalColorTheme.backgroundColor2}]}>
-            <Image style={styles.searchIcon} source={require('../../assets/png/search.png')} />
-            <TextInput
-                style={styles.searchInput}
-                value={searchValue}
-                onChangeText={text => setSearchValue(text)}
-                placeholder='Search for Services'
-                placeholderTextColor={globalColorTheme.color}
-            />
-                       <TouchableOpacity onPress={() => setSearchValue('')} style={[styles.clearButton, {backgroundColor: globalColorTheme.backgroundColor2}]}>
-                <FontAwesome name='remove' size={20} color={globalColorTheme.color} />
-            </TouchableOpacity>
-        </View>
-        <View style={styles.allFiltersWrapper}>
-            <FlatList
-                horizontal
-                persistentScrollbar
-                data={requestTypes}
-                renderItem={({item}) => 
-                <TouchableOpacity key={item.id} style={[styles.filterWrapper, {backgroundColor: globalColorTheme.backgroundColor}]} onPress={() => setFilterValue(item.type)}>
-                    <Text style={[styles.filterText, {backgroundColor: globalColorTheme.blue, color: globalColorTheme.text}]}>{item.type}</Text>
+            <View style={[styles.searchContainer, {backgroundColor: globalColorTheme.backgroundColor2}]}>
+                <Image style={styles.searchIcon} source={require('../../assets/png/search.png')} />
+                <TextInput
+                    style={styles.searchInput}
+                    value={searchValue}
+                    onChangeText={text => setSearchValue(text)}
+                    placeholder='Search for Services'
+                    placeholderTextColor={globalColorTheme.color}
+                />
+                        <TouchableOpacity onPress={() => setSearchValue('')} style={[styles.clearButton, {backgroundColor: globalColorTheme.backgroundColor2}]}>
+                    <FontAwesome name='remove' size={20} color={globalColorTheme.color} />
                 </TouchableOpacity>
-            }
-            />
-            <TouchableOpacity style={[styles.filterWrapper, {backgroundColor: globalColorTheme.backgroundColor}]} onPress={() => setFilterValue("None")}>
-                            <Text style={[styles.clearFilterText, {backgroundColor: globalColorTheme.backgroundColor2, color: globalColorTheme.color}]}>Clear Filter</Text>
-            </TouchableOpacity>
-        </View>
-        <FlatList
-            data={filteredRequestTypes}
-            renderItem={({item}) => 
-            <View style={styles.typeWrapper} key={item.id}>
-                <View style={styles.typeTitleWrapper}><Text style={[styles.typeTitle, {color: globalColorTheme.color}]}>{item.type}</Text></View>
+            </View>
+            <View style={styles.allFiltersWrapper}>
                 <FlatList
-                    data={item.subTypes}
-                    renderItem={({item: subTypes}) => 
-                    <TouchableOpacity onPress={() => {forwardRequest(item.type, subTypes.subType, subTypes.description)}} key={subTypes.id} style={[styles.subTypeWrapper, shadowUniversal.default, {backgroundColor: globalColorTheme.backgroundColor2}]}>
-                        <View style={[styles.subTypeTitleWrapper, {backgroundColor: globalColorTheme.blue}]}><Text style={styles.subTypeTitle}>{subTypes.subType}</Text></View>
-                        <Text style={[styles.subTypeDescription, {color: globalColorTheme.color}]}>{subTypes.description}</Text>
-						<Text style={styles.subTypeDesc2}>{subTypes.desc2}</Text>
+                    horizontal
+                    persistentScrollbar
+                    data={requestTypes}
+                    renderItem={({item}) => 
+                    <TouchableOpacity key={item.id} style={[styles.filterWrapper, {backgroundColor: globalColorTheme.backgroundColor}]} onPress={() => setFilterValue(item.type)}>
+                        <Text style={[styles.filterText, {backgroundColor: globalColorTheme.blue, color: globalColorTheme.text}]}>{item.type}</Text>
                     </TouchableOpacity>
                 }
                 />
+                <TouchableOpacity style={[styles.filterWrapper, {backgroundColor: globalColorTheme.backgroundColor}]} onPress={() => setFilterValue("None")}>
+                                <Text style={[styles.clearFilterText, {backgroundColor: globalColorTheme.backgroundColor2, color: globalColorTheme.color}]}>Clear Filter</Text>
+                </TouchableOpacity>
             </View>
-        }
-        />
-    </View>  
+            <FlatList
+                data={filteredRequestTypes}
+                renderItem={({item}) => 
+                <View style={styles.typeWrapper} key={item.id}>
+                    <View style={styles.typeTitleWrapper}><Text style={[styles.typeTitle, {color: globalColorTheme.color}]}>{item.type}</Text></View>
+                    <FlatList
+                        data={item.subTypes}
+                        renderItem={({item: subTypes}) => 
+                        <TouchableOpacity onPress={() => {pushToPopup(item.type, subTypes.subType, subTypes.description, subTypes.desc2);}} style={[styles.subTypeWrapper, shadowUniversal.default, {backgroundColor: globalColorTheme.backgroundColor2}]}>
+                            <View style={[styles.subTypeTitleWrapper, {backgroundColor: globalColorTheme.blue}]}><Text style={styles.subTypeTitle}>{subTypes.subType}</Text></View>
+                            <Text style={[styles.subTypeDescription, {color: globalColorTheme.color}]}>{subTypes.description}</Text>
+                        </TouchableOpacity>
+                    }
+                    />
+                </View>
+            }
+            />
+        </View>  
     )
 
 }
@@ -249,7 +282,7 @@ const styles = StyleSheet.create({
     subTypeTitleWrapper: {
         width: '100%',
         backgroundColor: global.baseBlue100,
-        borderRadius: 15,
+        borderRadius: 12,
         padding: 2,
     },
     subTypeTitle: {
@@ -330,5 +363,79 @@ const styles = StyleSheet.create({
         color: 'white',
         paddingVertical: 10,
         paddingHorizontal: 5,
+    },
+    requestPopupWrapper:{
+        backgroundColor: 'yellow',
+        width: '80%',
+        height:'70%',
+        zIndex:100,
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex:1,
+    },
+    modalView:{
+        width:'90%',
+        backgroundColor: 'white',
+        padding:20,
+        alignItems:"center",
+        borderRadius:25,
+        alignSelf:'center',
+        marginVertical:'70%',
+        elevation:10
+    },
+    requestPopupType:{
+        fontSize:25,
+        textAlign:'center',
+        paddingBottom:15,
+        color: global.baseBlue100,
+        fontFamily: globalFont.chosenFont
+    },
+    requestPopupDescription:{
+        fontSize:16,
+        paddingBottom:15,
+        color: global.darkGrey100,
+        fontFamily: globalFont.chosenFont
+    },
+    requestPopupDetails:{
+        fontSize:15,
+        color: global.baseGrey200,
+        paddingBottom: 20,
+        fontFamily: globalFont.chosenFont
+    },
+    requestConfirmationText:{ 
+        fontSize:19,
+        paddingBottom:10,
+        color: global.darkGrey100,
+        fontFamily: globalFont.chosenFont
+    },
+    requestBtnWrapper:{
+        flexDirection: 'row'
+    },
+    placeRequestBtn:{
+        backgroundColor: global.baseBlue200,
+        padding:10,
+        width:'40%',
+        borderRadius:30,
+        marginHorizontal:"2%"
+    },
+    placeRequestText:{
+        color: 'white',
+        padding: 10,
+        textAlign:'center',
+        fontFamily: globalFont.chosenFont
+    },
+    cancelRequestBtn:{
+        backgroundColor: 'red',
+        padding: 10,
+        width:'40%',
+        borderRadius:30,
+        marginHorizontal:"2%"
+    },
+    cancelRequestText:{
+        color: global.baseWhite100,
+        padding: 10,
+        textAlign:'center',
+        fontFamily: globalFont.chosenFont,
     },
 });

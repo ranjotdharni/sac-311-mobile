@@ -3,9 +3,11 @@ import { responseType } from "../../customs";
 import { memo, useEffect, useRef, useState } from "react";
 import { Animated, StyleSheet, Easing } from "react-native";
 
-function CustomMarker({ markerData, image, fadeInDelay, iconScale, backgroundColor, passUp } : { markerData: responseType, image: string, fadeInDelay: number, iconScale: number, backgroundColor: string, passUp: (obj: responseType) => void }) {
+function CustomMarker({ markerData, image, fadeInDelay, iconScale, backgroundColor, activeColor, active, passUp } : { markerData: responseType, image: string, fadeInDelay: number, iconScale: number, backgroundColor: string, activeColor: string, active: boolean, passUp: (obj: responseType) => void }) {
     let opacity = useRef(new Animated.Value(0)).current
+    let scale = useRef(new Animated.Value(1)).current
     const [trigger, setTrigger] = useState(false)
+
     useEffect(() => {
         Animated.timing(opacity, {
             toValue: 1,
@@ -22,13 +24,13 @@ function CustomMarker({ markerData, image, fadeInDelay, iconScale, backgroundCol
     return (
         markerData.geometry === undefined ?
         <></> :
-        <Marker.Animated opacity={opacity} key={markerData.attributes.ReferenceNumber + "MarkerTop"} style={{overflow: 'visible', width: iconScale, height: iconScale}} tracksViewChanges={true} coordinate={{latitude: markerData.geometry.y, longitude: markerData.geometry.x}} onPress={() => { passUp(markerData) }}>
+        <Marker.Animated opacity={opacity} key={markerData.attributes.ReferenceNumber + "MarkerTop"} style={{overflow: 'visible', width: iconScale * (active ? 3 : 1), height: iconScale * (active ? 3 : 1)}} tracksViewChanges={true} coordinate={{latitude: markerData.geometry.y, longitude: markerData.geometry.x}} onPress={() => { passUp(markerData) }}>
             {
                 trigger 
                 ?
                 <Animated.View key={markerData.attributes.ReferenceNumber + "MarkerTopWrapper"} style={styles.markerTopWrapper}>
-                    <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayBack"} style={[styles.markerTopOverlayBack, { backgroundColor:backgroundColor, borderRadius: iconScale / 3 }]}></Animated.View>
-                    <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayPin"} style={[styles.markerTopOverlayPin, {backgroundColor: backgroundColor, borderRadius: iconScale / 2}]}></Animated.View>
+                    <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayBack"} style={[styles.markerTopOverlayBack, { backgroundColor: (active ? activeColor : backgroundColor), borderRadius: iconScale / 3 }]}></Animated.View>
+                    <Animated.View  key={markerData.attributes.ReferenceNumber + "MarkerTopOverlayPin"} style={[styles.markerTopOverlayPin, {backgroundColor: (active ? activeColor : backgroundColor), borderRadius: iconScale / 2}]}></Animated.View>
                     <Animated.Image key={markerData.attributes.ReferenceNumber + "MarkerTopInset"} style={styles.markerTopInset} source={{uri: image}} />
                 </Animated.View> 
                 :

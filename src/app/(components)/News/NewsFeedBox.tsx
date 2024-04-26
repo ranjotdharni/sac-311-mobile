@@ -5,15 +5,14 @@ import { fontGetter, globalFont, shadowUniversal, global } from "../../../custom
 
 const borderOffset = 20 //Locally (within component) applied border radius
 
-export default function NewsFeedBox({ title, imgUrl, link, date, desc } : { title: string, imgUrl: string, link: string, date: Date, desc: string}) {
+export default function NewsFeedBox({ title, link, date, desc } : { title: string, link: string, date: Date, desc: string}) {
     return (
         <>
         <TouchableOpacity onPress={() => {router.push({ pathname: '/(web)/WebView', params: { url: link } })}} style={styles.FeedBoxWrapper}>
-        <View style={[styles.ImageWrapper, shadowUniversal.default]}>
-            <Image source={{ uri: imgUrl }} style={styles.FeedBoxImage} />
+        <View style={styles.ImageWrapper}>
+            <CustomText font={fontGetter()} nol={4} text={title} style={styles.FeedBoxTitle} />
         </View>
         <CustomText font={fontGetter()} nol={1} text={date.toDateString()} style={styles.FeedBoxDate} />
-        <CustomText font={fontGetter()} nol={3} text={title} style={styles.FeedBoxTitle} />
         </TouchableOpacity>
         
         </>
@@ -27,13 +26,12 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         marginLeft: Dimensions.get('screen').width * 0.05,
         marginRight: Dimensions.get('screen').width * 0.05,
+        backgroundColor: global.baseBackground300,
     },
     ImageWrapper: {
-        height: '75%',
+        height: '100%',
         position: 'relative',
         marginTop: '7%',
-        backgroundColor: global.baseBackground100,
-        borderRadius: borderOffset,
         display: 'flex',
     },
     FeedBoxImage: {
@@ -42,7 +40,8 @@ const styles = StyleSheet.create({
         borderRadius: borderOffset,
     },
     FeedBoxTitle: {
-        fontSize: Dimensions.get('screen').width * 0.035,
+        padding: '3%',
+        fontSize: Dimensions.get('screen').width * 0.040,
         fontWeight: 'bold',
         fontFamily: globalFont.chosenFont,
     },

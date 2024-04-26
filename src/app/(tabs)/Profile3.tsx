@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar, View, ScrollView, Text, StyleSheet, Pressable, Dimensions, Image, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,8 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { globalFont } from '../../customs';
+import { useRoute } from '@react-navigation/native';
+import { UserContext } from '../(components)/context/UserContext';
 
 
 /*
@@ -19,8 +21,14 @@ TODO:
     - sign out button only returns user to login page currently
 */
 
+
+//profile page
 export default function Profile3(){
+
+    const { userId, setUserId } = useContext(UserContext);
     const navigation = useNavigation();
+
+    const route = useRoute();
 
     const [userAddress, setUserAddress] = useState('');
     const [aptNum, setAptNum] = useState('');
@@ -56,115 +64,65 @@ export default function Profile3(){
 
     // sign out button takes user back to login page
     const handleSignOutPress = async () => {
-        await AsyncStorage.clear(); // clear user data
+        await AsyncStorage.clear();
         (navigation.navigate as (screen: string) => void)('Profile2');
     };
 
 
     //fetch user data from firestore dummy database
     const fetchUserData = async () => {
-        //create a reference to the Firestore document
-        const userDocRef = doc(FIRESTORE_DB, 'Users', 'UserInfo');
-        
-        //attempt to fetch the document
-        const userDoc = await getDoc(userDocRef);
-
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            if(userData){   //check if userData is undefined
-                setUserAddress(userData.StreetAddress || '');
-                setAptNum(userData.Suite || '');
-                setZipCode(userData.ZipCode || '');
-                setFirstName(userData.FirstName || '');
-                setLastName(userData.LastName || '');
-                setUserEmail(userData.Email || '');
+        console.log("Attempting to fetch user info from profile id: ", userId)
+        if (userId) {
+            const userDocRef = doc(FIRESTORE_DB, 'users', userId);
+            const userDoc = await getDoc(userDocRef);
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                setUserAddress(userData.address || '');
+                setAptNum(userData.suite || '');
+                setZipCode(userData.zip || '');
+                setFirstName(userData.fName || '');
+                setLastName(userData.lName || '');
+                setUserEmail(userData.email || '');
                 if (userData.PhoneNumber) {
-                    const parts = userData.PhoneNumber.split('-');//assumes phone number is saved as "xxx-xxx-xxxx"
+                    const parts = userData.PhoneNumber.split('-');
                     setFirstPart(parts[0] || '');
                     setSecondPart(parts[1] || '');
                     setThirdPart(parts[2] || '');
                 }
+            } else {
+                //console.log('No user data found for id: ', userId);
             }
-            else{
-                //default values loaded into fields
-            }
-        } else {
-            console.log('No user data found');
+        }else {
+            //console.log('No user data found for id: ', userId);///////////////////////for testing
         }
     };
-
 
     //save data to firestore dummy database
     const saveUserData = async () => {
-        //create a reference to the Firestore document
-        const userDocRef = doc(FIRESTORE_DB, 'Users', 'UserInfo');
-      
-        const phoneNumber = `${firstPart}-${secondPart}-${thirdPart}`;
-      
-        //use setDoc to update the document
-        await setDoc(userDocRef, {
-          Email: userEmail,
-          FirstName: firstName,
-          LastName: lastName,
-          PhoneNumber: phoneNumber,
-          StreetAddress: userAddress,
-          Suite: aptNum,
-          ZipCode: zipCode,
-        }, { merge: true }); //using merge: true to update the document without overwriting it entirely
-      
-        console.log('User data updated successfully');
-    };
-
-/*  old fetch/save functions
-
-    // save user data in async storage
-    const saveUserData = async () => {
-        try {
-            await AsyncStorage.setItem('userData', JSON.stringify({
-                firstName,
-                lastName,
-                userEmail,
-                userAddress,
-                aptNum,
-                zipCode,
-                firstPart,
-                secondPart,
-                thirdPart,
-            }));
-        } catch (error) {
-          // handle errors here
+        if (userId) {
+            const userDocRef = doc(FIRESTORE_DB, 'users', userId);
+            const phoneNumber = `${firstPart}-${secondPart}-${thirdPart}`;
+            await setDoc(userDocRef, {
+                email: userEmail,
+                fName: firstName,
+                lName: lastName,
+                phoneNumber,
+                address: userAddress,
+                suite: aptNum,
+                zip: zipCode,
+            }, { merge: true });
+           //console.log('User data updated successfully');///////////////////////////////////////////////////////
         }
     };
-
-    const loadUserData = async () => {
-        try {
-            const userDataString = await AsyncStorage.getItem('userData');
-            if (userDataString !== null) {
-                const userData = JSON.parse(userDataString);
-                setFirstName(userData.firstName);
-                setLastName(userData.lastName);
-                setUserEmail(userData.userEmail);
-                setFirstPart(userData.firstPart);
-                setSecondPart(userData.secondPart);
-                setThirdPart(userData.thirdPart);
-                setUserAddress(userData.userAddress);
-                setAptNum(userData.aptNum);
-                setZipCode(userData.zipCode);
-            }
-        } catch (error) {
-          // handle errors here
-        }
-    };
-    */
 
     // load user data when user clicks back into profile view
-    React.useEffect(() => {
+    useEffect(() => {
         fetchUserData();
-    }, []);
+    }, [userId]);
     
     // undo profile changes
     const revertUserData = async () => {
-        fetchUserData();
+        await fetchUserData();
     };
         
 

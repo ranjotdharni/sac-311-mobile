@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, StyleSheet, Pressable } from "react-native";
+import { View, Text, Dimensions, StyleSheet, Pressable, Platform } from "react-native";
 import { router } from "expo-router";
 import { shadowUniversal, global } from "../../customs";
 import { useState } from "react";
@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 import { globalColorTheme } from '../../customs';
 import { colorThemeGetter } from '../../customs';
 import { colorThemeSetter } from '../../customs';
+import * as Notifications from 'expo-notifications';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -22,16 +23,16 @@ function CityInfo() {
     return (
         <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:globalColorTheme.backgroundColor}}>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/executive-team"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Government Offices</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Government Offices</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/accessibility"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Sacramento Accessibility Policy</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Sacramento Accessibility Policy</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://data.cityofsacramento.org/"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Browse All City Data</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Browse All City Data</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/contact-us"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Contact Us</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Contact Us</Text>
             </Pressable>
         </View>
     )
@@ -42,21 +43,53 @@ function AppInfo() {
         <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:globalColorTheme.backgroundColor}}>
             
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://311.cityofsacramento.org/s/about-311"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>About 311</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>About 311</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]} onPress={() => {router.push({pathname:'/(web)/WebView', params: {url: "https://www.cityofsacramento.gov/city-government/web-policies"}})}}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Privacy Policy</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Privacy Policy</Text>
             </Pressable>
             <Pressable style={[styles.infoButton, {backgroundColor:globalColorTheme.blue}]}>
-                <Text style={{color: globalColorTheme.color, textAlign: 'center', fontWeight: 'bold'}}>Leave Feedback</Text>
+                <Text style={{color: globalColorTheme.text, textAlign: 'center', fontWeight: 'bold'}}>Leave Feedback</Text>
             </Pressable>
         </View>
     )
 }
 function General() {
-    const [notif, setNotif] = useState(false);
+    const [notifEnabled, setNotifEnabled] = useState(false);
     const [dark, setDarkMode] = useState(false);
-    const toggleNotifs = () => setNotif(previousState => !previousState);
+    useEffect(() => {
+        const loadNotificationPermission = async () => {
+            const permissionStatus = await AsyncStorage.getItem('notificationPermission');
+            setNotifEnabled(permissionStatus === 'granted');
+        };
+
+        loadNotificationPermission();
+    }, []);
+
+    const toggleNotifs = async () => {
+        if (notifEnabled) {
+            setNotifEnabled(false);
+            if (Platform.OS === 'android') {
+                await Notifications.setNotificationChannelAsync('default', {
+                    name: 'default',
+                    importance: Notifications.AndroidImportance.NONE,
+                });
+            }
+            await Notifications.cancelAllScheduledNotificationsAsync();
+            await Notifications.dismissAllNotificationsAsync();
+            await Notifications.setBadgeCountAsync(0);
+            await AsyncStorage.setItem('notificationPermission', 'denied');
+        } else {
+            const { status } = await Notifications.requestPermissionsAsync();
+            if (status === 'granted') {
+                setNotifEnabled(true);
+                await AsyncStorage.setItem('notificationPermission', 'granted');
+            } else {
+                setNotifEnabled(false);
+                await AsyncStorage.setItem('notificationPermission', 'denied');
+            }
+        }
+    };
     const toggleDarkMode = () => setDarkMode(previousState => !previousState);
 
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -97,18 +130,24 @@ function General() {
 
 
     return (
-        
-        <View style={{paddingTop:"5%", backgroundColor:globalColorTheme.backgroundColor}}>
-             <View style={{backgroundColor:globalColorTheme.backgroundColor,flexDirection:"row",alignItems:"center",paddingLeft:"5%",justifyContent:'space-between'}}>
-                <MaterialIcons name="notifications" size={Dimensions.get('screen').width * 0.065} color={globalColorTheme.blue}/>
-                <View style={{backgroundColor:globalColorTheme.backgroundColor, width:"90%", justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingRight:'3%',}}>
-                    <Text style={{fontSize: 19, fontFamily: globalFont.chosenFont, color:globalColorTheme.color, paddingLeft: '5%', fontWeight: '500'}}>
-                    Push Notifications</Text>
-                    <Switch onValueChange={toggleNotifs} value = {notif} trackColor={{false:'#DDDDDD', true:'#00EE63'}} thumbColor={globalColorTheme.blue}/>
+        <View style={{ paddingTop: "5%", backgroundColor: globalColorTheme.backgroundColor }}>
+            <View style={{ backgroundColor: globalColorTheme.backgroundColor, flexDirection: "row", alignItems: "center", paddingLeft: "5%", justifyContent: 'space-between' }}>
+                <MaterialIcons name="notifications" size={Dimensions.get('screen').width * 0.065} color={globalColorTheme.blue} />
+                <View style={{ backgroundColor: globalColorTheme.backgroundColor, width: "90%", justifyContent: 'space-between', flexDirection: "row", alignItems: 'center', paddingRight: '3%' }}>
+                    <Text style={{ fontSize: 19, fontFamily: globalFont.chosenFont, color: globalColorTheme.color, paddingLeft: '5%', fontWeight: '500' }}>
+                        Notification Permissions
+                    </Text>
+                    <Switch
+                        onValueChange={toggleNotifs} 
+                        value={notifEnabled}
+                        trackColor={{false:'#DDDDDD', true:'#00EE63'}}
+                        thumbColor={globalColorTheme.blue}
+                    />
                 </View>
             </View>
-            <Text style={{backgroundColor:globalColorTheme.backgroundColor, color:globalColorTheme.color, fontSize: 13, fontFamily: globalFont.chosenFont, paddingLeft: '5%', paddingBottom: '3%', fontWeight: '300'}}>
-                Notify me when a request I submit receives an update</Text>
+            <Text style={{ backgroundColor: globalColorTheme.backgroundColor, color: globalColorTheme.color, fontSize: 13, fontFamily: globalFont.chosenFont, paddingLeft: '5%', paddingBottom: '3%', fontWeight: '300' }}>
+                Ask permission for notifications if its not already allowed.
+            </Text>
             <View style={{backgroundColor:globalColorTheme.backgroundColor,flexDirection:"row",alignItems:"center",paddingLeft:"5%",justifyContent:'space-between'}}>
                 <MaterialIcons name="bedtime" size={Dimensions.get('screen').width * 0.065} color={globalColorTheme.blue}/>
                 <View style={{backgroundColor:globalColorTheme.backgroundColor, width:"90%", justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingRight:'3%',}}>
