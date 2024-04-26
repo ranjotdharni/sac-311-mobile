@@ -535,9 +535,7 @@ export default function Filter(props: FilterProps) {
     
 
     const setDateCreated = (d?: [Date | null, Date | null]) => {
-        console.log('neting', d)
         let obj = {...whereClause.dateFilter, dateCreated: d}
-        console.log({...whereClause, dateFilter: obj})
         setWhereClause({...whereClause, dateFilter: obj})
     }
 
