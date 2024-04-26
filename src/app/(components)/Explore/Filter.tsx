@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from "@expo/vector-icons";
-import { filter } from "lodash";
 
 export const MIN_COUNT: number = 20
 export const MAX_COUNT: number = 50
