@@ -6,12 +6,13 @@ import { global } from "../../customs";
 import { FIREBASE_APP } from '../../FirebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { FIRESTORE_DB } from '../../FirebaseConfig';
-import { doc, setDoc } from "firebase/firestore"; 
-import { userId, setUserId } from '../../global';
+import { doc, setDoc } from "firebase/firestore";
+import React, { useContext } from 'react';
+import { UserContext } from '../(components)/context/UserContext';
 
 //profile creation
-export default function Profile0()
-{
+export default function Profile0(){
+    const { userId, setUserId } = useContext(UserContext);
 
     const auth = getAuth(FIREBASE_APP);
 
@@ -33,23 +34,23 @@ export default function Profile0()
         .then((userCredential) => {
             //user is signed in
             const user = userCredential.user;
-            //setUserId(user.uid);
+            setUserId(user.uid);
             createUserProfile(user.uid, { fName, lName, email, phoneNumber, address, city, state, zip });
             (navigation.navigate as (screen: string) => void)('Profile3');
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            //insert error notification here
+            //console.error(`Signup error: ${errorCode}, ${errorMessage}`);
         });
     };
 
     const createUserProfile = async (userId: any, profileData: any) => {
         try {
             await setDoc(doc(FIRESTORE_DB, "users", userId), profileData);
-            console.log("Profile created/updated");///////////////////////////////////////////testing
+            //console.log("Profile created/updated");///////////////////////////////////////////testing
         } catch (error) {
-            console.error("Error creating user profile:", error);/////////////////////////////testing
+            //console.error("Error creating user profile:", error);/////////////////////////////testing
         }
     };
 
@@ -64,20 +65,6 @@ export default function Profile0()
     const cancelPress = () => {
         (navigation.navigate as (screen: string) => void)('Profile2');
     };
-
-    /*
-    const createPress = () => {
-        if((password.match(passConfirmation) === null) || (passConfirmation.match(password) === null)){ //checks that both passwords are the same
-            window.alert('Passwords must be identical');
-        }else{
-            if(checkIfUnique()){
-                createAccount();
-                (navigation.navigate as (screen: string) => void)('Profile');
-            };
-        }
-        
-    };
-    */
 
     return (
         <View style={styles.container}>

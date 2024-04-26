@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, TextInput, SafeAreaView, Image, Pressable} from "react-native";
-import { useState } from "react";
+import { View, Text, StyleSheet, TextInput, SafeAreaView, Image, Pressable, Alert} from "react-native";
+import { useState, useContext } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { globalFont, global, globalColorTheme } from "../../customs";
 import { FIREBASE_APP } from '../../FirebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { setUserId } from '../../global';
+import { UserContext } from '../(components)/context/UserContext';
 
 //login page
 export default function Profile2() {
@@ -12,12 +12,12 @@ export default function Profile2() {
     const [password, setPassword] = useState('');
 
     const navigation = useNavigation();
-
+    const { setUserId } = useContext(UserContext);
     const auth = getAuth(FIREBASE_APP);
 
     const handleSignIn = () => {
         if (email.trim() === '' || password.trim() === '') {
-            console.log("Email or password cannot be empty");
+            Alert.alert("Validation", "Email or password cannot be empty");
             return;
         }
 
@@ -27,18 +27,17 @@ export default function Profile2() {
             //signed in successfully
             const user = userCredential.user;
 
-            console.log("Signed in successfully: ", user.uid);
-
             setUserId(user.uid);
             //stuff that happens after successful sign in
-            (navigation.navigate as (screen: string) => void)('Profile3');
+            //console.log("Signed in successfully: ", user.uid);
+            (navigation.navigate as (screen: string) => void)('Profile3');//navigate to profile page
         })
         .catch((error) => {
             //error messages here
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.error("Sign in error:", error.message);
-            alert(`Login failed: ${error.message}`);
+            //console.error("Sign in error:", error.message);
+            Alert.alert("Login Failed", error.message);
         });
     };
 
