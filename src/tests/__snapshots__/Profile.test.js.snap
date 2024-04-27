@@ -4,39 +4,74 @@ exports[`Profile renders correctly 1`] = `
 <View
   style={
     {
-      "backgroundColor": "#ffffff",
       "flex": 1,
     }
   }
 >
+  <Image
+    source={1}
+    style={
+      [
+        {
+          "height": "10%",
+          "marginBottom": -10,
+          "paddingHorizontal": 50,
+          "paddingVertical": 100,
+          "resizeMode": "center",
+          "width": "100%",
+        },
+        {
+          "backgroundColor": "#203d61",
+        },
+      ]
+    }
+  />
   <View
     style={
-      {
-        "alignItems": "center",
-        "flex": 0,
-        "justifyContent": "flex-end",
-      }
+      [
+        {
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "center",
+          "marginTop": 0,
+          "zIndex": 1,
+        },
+        {
+          "backgroundColor": "#ffffff",
+        },
+      ]
     }
   >
     <Text
       style={
-        {
-          "color": "#fdaa1f",
-          "fontFamily": "jbm",
-          "fontSize": 20,
-          "marginTop": 60,
-          "paddingTop": 100,
-          "textAlign": "center",
-        }
+        [
+          {
+            "color": "#000000",
+            "fontFamily": "jbm",
+            "fontSize": 25,
+            "marginBottom": 25,
+            "textAlign": "center",
+          },
+          {
+            "color": "#000000",
+          },
+        ]
       }
     >
-      Login to see your requests.
+      Login/Signup
     </Text>
     <View
       style={
-        {
-          "width": "80%",
-        }
+        [
+          {
+            "marginBottom": 20,
+            "maxWidth": 500,
+            "paddingHorizontal": 5,
+          },
+          {
+            "backgroundColor": "#ffffff",
+          },
+        ]
       }
     >
       <Text
@@ -45,9 +80,11 @@ exports[`Profile renders correctly 1`] = `
             {
               "color": "#000000",
               "fontFamily": "jbm",
-              "fontSize": 20,
-              "marginTop": 15,
+              "fontSize": 18,
+              "marginBottom": 150,
               "textAlign": "center",
+              "textShadowColor": "white",
+              "textShadowRadius": 1,
             },
             {
               "color": "#000000",
@@ -55,43 +92,66 @@ exports[`Profile renders correctly 1`] = `
           ]
         }
       >
-        Create an account or login to see requests you have made or followed.
+        Hey! Want in? Sign up and log in with your City of Sacramento account. With an account, you can track your requests, save contact info, and follow others' updates.
+      </Text>
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "backgroundColor": "#203d61",
+          "borderRadius": 10,
+          "marginBottom": 75,
+          "opacity": 1,
+          "paddingHorizontal": 100,
+          "paddingVertical": 20,
+        }
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "color": "white",
+              "fontFamily": "jbm",
+              "fontSize": 20,
+              "textAlign": "center",
+            },
+            {
+              "color": "#E7EAED",
+            },
+          ]
+        }
+      >
+        Login/Signup
       </Text>
     </View>
   </View>
-  <View
-    accessibilityState={
-      {
-        "busy": undefined,
-        "checked": undefined,
-        "disabled": undefined,
-        "expanded": undefined,
-        "selected": undefined,
-      }
-    }
-    accessibilityValue={
-      {
-        "max": undefined,
-        "min": undefined,
-        "now": undefined,
-        "text": undefined,
-      }
-    }
-    accessible={true}
-    collapsable={false}
-    focusable={true}
-    onClick={[Function]}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
-    style={
-      {
-        "opacity": 1,
-      }
-    }
-  />
 </View>
 `;

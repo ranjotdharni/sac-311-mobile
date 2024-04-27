@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { globalFont, globalColorTheme } from '../../customs';
 
 export default function Profile() {
-  const navigation = useNavigation();
+  const router = useRouter();
 
   const navigateToProfile2 = () => {
-    (navigation.navigate as (screen: string) => void)('Profile2');
+    (router.push('./Profile2'));
   };
 
   return (

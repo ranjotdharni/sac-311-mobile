@@ -333,7 +333,7 @@ exports[`Resources renders correctly 1`] = `
                 "subType": "Stray or Loose Animal",
               },
             ],
-            "type": "Animal Care",
+            "type": "Animal Control",
           },
           {
             "id": "a0Om0000003eSnjEAE",
@@ -1004,7 +1004,7 @@ exports[`Resources renders correctly 1`] = `
                 ]
               }
             >
-              Animal Care
+              Animal Control
             </Text>
           </View>
         </View>
@@ -1742,7 +1742,7 @@ exports[`Resources renders correctly 1`] = `
               "subType": "Stray or Loose Animal",
             },
           ],
-          "type": "Animal Care",
+          "type": "Animal Control",
         },
         {
           "id": "a0Om0000003eSnjEAE",
@@ -2382,7 +2382,7 @@ exports[`Resources renders correctly 1`] = `
                 ]
               }
             >
-              Animal Care
+              Animal Control
             </Text>
           </View>
           <View
