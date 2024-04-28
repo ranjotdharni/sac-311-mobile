@@ -1,7 +1,7 @@
 import { getLocationPermission, getCurrentLocation, getClosestRequests } from '../(components)/LocationService';
 import { LocationObject } from 'expo-location';
-import { Text, View, StyleSheet, Dimensions } from "react-native";
-import { dummyDataHome, generateEndpointUrl, responseType } from "../../customs";
+import { View, StyleSheet, Dimensions } from "react-native";
+import { responseType } from "../../customs";
 import Request from "../(components)/Request";
 import { global } from "../../customs";
 import { useEffect, useState } from "react";
@@ -14,24 +14,17 @@ export default function Geoloc() {
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [closestRequests, setClosestRequests] = useState<Array<responseType>>([]);
 
+  //Get user permissions for location data
   useEffect(() => {
     const fetchLocation = async () => {
       const permissionGranted = await getLocationPermission();
 
+      //if permissions are granted get location
       if (permissionGranted) {
         const currentLocation = await getCurrentLocation();
         setLocation(currentLocation);
         //print to console
         if (currentLocation) {
-          //Bug testing console logs
-         /* 
-          console.log('Latitude:', currentLocation.coords.latitude);
-          console.log('Longitude:', currentLocation.coords.longitude);
-          getClosestRequests(currentLocation.coords.latitude, currentLocation.coords.longitude, 10).then((entries) => {
-            console.log('Closest requests: ', entries);
-          }).catch((error)=>{
-            console.error('Error: ', error);
-          })*/
           const closestRequestsData = await getClosestRequests(currentLocation.coords.latitude, currentLocation.coords.longitude, 10);
 
           setClosestRequests(closestRequestsData);
@@ -42,7 +35,7 @@ export default function Geoloc() {
     fetchLocation();
   }, []);
 
-  //Style view for testing purposes
+  //Style view for testing purposes, not used in final build
   return (
     <View style = {styles.listWrapper}>
       {

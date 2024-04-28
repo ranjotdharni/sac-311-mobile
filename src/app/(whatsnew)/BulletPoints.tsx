@@ -3,10 +3,12 @@ import { View, Text, StyleSheet } from 'react-native';
 import bulletPointsData from './patch.json';
 import { globalFont } from '../../customs';
 
+//For adding bullet points into patch notes
 interface BulletPoints {
   points: string[];
 }
 
+//takes data from patch.json and returns as bullet points
 const BulletPointDisplay: React.FC = () => {
   const data: BulletPoints = bulletPointsData;
 
