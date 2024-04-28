@@ -7,6 +7,7 @@ import localData from './patch.json';
 import BulletPointDisplay from './BulletPoints';
 import { globalFont } from '../../customs';
 
+//for importing json data
 export type WhatsNewData = {
   header: string;
   OverviewBody: string;
@@ -20,7 +21,7 @@ export function useWhatsNewData(): WhatsNewData | null {
   const [data, setData] = useState<WhatsNewData | null>(null);
 
   useEffect(() => {
-    // Load data from JSON file or any other data source
+    // Load data from JSON file 
     setData(localData);
   }, []);
 
@@ -29,9 +30,9 @@ export function useWhatsNewData(): WhatsNewData | null {
 
 const Tab = createMaterialTopTabNavigator();
 
+//General page layout in Whats New sorted by tabs. Tabs are modular and can be easily swapped out, removed, or added
 export default function WhatsNew() {
   
-
   const navigation = useNavigation();
 
   return (
@@ -50,22 +51,18 @@ export default function WhatsNew() {
                  tabStyle: { width: 'auto' }, // Set the width of each tab to auto
 
                })}
-   
             >
         <Tab.Screen name="Overview" component={OverviewScreen} />
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Explore" component={ExploreScreen} />
         <Tab.Screen name="Plus Button" component={PlusScreen} />
         <Tab.Screen name="Resources" component={ResourcesScreen} />
-
-
-
-
       </Tab.Navigator>
     </View>
   );
 };
 
+//Overview tab layout and data
 const OverviewScreen = () => {
   const data = useWhatsNewData();
 
@@ -85,6 +82,7 @@ const OverviewScreen = () => {
   );
 };
 
+//Home tab laoyut and data
 const HomeScreen = () => {
   
   const data = useWhatsNewData();
@@ -110,6 +108,7 @@ const HomeScreen = () => {
      </ScrollView>
    );
 };
+//Explopre tab layout and data
 const ExploreScreen = () => {
   const data = useWhatsNewData();
 
@@ -134,7 +133,7 @@ const ExploreScreen = () => {
 
   );
 };
-
+//Plus tab layout and data
 const PlusScreen = () => {
   const data = useWhatsNewData();
 
@@ -156,7 +155,7 @@ const PlusScreen = () => {
 
   );
 };
-
+//Resources tab layout and data
 const ResourcesScreen = () => {
   const data = useWhatsNewData();
 
