@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Dimensions, Pressable, TextInput, Text, Animated, Easing } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Dimensions, Pressable, TextInput, Text, Animated, Easing, Platform } from "react-native";
 import CustomText from "../CustomText";
 import { DEFAULT_REGION, dateAtDaysAgo, dateToFormat, generateEndpointUrl, global, inclusiveRandom, requestTypes, symbolReference } from "../../../customs";
 import { Region } from "react-native-maps";
@@ -70,9 +70,11 @@ interface DateFilterProps {
     dateCreated?: [Date | null, Date | null]
     dateModified?:   [Date | null, Date | null],
     dateClosed?:     [Date | null, Date | null],
+    androidPicker: [boolean, boolean][],
     passUpCreated: (d?: [Date | null, Date | null]) => void,
     passUpModified: (d?: [Date | null, Date | null]) => void,
     passUpClosed: (d?: [Date | null, Date | null]) => void,
+    passUpAndroidPicker: (index: number, selector: number) => void
 }
 
 interface CategoryFilterProps {
@@ -301,37 +303,50 @@ function DateFilter(props: DateFilterProps): JSX.Element {
         )
     }
 
-    function DateRange(props: { title: string, passUpDateFunction: (idx: number) => ((d: Date) => void), dateArray?: [Date | null, Date | null]}) {
-
+    function DateRange(DateRangeProps: { title: string, androidPicker: number, setAndroidPicker: (index: number, selector: number) => void, passUpDateFunction: (idx: number) => ((d: Date) => void), dateArray?: [Date | null, Date | null]}) {
         function submitStart(arg0: DateTimePickerEvent, arg1?: Date) {
-            const orchestrate = props.passUpDateFunction(0)
+            const orchestrate = DateRangeProps.passUpDateFunction(0)
             orchestrate(arg1!)
         }
 
         function submitStop(arg0: DateTimePickerEvent, arg1?: Date) {
-            const orchestrate = props.passUpDateFunction(1)
+            const orchestrate = DateRangeProps.passUpDateFunction(1)
             orchestrate(arg1!)
+        }
+
+        function inferComponent(select: number): JSX.Element {
+            if (Platform.OS === 'android'){
+                return (
+                    props.androidPicker[DateRangeProps.androidPicker][select] ?
+                    <DateTimePicker value={DateRangeProps.dateArray![select] as Date} onChange={select === 0 ? submitStart : submitStop} mode="date" /> :
+                    <TouchableOpacity onPress={() => { DateRangeProps.setAndroidPicker(DateRangeProps.androidPicker, select) }} style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                        <CustomText text={dateToFormat('MMM DD, YYYY', DateRangeProps.dateArray![select]!)} style={{color: global.baseGold100, fontSize: 9, textAlign: 'center'}} nol={0} />
+                    </TouchableOpacity>
+                )
+            }
+
+            return <DateTimePicker value={DateRangeProps.dateArray![select] as Date} onChange={select === 0 ? submitStart : submitStop} mode="date" />
         }
 
         return (
             <View style={dateFilterStyles.componentItem}>
-                <CustomText text={props.title} style={dateFilterStyles.componentText} nol={0} />
+                <CustomText text={DateRangeProps.title} style={dateFilterStyles.componentText} nol={0} />
                 <View style={dateFilterStyles.componentStart}>
                     {
                         (
-                            props.dateArray === undefined || props.dateArray[0] === null ?
-                            <AddDate passUpDate={props.passUpDateFunction(0)} /> :
-                            <DateTimePicker value={props.dateArray![0] as Date} onChange={submitStart} mode="date" />
+                            DateRangeProps.dateArray === undefined || DateRangeProps.dateArray[0] === null ?
+                            <AddDate passUpDate={DateRangeProps.passUpDateFunction(0)} /> :
+                            inferComponent(0)
                         )
                     }
                 </View>
                 <CustomText text="To" style={dateFilterStyles.componentSplit} nol={0} />
                 <View style={dateFilterStyles.componentStop}>
-                {
+                    {
                         (
-                            props.dateArray === undefined || props.dateArray[1] === null ?
-                            <AddDate passUpDate={props.passUpDateFunction(1)} /> :
-                            <DateTimePicker value={props.dateArray![1] as Date} onChange={submitStop} mode="date" />
+                            DateRangeProps.dateArray === undefined || DateRangeProps.dateArray[1] === null ?
+                            <AddDate passUpDate={DateRangeProps.passUpDateFunction(1)} /> :
+                            inferComponent(1)
                         )
                     }
                 </View>
@@ -342,9 +357,9 @@ function DateFilter(props: DateFilterProps): JSX.Element {
 
     return (
         <View style={filterStyles.componentWrapper}>
-            <DateRange title="Date Created" passUpDateFunction={editDateCreated} dateArray={props.dateCreated} />
-            <DateRange title="Date Modified" passUpDateFunction={editDateModified} dateArray={props.dateModified} />
-            <DateRange title="Date Closed" passUpDateFunction={editDateClosed} dateArray={props.dateClosed} />
+            <DateRange androidPicker={0} setAndroidPicker={props.passUpAndroidPicker} title="Date Created" passUpDateFunction={editDateCreated} dateArray={props.dateCreated} />
+            <DateRange androidPicker={1} setAndroidPicker={props.passUpAndroidPicker} title="Date Modified" passUpDateFunction={editDateModified} dateArray={props.dateModified} />
+            <DateRange androidPicker={2} setAndroidPicker={props.passUpAndroidPicker} title="Date Closed" passUpDateFunction={editDateClosed} dateArray={props.dateClosed} />
         </View>
     )
 }
@@ -521,6 +536,7 @@ export default function Filter(props: FilterProps) {
     const [filterBy, setFilterBy] = useState<{ selected: number, distance: number, count: number }>({ selected: 0, distance: INITIAL_PARAMETERS[3], count: INITIAL_PARAMETERS[1] })
     const [whereClause, setWhereClause] = useState<CreateQueryParameters>(INITIAL_PARAMETERS[0])
     const [categoryIdx, setCategoryIdx] = useState<number>(0)
+    const [showDatePicker, setDatePicker] = useState<[boolean, boolean][]>([[false, false], [false, false], [false, false]])
     const [buffer, setBuffer] = useState<typeof INITIAL_PARAMETERS>(INITIAL_PARAMETERS)
 
     let slideAnim = useRef(new Animated.Value(categoryIdx * categoryFilterBarWidth)).current
@@ -532,21 +548,34 @@ export default function Filter(props: FilterProps) {
         }).start()
     }, [categoryIdx])
 
-    
+    const modifyPickerSet = (index: number, selector: number) => {
+        let obj: [boolean, boolean][] = [...showDatePicker]
+        let temp: [boolean, boolean] = obj[index]
+        temp[selector] = !temp[selector]
+        obj[index] = temp
+        setDatePicker(obj)
+    }
+
+    const closePickers = () => {
+        setDatePicker([[false, false], [false, false], [false, false]])
+    }
 
     const setDateCreated = (d?: [Date | null, Date | null]) => {
         let obj = {...whereClause.dateFilter, dateCreated: d}
         setWhereClause({...whereClause, dateFilter: obj})
+        closePickers()
     }
 
     const setDateModified = (d?: [Date | null, Date | null]) => {
         let obj = {...whereClause.dateFilter, dateModified: d}
         setWhereClause({...whereClause, dateFilter: obj})
+        closePickers()
     }
 
     const setDateClosed = (d?: [Date | null, Date | null]) => {
         let obj = {...whereClause.dateFilter, dateClosed: d}
         setWhereClause({...whereClause, dateFilter: obj})
+        closePickers()
     }
 
     const setCategoryLevel1 = (c?: typeof categoryLevel1String) => {
@@ -571,9 +600,11 @@ export default function Filter(props: FilterProps) {
             dateCreated: whereClause.dateFilter.dateCreated,
             dateModified: whereClause.dateFilter.dateModified,
             dateClosed: whereClause.dateFilter.dateClosed,
+            androidPicker: showDatePicker,
             passUpCreated: setDateCreated,
             passUpModified: setDateModified,
             passUpClosed: setDateClosed,
+            passUpAndroidPicker: modifyPickerSet
         }
 
         const complex: (props: DateFilterProps) => JSX.Element = primitive as (props: DateFilterProps) => JSX.Element
