@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "clean start": "expo start -c",
+    "fresh": "expo start -c",
     "benchmark": "expo start --no-dev --minify",
     "tunnel": "expo start --tunnel",
     "android": "expo start --android",

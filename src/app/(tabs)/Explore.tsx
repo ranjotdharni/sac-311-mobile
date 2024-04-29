@@ -46,6 +46,7 @@ function Explore()
     const router = useRouter()
     const controller = new AbortController()
     const mapRef = useRef<MapView>(null)
+    const filterRef = useRef<any>()
     const padPanAnim = useRef(new Animated.Value(padHiddenHeight)).current
     const previewPanAnim = useRef(new Animated.Value(previewVisibleHeight)).current
     const filterPanAnim = useRef(new Animated.Value(filterHiddenPosition)).current
@@ -117,6 +118,7 @@ function Explore()
 
     function showOrHideFilter() {
         if (filterPan !== filterHiddenPosition) {
+            filterRef!.current!.parentChildFunction()
             setFilterPan(filterHiddenPosition)
             setTimeout(() => {
                 setFilterFade(0)
@@ -295,7 +297,7 @@ function Explore()
     return (
         <View style={{flex: 1}}>
                 <Animated.View style={[styles.filterContainer, shadowUniversal.default, { opacity: filterFade, transform: [ { translateX: filterPanAnim } ] }]}>
-                    <Filter region={region} passUpQuery={setMarkerQuery} />
+                    <Filter ref={filterRef} region={region} passUpQuery={setMarkerQuery} />
                 </Animated.View>
                 <Animated.View style={[styles.markerPreview, shadowUniversal.default, { transform: [ { translateY: previewPanAnim } ] }]}>
                     <MaterialIcons onPress={showOrHideFilter} name="filter-alt" size={25} color={global.baseGrey100} style={{left: '5%'}} />

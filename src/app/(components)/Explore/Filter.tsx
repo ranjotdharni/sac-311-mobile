@@ -2,7 +2,7 @@ import { View, StyleSheet, TouchableOpacity, Dimensions, Pressable, TextInput, T
 import CustomText from "../CustomText";
 import { DEFAULT_REGION, dateAtDaysAgo, dateToFormat, generateEndpointUrl, global, inclusiveRandom, requestTypes, symbolReference } from "../../../customs";
 import { Region } from "react-native-maps";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from "@expo/vector-icons";
@@ -531,7 +531,7 @@ function StatusFilter(props: StatusFilterProps): JSX.Element {
     )
 }
 
-export default function Filter(props: FilterProps) {
+export const Filter = forwardRef((props: FilterProps, ref: any) => {
     const [modal, showModal] = useState<boolean>(false)
     const [filterBy, setFilterBy] = useState<{ selected: number, distance: number, count: number }>({ selected: 0, distance: INITIAL_PARAMETERS[3], count: INITIAL_PARAMETERS[1] })
     const [whereClause, setWhereClause] = useState<CreateQueryParameters>(INITIAL_PARAMETERS[0])
@@ -540,6 +540,10 @@ export default function Filter(props: FilterProps) {
     const [buffer, setBuffer] = useState<typeof INITIAL_PARAMETERS>(INITIAL_PARAMETERS)
 
     let slideAnim = useRef(new Animated.Value(categoryIdx * categoryFilterBarWidth)).current
+
+    useImperativeHandle(ref, () => ({
+        parentChildFunction: reset
+    }))
 
     useEffect(() => {
         Animated.spring(slideAnim, {
@@ -677,6 +681,11 @@ export default function Filter(props: FilterProps) {
         }
     }
 
+    function clear() {
+        setWhereClause({dateFilter: {}, categoryFilter: {}, statusFilter: {}})
+        setFilterBy({...filterBy, distance: INITIAL_PARAMETERS[3], count: INITIAL_PARAMETERS[1]})
+    }
+
     function reset() {
         setWhereClause(buffer[0])
         setFilterBy({...filterBy, count: buffer[1], distance: buffer[3]})
@@ -685,7 +694,7 @@ export default function Filter(props: FilterProps) {
     function Applicator() {
         return (
             <View style={{position: 'absolute', width: '100%', height: '15%', top: '87.5%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', paddingRight: '10%',}}>
-                <TouchableOpacity onPress={() => { reset() }} style={{marginRight: '10%'}}>
+                <TouchableOpacity onPress={clear} style={{marginRight: '10%'}}>
                     <CustomText text="Reset" style={{fontSize: 18, color: 'red'}} nol={0} />
                 </TouchableOpacity>
 
@@ -719,7 +728,9 @@ export default function Filter(props: FilterProps) {
             {(modal ? <ModalSelector selected={filterBy.selected} distance={filterBy.distance} count={filterBy.count} passUpSelection={changeFilterField} /> : <></>)}
         </>
     )
-}
+})
+
+export default Filter
 
 const styles = StyleSheet.create({
     componentWrapper: {
