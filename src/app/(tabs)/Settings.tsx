@@ -95,6 +95,7 @@ function General() {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isAccessibleMode, setIsAccessibleMode] = useState(false);
 
+    // font change activated by the accessibility toggle
     useEffect(() => {
         const setAccessibleMode = async (): Promise<void> => {
             const result = JSON.parse(
@@ -103,31 +104,23 @@ function General() {
 
             setIsAccessibleMode(result);
         };
-
         setAccessibleMode();
         fontSetter(fontGetter());
-
     }, []);
 
 
-
+    // theme change activated by the dark-mode toggle
     useEffect(() => {
         const setDarkMode = async (): Promise<void> => {
             const result = JSON.parse(
                 (await AsyncStorage.getItem('darkToken')) || 'false',
             ) as boolean;
-
             setIsDarkMode(result);
             }
-
         const tempvar: any = colorThemeGetter('theme');
         colorThemeSetter(globalColorTheme.theme);
         setDarkMode();
-            
     }, [dark]);
-
-
-
 
     return (
         <View style={{ paddingTop: "5%", backgroundColor: globalColorTheme.backgroundColor }}>
@@ -159,12 +152,11 @@ function General() {
                                 "darkToken",
                                 JSON.stringify(darkResult),
                             );
-                            colorThemeSetter(darkResult ? 'darkTheme' : 'lightTheme');
+                            colorThemeSetter(darkResult ? 'darkTheme' : 'lightTheme'); // theme change requires the exact theme name used from 'customs.tsx'
                             setIsDarkMode(darkResult);
-                            
                         }}
                         value={isDarkMode}
-                        trackColor={{false:'#DDDDDD', true:'#00EE63'}}
+                        trackColor={{false:'#DDDDDD', true:'#00EE63'}} // standard IOS green and gray
                         thumbColor={globalColorTheme.blue}
                         />
                 </View>
@@ -182,12 +174,11 @@ function General() {
                                 "accessibilityToken",
                                 JSON.stringify(result),
                             );
-                            fontSetter(result ? 'opendyslexic' : 'jbm');
+                            fontSetter(result ? 'opendyslexic' : 'jbm'); // font change requires the exact font name used from '_layout.tsx'
                             setIsAccessibleMode(result);
-                            
                         }}
                         value={isAccessibleMode}
-                        trackColor={{false:'#DDDDDD', true:'#00EE63'}}
+                        trackColor={{false:'#DDDDDD', true:'#00EE63'}} // standard IOS green and gray
                         thumbColor={globalColorTheme.blue}
                         />
                 </View>

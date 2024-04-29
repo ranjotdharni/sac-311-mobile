@@ -28,7 +28,6 @@ export default function Layout()
                     <Stack.Screen name="BusinessTab" options={{ headerShown: false }} />
                     <Stack.Screen name="News" options={{headerShown: false }} />
                     <Stack.Screen name="Profile2" options={{headerShown: false }} />                    
-
                 </Stack>
             <NavBar />
         </UserProvider>

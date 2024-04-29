@@ -1149,9 +1149,11 @@ export function fontGetter(){
 //                                      //
 // this value is designed to be read by every entity that displays color
 // the user may change the color theme of the entire app, by making a selection in the settings page
-let chosenColorTheme: any = 'lightMode';
+// NOTE: any theming changes expected to happen without an app refresh, requires in-line style formitting.
 
-export const globalColorTheme= {
+let chosenColorTheme: any = 'lightMode'; // default theme
+
+export const globalColorTheme= { // default theme
     chosenColorTheme : chosenColorTheme,
     backgroundColor : '#ffffff',
     backgroundColor2 : '#ffffff',
@@ -1166,7 +1168,7 @@ export const globalColorTheme= {
     fontWeight: '500'
 }
 
-export function colorThemeSetter(newTheme:string){
+export function colorThemeSetter(newTheme:string){ // called by the toggle within the settings page
     globalColorTheme.chosenColorTheme = newTheme;
     if (newTheme == 'lightTheme'){
         globalColorTheme.theme = 'lightTheme';
@@ -1186,19 +1188,8 @@ export function colorThemeSetter(newTheme:string){
         globalColorTheme.blue = '#33619b';             //textcolor = light blue
         globalColorTheme.text = '#E7EAED';              //textcolor = off-white
         globalColorTheme.opposite = '#E7EAED';              // textcolor = off-white
-        
     }
-
 }
-
-
-
-
-
-
-
-
-
 
 export function colorThemeGetter(property:string){
     if (property == 'color'){
@@ -1210,6 +1201,4 @@ export function colorThemeGetter(property:string){
     if (property == 'backgroundColor'){
         return globalColorTheme.backgroundColor;
     }
-    
-
 }
