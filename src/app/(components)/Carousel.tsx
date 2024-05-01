@@ -1,7 +1,14 @@
 import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { DimensionValue, ScrollView, View, StyleSheet, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { Article } from './Home/types';
+
+export interface Article {
+    id: string;
+    title: string;
+    imgUrl: string;
+    link: string;
+    desc: string;
+}
 
 //  When using this prop and determining what scrollOffset prop should be!!!!!
 //======================================================================================================================================================================================
@@ -58,7 +65,7 @@ export default function Carousel({ nestData, nestCallback, endPadding, scrollOff
             scrollToIndex(nextIndex);
         };
 
-        const timer = setInterval(scrollAutomatically, 5000); // milliseconds between automatic scrolla
+        const timer = setInterval(scrollAutomatically, 7000); // milliseconds between automatic scroll
 
         //clear the interval on component unmount
         return () => clearInterval(timer);

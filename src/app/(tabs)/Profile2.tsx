@@ -21,7 +21,7 @@ export default function Profile2() {
             return;
         }
 
-        console.log("Attempting to sign in with email: ", email, " and password: ", password);
+        //console.log("Attempting to sign in with email: ", email, " and password: ", password);
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             //signed in successfully
@@ -63,6 +63,7 @@ export default function Profile2() {
           placeholder='Password'
           placeholderTextColor={globalColorTheme.opposite}
           onChangeText={(val) => setPassword(val)}
+          secureTextEntry={true}
         />
         <Pressable style={[styles.button, {backgroundColor:globalColorTheme.blue}]} onPress = {handleSignIn}>
           <Text style={[styles.buttonText, {color:globalColorTheme.text}]}>Log In</Text>
