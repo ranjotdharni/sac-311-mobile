@@ -56,7 +56,7 @@ Splash Screen              |  Home Screen              |  Map Screen            
     1. Integrate **existing service request data** from City of Sacramento's database instance
     1. Configure front-end to **transform requests to the proper format** for storage
 
-- [ ] <span style="font-size: 1.25rem">**Authentication**</span>
+- [X] <span style="font-size: 1.25rem">**Authentication\*\*\***</span>
     1. Enable user profile creation and login-in
     1. Configure **Azure B2C** authentication protocol
     1. Integrate authentication with **existing user profile data**
@@ -66,8 +66,9 @@ Splash Screen              |  Home Screen              |  Map Screen            
     1. Leverage Salesforce object for storing format of a request, then modify this object on update to request format
     1. Engage in **constant, consistent communication** with City of Sacramento's back-end team to **ensure proper allocation of the resources required** to implement this feature
 
-<span style="font-size: 0.75rem">**CSC 191*</span>
+<span style="font-size: 0.75rem">**Any incomplete milestones were phased out during development*</span>
 <span style="font-size: 0.75rem">***Based on summary of JIRA backlog*</span>
+<span style="font-size: 0.75rem">***Substituted with Firebase Authentication*</span>
 
 ---
 ## Testing
