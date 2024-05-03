@@ -79,7 +79,7 @@ Testing was conducted by the Stack 8 team to provide evidence of the current wor
 
 For our specific development purposes, the following testing environment was used:
 
-1. **Operating System:** *Windows 11*
+1. **Operating System:** *Microsoft Windows 10 Enterprise v10.0.19045*
 1. **NodeJS Version:** *v20.9.0*
 1. **Node Package Manager Version:** *v10.1.0*
 
