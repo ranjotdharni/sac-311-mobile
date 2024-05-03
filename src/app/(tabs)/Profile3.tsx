@@ -71,7 +71,7 @@ export default function Profile3(){
 
     //fetch user data from firestore dummy database
     const fetchUserData = async () => {
-        console.log("Attempting to fetch user info from profile id: ", userId)
+        //console.log("Attempting to fetch user info from profile id: ", userId)
         if (userId) {
             const userDocRef = doc(FIRESTORE_DB, 'users', userId);
             const userDoc = await getDoc(userDocRef);
@@ -93,7 +93,7 @@ export default function Profile3(){
                 //console.log('No user data found for id: ', userId);
             }
         }else {
-            //console.log('No user data found for id: ', userId);///////////////////////for testing
+            //console.log('No user data found for id: ', userId);
         }
     };
 
@@ -111,7 +111,7 @@ export default function Profile3(){
                 suite: aptNum,
                 zip: zipCode,
             }, { merge: true });
-           //console.log('User data updated successfully');///////////////////////////////////////////////////////
+           //console.log('User data updated successfully');
         }
     };
 
